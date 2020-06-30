@@ -221,7 +221,7 @@ EditProductScreen.navigationOptions = navData => {
 
 const styles = StyleSheet.create({
   form: {
-    margin: 20,
+    margin: 25,
   },
   centered: {
     flex: 1,
