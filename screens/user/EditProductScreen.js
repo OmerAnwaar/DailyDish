@@ -208,7 +208,7 @@ EditProductScreen.navigationOptions = navData => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Save"
+          title="SAVE"
           iconName={
             Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
           }
@@ -221,7 +221,7 @@ EditProductScreen.navigationOptions = navData => {
 
 const styles = StyleSheet.create({
   form: {
-    margin: 25,
+    margin: 20,
   },
   centered: {
     flex: 1,
