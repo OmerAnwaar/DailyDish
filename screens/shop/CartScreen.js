@@ -15,11 +15,11 @@ import Card from "../../components/UI/Card";
 import * as cartActions from "../../store/actions/cart";
 import * as ordersActions from "../../store/actions/orders";
 
-const CartScreen = props => {
+const CartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const cartTotalAmount = useSelector(state => state.cart.totalAmount);
-  const cartItems = useSelector(state => {
+  const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
+  const cartItems = useSelector((state) => {
     const transformedCartItems = [];
     for (const key in state.cart.items) {
       transformedCartItems.push({
@@ -48,7 +48,7 @@ const CartScreen = props => {
         <Text style={styles.summaryText}>
           Total:{" "}
           <Text style={styles.amount}>
-            ${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
+            Rs {Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
           </Text>
         </Text>
         {isLoading ? (
@@ -64,8 +64,8 @@ const CartScreen = props => {
       </Card>
       <FlatList
         data={cartItems}
-        keyExtractor={item => item.productId}
-        renderItem={itemData => (
+        keyExtractor={(item) => item.productId}
+        renderItem={(itemData) => (
           <CartItem
             quantity={itemData.item.quantity}
             title={itemData.item.productTitle}
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 20,
     padding: 10,
+    borderRadius: 15,
   },
   summaryText: {
     fontFamily: "open-sans-bold",

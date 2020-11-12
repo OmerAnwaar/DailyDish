@@ -41,7 +41,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = props => {
+const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
@@ -124,6 +124,7 @@ const AuthScreen = props => {
             <Input
               id="password"
               label="Password"
+              // placeholder="password"
               keyboardType="default"
               secureTextEntry
               required
@@ -133,25 +134,27 @@ const AuthScreen = props => {
               onInputChange={inputChangeHandler}
               initialValue=""
             />
-            <View style={styles.buttonContainer}>
-              {isLoading ? (
-                <ActivityIndicator size="small" color={Colors.primary} />
-              ) : (
+            <View style={styles.button}>
+              <View style={styles.buttonContainer}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color={Colors.primary} />
+                ) : (
+                  <Button
+                    title={isSignup ? "Sign Up" : "Login"}
+                    color={Colors.primary}
+                    onPress={authHandler}
+                  />
+                )}
+              </View>
+              <View style={styles.buttonContainer}>
                 <Button
-                  title={isSignup ? "Sign Up" : "Login"}
-                  color={Colors.primary}
-                  onPress={authHandler}
+                  title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                  color={Colors.accent}
+                  onPress={() => {
+                    setIsSignup((prevState) => !prevState);
+                  }}
                 />
-              )}
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
-                color={Colors.accent}
-                onPress={() => {
-                  setIsSignup(prevState => !prevState);
-                }}
-              />
+              </View>
             </View>
           </ScrollView>
         </Card>
@@ -161,7 +164,12 @@ const AuthScreen = props => {
 };
 
 AuthScreen.navigationOptions = {
-  headerTitle: "Authenticate",
+  headerTitle: "DAILY DISH",
+  headerStyle: {
+    backgroundColor: "#feedff",
+    shadowColor: "transparent",
+  },
+  headerTintColor: Colors.primary,
 };
 
 const styles = StyleSheet.create({
@@ -174,13 +182,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   authContainer: {
-    width: "80%",
+    width: "100%",
+    height: 500,
     maxWidth: 400,
-    maxHeight: 400,
-    padding: 20,
+    // maxHeight: 400,
+    marginTop: 180,
+    padding: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   buttonContainer: {
     marginTop: 10,
+  },
+  button: {
+    paddingTop: "50%",
   },
 });
 

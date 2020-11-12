@@ -2,19 +2,27 @@ import React from "react";
 import {
   createAppContainer,
   createSwitchNavigator,
-  drawerNavigatorItems,
+  withOrientation,
 } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import {
   createDrawerNavigator,
   DrawerNavigatorItems,
 } from "react-navigation-drawer";
-import { Platform, SafeAreaView, Button, View } from "react-native";
+import {
+  Platform,
+  SafeAreaView,
+  Button,
+  View,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
+import SplashScreen from "../screens/shop/SplashScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
@@ -45,7 +53,7 @@ const ProductsNavigator = createStackNavigator(
   },
   {
     navigationOptions: {
-      drawerIcon: drawerConfig => (
+      drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           size={23}
@@ -63,7 +71,7 @@ const OrdersNavigator = createStackNavigator(
   },
   {
     navigationOptions: {
-      drawerIcon: drawerConfig => (
+      drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-list" : "ios-list"}
           size={23}
@@ -82,7 +90,7 @@ const AdminNavigator = createStackNavigator(
   },
   {
     navigationOptions: {
-      drawerIcon: drawerConfig => (
+      drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-create" : "ios-create"}
           size={23}
@@ -104,20 +112,38 @@ const ShopNavigator = createDrawerNavigator(
     contentOptions: {
       activeTintColor: Colors.primary,
     },
-    contentComponent: props => {
+    contentComponent: (props) => {
       const dispatch = useDispatch();
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            <DrawerNavigatorItems {...props} />
-            <Button
-              title="Logout"
-              color={Colors.primary}
-              onPress={() => {
-                dispatch(authActions.logout());
-                // props.navigation.navigate("Auth");
-              }}
+            <Image
+              source={require("../assets/Omer.png")}
+              style={{ width: 250, height: 200, marginLeft: 5 }}
             />
+            <DrawerNavigatorItems {...props} />
+
+            <View style={styles.button}>
+              <View style={styles.chef}>
+                <Button
+                  title="Can You Cook?"
+                  color={Colors.primary}
+                  onPress={() => {
+                    props.navigation.navigate("Auth");
+                  }}
+                />
+              </View>
+              <View style={styles.logout}>
+                <Button
+                  title="Logout"
+                  color="white"
+                  onPress={() => {
+                    dispatch(authActions.logout());
+                    // props.navigation.navigate("Auth");
+                  }}
+                />
+              </View>
+            </View>
           </SafeAreaView>
         </View>
       );
@@ -127,7 +153,7 @@ const ShopNavigator = createDrawerNavigator(
 
 const AuthNavigator = createStackNavigator(
   {
-    Auth: AuthScreen,
+    Auth: SplashScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -135,9 +161,24 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
-  StartUp: StartupScreen,
+  StartUp: SplashScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
+});
+
+const styles = StyleSheet.create({
+  button: {
+    paddingTop: 250,
+  },
+  chef: {
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    margin: 10,
+  },
+  logout: {
+    backgroundColor: Colors.primary,
+    margin: 10,
+  },
 });
 
 export default createAppContainer(MainNavigator);
