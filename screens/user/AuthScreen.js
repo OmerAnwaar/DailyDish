@@ -107,7 +107,7 @@ const AuthScreen = (props) => {
       keyboardVerticalOffset={50}
       style={styles.screen}
     >
-      <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
+      <LinearGradient colors={["#FF6347", "#fe6347"]} style={styles.gradient}>
         <Card style={styles.authContainer}>
           <ScrollView>
             <Input
@@ -165,11 +165,12 @@ const AuthScreen = (props) => {
 
 AuthScreen.navigationOptions = {
   headerTitle: "DAILY DISH",
+  headerLeft: () => null,
   headerStyle: {
-    backgroundColor: "#feedff",
+    backgroundColor: "#FF6347",
     shadowColor: "transparent",
   },
-  headerTintColor: Colors.primary,
+  headerTintColor: "white",
 };
 
 const styles = StyleSheet.create({

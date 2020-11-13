@@ -12,6 +12,7 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
+import Colors from "../constants/Colors";
 
 const SplashScreen = (props) => {
   //   const { colors } = useTheme();
@@ -23,7 +24,7 @@ const SplashScreen = (props) => {
         <Animatable.Image
           animation="bounceIn"
           duraton="1500"
-          source={require("../../assets/logo.png")}
+          source={require("../assets/logo.png")}
           style={styles.logo}
           resizeMode="stretch"
         />
@@ -49,7 +50,11 @@ const SplashScreen = (props) => {
         </Text>
         <Text style={styles.text}>Sign in with account</Text>
         <View style={styles.button}>
-          <TouchableOpacity onPress={() => navigation.navigate("Auth")}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("Auth");
+            }}
+          >
             <LinearGradient
               colors={["#FFA07A", "#FF6347"]}
               style={styles.signIn}
@@ -72,7 +77,14 @@ const SplashScreen = (props) => {
   );
 };
 
-export default SplashScreen;
+SplashScreen.navigationOptions = {
+  headerTitle: "Get Started",
+  headerStyle: {
+    backgroundColor: "#fe6347",
+    shadowColor: "transparent",
+  },
+  headerTintColor: "white",
+};
 
 const { height } = Dimensions.get("screen");
 const height_logo = height * 0.28;
@@ -126,3 +138,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
 });
+export default SplashScreen;

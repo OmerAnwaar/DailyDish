@@ -22,13 +22,13 @@ import { Ionicons } from "@expo/vector-icons";
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
-import SplashScreen from "../screens/shop/SplashScreen";
+import SplashScreen from "../screens/SplashScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
-import StartupScreen from "../screens/user/StartupScreen";
+import StartupScreen from "../screens/StartupScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
 
@@ -153,7 +153,8 @@ const ShopNavigator = createDrawerNavigator(
 
 const AuthNavigator = createStackNavigator(
   {
-    Auth: SplashScreen,
+    Splash: SplashScreen,
+    Auth: AuthScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -161,7 +162,8 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
-  StartUp: SplashScreen,
+  StartUp: StartupScreen,
+  Splash: SplashScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
 });
