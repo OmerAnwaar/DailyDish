@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useReducer, useCallback } from "react";
 import {
-  ScrollView,
   View,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Button,
-  ActivityIndicator,
   Alert,
+  Button,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 
@@ -15,6 +17,8 @@ import Input from "../../components/UI/Input";
 import Card from "../../components/UI/Card";
 import Colors from "../../constants/Colors";
 import * as authActions from "../../store/actions/auth";
+
+import * as Animatable from "react-native-animatable";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -61,7 +65,9 @@ const AuthScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
+      Alert.alert("Please enter Email Address or Password!", error, [
+        { text: "Okay" },
+      ]);
     }
   }, [error]);
 
@@ -108,64 +114,68 @@ const AuthScreen = (props) => {
       style={styles.screen}
     >
       <LinearGradient colors={["#FF6347", "#fe6347"]} style={styles.gradient}>
-        <Card style={styles.authContainer}>
-          <ScrollView>
-            <Input
-              id="email"
-              label="E-Mail"
-              keyboardType="email-address"
-              required
-              email
-              autoCapitalize="none"
-              errorText="Please enter a valid email address."
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-            <Input
-              id="password"
-              label="Password"
-              // placeholder="password"
-              keyboardType="default"
-              secureTextEntry
-              required
-              minLength={5}
-              autoCapitalize="none"
-              errorText="Please enter a valid password."
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-            <View style={styles.button}>
-              <View style={styles.buttonContainer}>
-                {isLoading ? (
-                  <ActivityIndicator size="small" color={Colors.primary} />
-                ) : (
+        <Animatable.View style={styles.Container} animation="fadeInUpBig">
+          <Card style={styles.authContainer}>
+            <ScrollView>
+              <Input
+                id="email"
+                label="E-Mail"
+                keyboardType="email-address"
+                required
+                email
+                autoCapitalize="none"
+                errorText="Please enter a valid email address."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+              />
+              <Input
+                id="password"
+                label="Password"
+                placeholder="password"
+                keyboardType="default"
+                secureTextEntry
+                required
+                minLength={5}
+                autoCapitalize="none"
+                errorText="Please enter a valid password."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+              />
+              <View style={styles.button}>
+                <View style={styles.buttonContainer}>
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color={Colors.primary} />
+                  ) : (
+                    <Button
+                      title={isSignup ? "Sign Up" : "Login"}
+                      color={Colors.primary}
+                      onPress={authHandler}
+                    />
+                  )}
+                </View>
+                <View style={styles.buttonContainer}>
                   <Button
-                    title={isSignup ? "Sign Up" : "Login"}
-                    color={Colors.primary}
-                    onPress={authHandler}
+                    title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                    color={Colors.accent}
+                    onPress={() => {
+                      setIsSignup((prevState) => !prevState);
+                    }}
                   />
-                )}
+                </View>
               </View>
-              <View style={styles.buttonContainer}>
-                <Button
-                  title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
-                  color={Colors.accent}
-                  onPress={() => {
-                    setIsSignup((prevState) => !prevState);
-                  }}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </Card>
+            </ScrollView>
+          </Card>
+        </Animatable.View>
       </LinearGradient>
     </KeyboardAvoidingView>
   );
 };
 
+const { height } = Dimensions.get("screen");
+
 AuthScreen.navigationOptions = {
   headerTitle: "DAILY DISH",
-  headerLeft: () => null,
+  // headerLeft: () => null,
   headerStyle: {
     backgroundColor: "#FF6347",
     shadowColor: "transparent",
@@ -177,10 +187,12 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
+  Container: {},
   gradient: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    paddingLeft: 5,
+    // alignItems: "center",
   },
   authContainer: {
     width: "100%",
