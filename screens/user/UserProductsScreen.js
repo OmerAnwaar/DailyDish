@@ -44,6 +44,7 @@ const UserProductsScreen = (props) => {
       renderItem={(itemData) => (
         <ProductItem
           image={itemData.item.imageUrl}
+          // image={itemData.item.imageUri}
           title={itemData.item.title}
           price={itemData.item.price}
           onSelect={() => {
