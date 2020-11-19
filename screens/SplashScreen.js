@@ -26,7 +26,7 @@ const SplashScreen = (props) => {
           duraton="1500"
           source={require("../assets/logo.png")}
           style={styles.logo}
-          resizeMode="stretch"
+          resizeMode="cover"
         />
       </View>
       <Animatable.View
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   logo: {
-    width: height_logo,
-    height: height_logo,
+    width: "70%",
+    height: "60%",
   },
   title: {
     color: "#05375a",

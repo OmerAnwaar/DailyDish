@@ -38,20 +38,6 @@ const UserProductsScreen = (props) => {
   }
 
   return (
-    // <TextInput
-    //       placeholder="Search"
-    //       placeholderTextColor="#dddddd"
-    //       style={{
-    //         backgroundColor: '#2f363c',
-    //         height: 50,
-    //         fontSize: 36,
-    //         padding: 10,
-    //         color: 'white',
-    //         borderBottomWidth: 0.5,
-    //         borderBottomColor: '#7d90a0'
-    //       }}
-    //       onChangeText={value => this.searchContacts(value)}
-    //     />
     <FlatList
       data={userProducts}
       keyExtractor={(item) => item.id}

@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as productsActions from "../../store/actions/products";
 import Input from "../../components/UI/Input";
+import ImagePicker from "../../components/ImagePicker";
 import Colors from "../../constants/Colors";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
@@ -45,6 +46,7 @@ const formReducer = (state, action) => {
 const EditProductScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [selectedImage, setSelectedImage] = useState();
 
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state) =>
@@ -55,13 +57,13 @@ const EditProductScreen = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
-      imageUrl: editedProduct ? editedProduct.imageUrl : "",
+      // imageUrl: editedProduct ? editedProduct.imageUrl : "",
       description: editedProduct ? editedProduct.description : "",
       price: "",
     },
     inputValidities: {
       title: editedProduct ? true : false,
-      imageUrl: editedProduct ? true : false,
+      // imageUrl: editedProduct ? true : false,
       description: editedProduct ? true : false,
       price: editedProduct ? true : false,
     },
@@ -135,6 +137,9 @@ const EditProductScreen = (props) => {
     );
   }
 
+  const imageTakenHandler = (imagePath) => {
+    setSelectedImage(imagePath);
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -143,30 +148,26 @@ const EditProductScreen = (props) => {
     >
       <ScrollView>
         <View style={styles.form}>
-          <Input
-            id="title"
-            label="Title"
-            errorText="Please enter a valid title!"
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
-            onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.title : ""}
-            initiallyValid={!!editedProduct}
-            required
+          <View style={styles.title}>
+            <Input
+              id="title"
+              label="Title"
+              errorText="Please enter a valid title!"
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+              onInputChange={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.title : ""}
+              initiallyValid={!!editedProduct}
+              required
+            />
+          </View>
+          <ImagePicker
+            onImageTaken={imageTakenHandler}
+            // initialValue={editedProduct ? editedProduct.imageUrl : ""}
           />
-          <Input
-            id="imageUrl"
-            label="Image Url"
-            errorText="Please enter a valid image url!"
-            keyboardType="default"
-            returnKeyType="next"
-            onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.imageUrl : ""}
-            initiallyValid={!!editedProduct}
-            required
-          />
+
           {editedProduct ? null : (
             <Input
               id="price"
@@ -228,6 +229,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    paddingVertical: 20,
   },
 });
 

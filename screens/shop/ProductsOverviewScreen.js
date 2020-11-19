@@ -8,7 +8,9 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from "react-native";
+
 import { useSelector, useDispatch } from "react-redux";
+// import { SearchBar } from "react-native-elements";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import HeaderButton from "../../components/UI/HeaderButton";
@@ -16,12 +18,14 @@ import ProductItem from "../../components/shop/ProductItem";
 import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
+import SearchBar from "../../components/UI/SearchBar";
 
-const ProductsOverviewScreen = props => {
+const ProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [search, setSearch] = useState("");
   const [error, setError] = useState();
-  const products = useSelector(state => state.products.availableProducts);
+  const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
@@ -89,42 +93,50 @@ const ProductsOverviewScreen = props => {
     );
   }
 
+  const filteredProducts = products.filter((products) => {
+    return products.title.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
-    <FlatList
-      onRefresh={loadProducts}
-      refreshing={isRefreshing}
-      data={products}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
-        <ProductItem
-          image={itemData.item.imageUrl}
-          title={itemData.item.title}
-          price={itemData.item.price}
-          onSelect={() => {
-            selectItemHandler(itemData.item.id, itemData.item.title);
-          }}
-        >
-          <Button
-            color={Colors.primary}
-            title="View Details"
-            onPress={() => {
+    <>
+      <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
+
+      <FlatList
+        onRefresh={loadProducts}
+        refreshing={isRefreshing}
+        data={filteredProducts}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => (
+          <ProductItem
+            image={itemData.item.imageUrl}
+            title={itemData.item.title}
+            price={itemData.item.price}
+            onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}
-          />
-          <Button
-            color={Colors.primary}
-            title="To Cart"
-            onPress={() => {
-              dispatch(cartActions.addToCart(itemData.item));
-            }}
-          />
-        </ProductItem>
-      )}
-    />
+          >
+            <Button
+              color={Colors.primary}
+              title="View Details"
+              onPress={() => {
+                selectItemHandler(itemData.item.id, itemData.item.title);
+              }}
+            />
+            <Button
+              color={Colors.primary}
+              title="To Cart"
+              onPress={() => {
+                dispatch(cartActions.addToCart(itemData.item));
+              }}
+            />
+          </ProductItem>
+        )}
+      />
+    </>
   );
 };
 
-ProductsOverviewScreen.navigationOptions = navData => {
+ProductsOverviewScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "All Products",
     headerLeft: () => (
@@ -157,6 +169,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  flatList: {
+    paddingLeft: 15,
+    marginTop: 15,
+    paddingBottom: 15,
+    fontSize: 20,
+    borderBottomColor: "#26a69a",
+    borderBottomWidth: 1,
   },
 });
 

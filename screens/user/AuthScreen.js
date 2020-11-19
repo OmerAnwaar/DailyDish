@@ -114,6 +114,15 @@ const AuthScreen = (props) => {
       style={styles.screen}
     >
       <LinearGradient colors={["#FF6347", "#fe6347"]} style={styles.gradient}>
+        <View style={styles.header}>
+          <Animatable.Image
+            animation="fadeInDownBig"
+            duraton="1500"
+            source={require("../../assets/logo.png")}
+            style={styles.logo}
+            resizeMode="cover"
+          />
+        </View>
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
@@ -131,7 +140,7 @@ const AuthScreen = (props) => {
               <Input
                 id="password"
                 label="Password"
-                placeholder="password"
+                // placeholder="password"
                 keyboardType="default"
                 secureTextEntry
                 required
@@ -174,8 +183,8 @@ const AuthScreen = (props) => {
 const { height } = Dimensions.get("screen");
 
 AuthScreen.navigationOptions = {
-  headerTitle: "DAILY DISH",
-  // headerLeft: () => null,
+  headerTitle: "",
+  headerLeft: () => null,
   headerStyle: {
     backgroundColor: "#FF6347",
     shadowColor: "transparent",
@@ -187,22 +196,25 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  Container: {},
-  gradient: {
-    // flex: 1,
+  header: {
     justifyContent: "center",
-    paddingLeft: 5,
-    // alignItems: "center",
+    alignItems: "center",
+  },
+  gradient: {
+    justifyContent: "center",
   },
   authContainer: {
     width: "100%",
-    height: 500,
+    height: 600,
     maxWidth: 400,
-    // maxHeight: 400,
-    marginTop: 180,
     padding: 30,
     borderTopLeftRadius: 20,
+    marginHorizontal: 7.5,
     borderTopRightRadius: 20,
+  },
+  logo: {
+    width: "60%",
+    height: "40%",
   },
   buttonContainer: {
     marginTop: 10,
