@@ -84,6 +84,7 @@ const EditProductScreen = (props) => {
       return;
     }
     setError(null);
+
     setIsLoading(true);
     try {
       if (editedProduct) {
@@ -92,7 +93,8 @@ const EditProductScreen = (props) => {
             prodId,
             formState.inputValues.title,
             formState.inputValues.description,
-            formState.inputValues.imageUrl
+            selectedImage
+            // formState.inputValues.imageUrl
           )
         );
       } else {
@@ -100,7 +102,9 @@ const EditProductScreen = (props) => {
           productsActions.createProduct(
             formState.inputValues.title,
             formState.inputValues.description,
-            formState.inputValues.imageUrl,
+            selectedImage,
+
+            // formState.inputValues.imageUrl,
             +formState.inputValues.price
           )
         );
