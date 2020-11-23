@@ -28,6 +28,7 @@ import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
+import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
@@ -106,7 +107,7 @@ const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
-    Admin: AdminNavigator,
+    // Admin: AdminNavigator,
   },
   {
     contentOptions: {
@@ -119,7 +120,7 @@ const ShopNavigator = createDrawerNavigator(
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
             <Image
               source={require("../assets/Omer.png")}
-              style={{ width: 250, height: 200, marginLeft: 5 }}
+              style={{ width: 150, height: 100 }}
             />
             <DrawerNavigatorItems {...props} />
 
@@ -129,11 +130,60 @@ const ShopNavigator = createDrawerNavigator(
                   title="Can You Cook?"
                   color={Colors.primary}
                   onPress={() => {
-                    props.navigation.navigate("Auth");
+                    props.navigation.navigate("ChefAuth");
                   }}
                 />
               </View>
               <View style={styles.logout}>
+                <Button
+                  title="Logout"
+                  color="white"
+                  onPress={() => {
+                    dispatch(authActions.logout());
+                    // props.navigation.navigate("Auth");
+                  }}
+                />
+              </View>
+            </View>
+          </SafeAreaView>
+        </View>
+      );
+    },
+  }
+);
+
+const ChefShopNavigator = createDrawerNavigator(
+  {
+    Products: ProductsNavigator,
+    // Orders: OrdersNavigator,
+    Admin: AdminNavigator,
+  },
+  {
+    contentOptions: {
+      activeTintColor: Colors.primary,
+    },
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+      return (
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            {/* <Image
+              source={require("../assets/Omer.png")}
+              style={{ width: 250, height: 200, marginLeft: 5 }}
+            /> */}
+            <DrawerNavigatorItems {...props} />
+
+            <View style={styles.chefButton}>
+              {/* <View style={styles.chef}>
+                <Button
+                  title="Can You Cook?"
+                  color={Colors.primary}
+                  onPress={() => {
+                    props.navigation.navigate("ChefAuth");
+                  }}
+                />
+              </View> */}
+              <View style={styles.chefLogout}>
                 <Button
                   title="Logout"
                   color="white"
@@ -161,16 +211,28 @@ const AuthNavigator = createStackNavigator(
   }
 );
 
+const ChefAuthNavigator = createStackNavigator(
+  {
+    // Splash: SplashScreen,
+    ChefAuth: ChefAuthScreen,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
 const MainNavigator = createSwitchNavigator({
   StartUp: StartupScreen,
   Splash: SplashScreen,
   Auth: AuthNavigator,
+  ChefAuth: ChefAuthNavigator,
   Shop: ShopNavigator,
+  Chef: ChefShopNavigator,
 });
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 250,
+    paddingTop: 400,
   },
   chef: {
     borderColor: Colors.primary,
@@ -180,6 +242,13 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
+  },
+  chefLogout: {
+    backgroundColor: Colors.primary,
+    margin: 10,
+  },
+  chefButton: {
+    paddingTop: 550,
   },
 });
 

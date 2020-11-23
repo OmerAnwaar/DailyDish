@@ -37,7 +37,7 @@ export const fetchProducts = () => {
       dispatch({
         type: SET_PRODUCTS,
         products: loadedProducts,
-        userProducts: loadedProducts.filter(prod => prod.ownerId === userId),
+        userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
       });
     } catch (err) {
       // send to custom analytics server
@@ -46,7 +46,7 @@ export const fetchProducts = () => {
   };
 };
 
-export const deleteProduct = productId => {
+export const deleteProduct = (productId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(

@@ -11,7 +11,7 @@ import {
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@react-navigation/native";
+// import { useTheme } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 
 const SplashScreen = (props) => {
@@ -22,11 +22,11 @@ const SplashScreen = (props) => {
       <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
       <View style={styles.header}>
         <Animatable.Image
-          animation="bounceIn"
+          animation="fadeInDownBig"
           duraton="1500"
           source={require("../assets/logo.png")}
           style={styles.logo}
-          resizeMode="stretch"
+          resizeMode="cover"
         />
       </View>
       <Animatable.View
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   logo: {
-    width: height_logo,
-    height: height_logo,
+    width: "70%",
+    height: "60%",
   },
   title: {
     color: "#05375a",

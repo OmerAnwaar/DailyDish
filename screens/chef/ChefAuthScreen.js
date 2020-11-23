@@ -45,7 +45,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = (props) => {
+const ChefAuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
@@ -88,7 +88,7 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      props.navigation.navigate("Shop");
+      props.navigation.navigate("Chef");
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -150,6 +150,15 @@ const AuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
+              <Input
+                id="phone"
+                label="Phone number"
+                keyboardType="phone-pad"
+                required
+                errorText="Please enter a valid phone number."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+              />
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
                   {isLoading ? (
@@ -182,7 +191,7 @@ const AuthScreen = (props) => {
 
 const { height } = Dimensions.get("screen");
 
-AuthScreen.navigationOptions = {
+ChefAuthScreen.navigationOptions = {
   headerTitle: "",
   headerLeft: () => null,
   headerStyle: {
@@ -199,29 +208,31 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: 80,
   },
   gradient: {
     justifyContent: "center",
-  },
-  authContainer: {
-    width: "100%",
-    height: 600,
-    maxWidth: 400,
-    padding: 30,
-    borderTopLeftRadius: 20,
-    marginHorizontal: 7.5,
-    borderTopRightRadius: 20,
+    // paddingLeft: 5,
   },
   logo: {
     width: "60%",
     height: "40%",
   },
+  authContainer: {
+    width: "100%",
+    height: 900,
+    maxWidth: 400,
+    padding: 30,
+    marginHorizontal: 7.5,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
   buttonContainer: {
     marginTop: 10,
   },
   button: {
-    paddingTop: "50%",
+    paddingTop: "30%",
   },
 });
 
-export default AuthScreen;
+export default ChefAuthScreen;

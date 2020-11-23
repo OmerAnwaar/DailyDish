@@ -8,15 +8,15 @@ import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/products";
 
-const UserProductsScreen = props => {
-  const userProducts = useSelector(state => state.products.userProducts);
+const UserProductsScreen = (props) => {
+  const userProducts = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
 
-  const editProductHandler = id => {
+  const editProductHandler = (id) => {
     props.navigation.navigate("EditProduct", { productId: id });
   };
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     Alert.alert("Are you sure?", "Do you really want to delete this item?", [
       { text: "No", style: "default" },
       {
@@ -40,10 +40,11 @@ const UserProductsScreen = props => {
   return (
     <FlatList
       data={userProducts}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => (
         <ProductItem
           image={itemData.item.imageUrl}
+          // image={itemData.item.imageUri}
           title={itemData.item.title}
           price={itemData.item.price}
           onSelect={() => {
@@ -68,7 +69,7 @@ const UserProductsScreen = props => {
   );
 };
 
-UserProductsScreen.navigationOptions = navData => {
+UserProductsScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Your Products",
     headerLeft: () => (
