@@ -17,7 +17,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
@@ -25,13 +25,14 @@ import CartScreen from "../screens/shop/CartScreen";
 import SplashScreen from "../screens/SplashScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
-import EditProductScreen from "../screens/user/EditProductScreen";
+import EditProductScreen from "../screens/chef/EditProductScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
+import LocationScreen from "../screens/user/LocationScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -84,6 +85,20 @@ const OrdersNavigator = createStackNavigator(
   }
 );
 
+const LocationNavigator = createStackNavigator(
+  {
+    Address: LocationScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Entypo name={"address"} size={23} color={drawerConfig.tintColor} />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
 const AdminNavigator = createStackNavigator(
   {
     UserProducts: UserProductsScreen,
@@ -107,6 +122,7 @@ const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
+    Address: LocationNavigator,
     // Admin: AdminNavigator,
   },
   {
@@ -155,7 +171,6 @@ const ShopNavigator = createDrawerNavigator(
 const ChefShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
-    // Orders: OrdersNavigator,
     Admin: AdminNavigator,
   },
   {
@@ -232,7 +247,7 @@ const MainNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 400,
+    paddingTop: 350,
   },
   chef: {
     borderColor: Colors.primary,
