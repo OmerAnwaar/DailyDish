@@ -136,6 +136,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
+
 ProductsOverviewScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "All Products",
