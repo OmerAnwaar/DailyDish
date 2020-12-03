@@ -19,6 +19,8 @@ import Colors from "../../constants/Colors";
 import * as authActions from "../../store/actions/auth";
 
 import * as Animatable from "react-native-animatable";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButton from "../../components/UI/HeaderButton";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -151,11 +153,14 @@ const ChefAuthScreen = (props) => {
                 initialValue=""
               />
               <Input
-                id="phone"
-                label="Phone number"
-                keyboardType="phone-pad"
+                id="KitchenName"
+                label="Kitchen Name"
+                keyboardType="default"
+                secureTextEntry
                 required
-                errorText="Please enter a valid phone number."
+                minLength={5}
+                autoCapitalize="none"
+                errorText="Please enter a valid Kitchen."
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
@@ -191,14 +196,27 @@ const ChefAuthScreen = (props) => {
 
 const { height } = Dimensions.get("screen");
 
-ChefAuthScreen.navigationOptions = {
-  headerTitle: "",
-  headerLeft: () => null,
-  headerStyle: {
-    backgroundColor: "#FF6347",
-    shadowColor: "transparent",
-  },
-  headerTintColor: "white",
+ChefAuthScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "All Products",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Cart"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-arrow-back"}
+          color="white"
+          onPress={() => {
+            navData.navigation.navigate("Auth");
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerStyle: {
+      backgroundColor: "#FF6347",
+      shadowColor: "transparent",
+    },
+    headerTintColor: "white",
+  };
 };
 
 const styles = StyleSheet.create({

@@ -135,22 +135,13 @@ const ShopNavigator = createDrawerNavigator(
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            <Image
+            {/* <Image
               source={require("../assets/Omer.png")}
               style={{ width: 150, height: 100 }}
-            />
+            /> */}
             <DrawerNavigatorItems {...props} />
 
             <View style={styles.button}>
-              <View style={styles.chef}>
-                <Button
-                  title="Can You Cook?"
-                  color={Colors.primary}
-                  onPress={() => {
-                    props.navigation.navigate("ChefAuth");
-                  }}
-                />
-              </View>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
@@ -172,7 +163,7 @@ const ShopNavigator = createDrawerNavigator(
 const ChefShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
-    Admin: AdminNavigator,
+    AddProducts: AdminNavigator,
   },
   {
     contentOptions: {
@@ -183,23 +174,10 @@ const ChefShopNavigator = createDrawerNavigator(
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            {/* <Image
-              source={require("../assets/Omer.png")}
-              style={{ width: 250, height: 200, marginLeft: 5 }}
-            /> */}
             <DrawerNavigatorItems {...props} />
 
-            <View style={styles.chefButton}>
-              {/* <View style={styles.chef}>
-                <Button
-                  title="Can You Cook?"
-                  color={Colors.primary}
-                  onPress={() => {
-                    props.navigation.navigate("ChefAuth");
-                  }}
-                />
-              </View> */}
-              <View style={styles.chefLogout}>
+            <View style={styles.button}>
+              <View style={styles.logout}>
                 <Button
                   title="Logout"
                   color="white"
@@ -248,7 +226,7 @@ const MainNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 350,
+    paddingTop: 500,
   },
   chef: {
     borderColor: Colors.primary,
@@ -258,13 +236,6 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
-  },
-  chefLogout: {
-    backgroundColor: Colors.primary,
-    margin: 10,
-  },
-  chefButton: {
-    paddingTop: 550,
   },
 });
 
