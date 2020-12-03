@@ -150,6 +150,13 @@ const AuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
+              <Button
+                title="Can You Cook?"
+                color={Colors.primary}
+                onPress={() => {
+                  props.navigation.navigate("ChefAuth");
+                }}
+              />
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
                   {isLoading ? (
@@ -220,7 +227,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    paddingTop: "50%",
+    paddingTop: "40%",
   },
 });
 
