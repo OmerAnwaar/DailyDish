@@ -77,7 +77,7 @@ const LocationPicker = (props) => {
       .then((json) => {
         var addressComponent = json.results[0];
         // console.log(addressComponent);
-         setaddress(addressComponent.formatted_address);
+        setaddress(addressComponent.formatted_address);
         setfetching(false);
       })
       .catch((error) => console.warn(error));
@@ -136,13 +136,14 @@ const LocationPicker = (props) => {
           showsUserLocation={true}
           maxZoomLevel={65}
         ></MapView>
-
-        <Button
-          title="Locate Me on Map"
-          onPress={getAddressHandler}
-          color={Colors.primary}
-          style={styles.button}
-        ></Button>
+        <View style={styles.btnView}>
+          <Button
+            title="Locate Me on Map"
+            onPress={getAddressHandler}
+            color={Colors.primary}
+            style={styles.button}
+          ></Button>
+        </View>
 
         {loading === true ? (
           <View style={[styles.container, styles.horizontal]}>
@@ -152,35 +153,57 @@ const LocationPicker = (props) => {
           <View>
             {showAddress == true ? (
               <View style={styles.cordContainer}>
-                <Text style={{ fontWeight: "bold", fontSize: 18, padding: 5, color:'#f1f2f6' }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    padding: 5,
+                    color: "#f1f2f6",
+                  }}
+                >
                   We Got Your Exact Location! 🎯
                 </Text>
-                <Text style={styles.textClr}>Longitude is {pickedLocation.longitude.toString().slice(0,7)} </Text>
-                <Text style={styles.textClr}>Loatitude is {pickedLocation.latitude.toString().slice(0,7)}</Text>
+                <Text style={styles.textClr}>
+                  Longitude is {pickedLocation.longitude.toString().slice(0, 7)}{" "}
+                </Text>
+                <Text style={styles.textClr}>
+                  Loatitude is {pickedLocation.latitude.toString().slice(0, 7)}
+                </Text>
               </View>
             ) : (
               <View style={styles.NotSetcordContainer}>
-                <Text style={{fontSize:15, color: "#f1f2f6"}}>Address Not Set ❌ </Text>
+                <Text style={{ fontSize: 15, color: "#f1f2f6" }}>
+                  Address Not Set ❌{" "}
+                </Text>
               </View>
             )}
           </View>
         )}
-        <Button
-          title="Set My address"
-          color={Colors.primary}
-          onPress={genAddress}
-          style={styles.button}
-        ></Button>
+        <View style={styles.btnView}>
+          <Button
+            title="Set My address"
+            color={Colors.primary}
+            onPress={genAddress}
+            style={styles.button}
+          ></Button>
+        </View>
         {displayAdd === true ? (
           <View>
             {address === INITIAL_ADDRESS ? (
               <ActivityIndicator size="small" color={Colors.primary} />
             ) : (
               <View style={styles.addressContainer}>
-                <Text style={{ fontWeight: "bold", fontSize: 18, padding: 5 , color:'#f1f2f6' }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    padding: 5,
+                    color: "#f1f2f6",
+                  }}
+                >
                   Auto Located Address: 🏘️
                 </Text>
-              
+
                 <Text style={styles.textClr}> {address}</Text>
               </View>
             )}
@@ -221,41 +244,47 @@ const styles = StyleSheet.create({
   button: {
     color: Colors.primary,
     padding: 5,
+    height: 20,
   },
   addressContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 5,
     backgroundColor: Colors.primary,
     borderRadius: 30,
     margin: 10,
     height: 100,
-    justifyContent: 'center',
-    textAlign: 'center'
+    justifyContent: "center",
+    textAlign: "center",
   },
-  cordContainer:{
-    alignItems: 'center',
+  cordContainer: {
+    alignItems: "center",
     padding: 5,
     backgroundColor: Colors.primary,
     borderRadius: 30,
     margin: 10,
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: "center",
+    textAlign: "center",
     height: 100,
   },
-  textClr:{
-    color: '#f1f2f6',
-    fontSize: 15
+  textClr: {
+    color: "#f1f2f6",
+    fontSize: 15,
   },
-  NotSetcordContainer:{
-    alignItems: 'center',
+  NotSetcordContainer: {
+    alignItems: "center",
     padding: 5,
     backgroundColor: Colors.primary,
     borderRadius: 30,
     margin: 10,
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: "center",
+    textAlign: "center",
     height: 50,
-  }
+  },
+  btnView: {
+    width: "50%",
+    marginLeft: 100,
+    padding: 10,
+  },
 });
 
 export default LocationPicker;
