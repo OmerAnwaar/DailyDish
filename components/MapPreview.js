@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet , Text} from 'react-native';
 
 import ENV from '../env';
 
@@ -21,7 +21,10 @@ const MapPreview = props => {
       {props.location ? (
         <Image style={styles.mapImage} source={{ uri: imagePreviewUrl }} />
       ) : (
-        props.children
+        <View>
+      {props.children}
+        <Text>Hello</Text>
+        </View>
       )}
     </View>
   );

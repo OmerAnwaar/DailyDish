@@ -26,6 +26,7 @@ import SplashScreen from "../screens/SplashScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/chef/EditProductScreen";
+
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
@@ -87,7 +88,7 @@ const OrdersNavigator = createStackNavigator(
 
 const LocationNavigator = createStackNavigator(
   {
-    Address: LocationScreen,
+    Adddress: LocationScreen,
   },
   {
     navigationOptions: {
