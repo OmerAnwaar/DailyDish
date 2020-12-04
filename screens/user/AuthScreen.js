@@ -76,7 +76,9 @@ const AuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.password,
+        formState.inputValues.name,
+        formState.inputValues.phnumber
       );
     } else {
       action = authActions.login(
@@ -126,6 +128,38 @@ const AuthScreen = (props) => {
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
+<<<<<<< Updated upstream
+=======
+              {isSignup==true?(
+                 <View>
+                 <Input
+                 id="name"
+                 label="Full Name"
+                 keyboardType="default"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Name."
+                 onInputChange={inputChangeHandler}
+                 minLength={5}
+                 initialValue=""
+               />
+                <Input
+                 id="phnumber"
+                 label="Phone Number (03XXXXXXXXX):"
+                 keyboardType="numeric"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Phone Number."
+                 onInputChange={inputChangeHandler}
+                 minLength={11}
+                 initialValue=""
+               />
+               </View>
+               
+              ):(
+                <></>
+              )}
+>>>>>>> Stashed changes
               <Input
                 id="email"
                 label="E-Mail"
@@ -220,7 +254,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
+<<<<<<< Updated upstream
     paddingTop: "50%",
+=======
+    paddingTop: "5%",
+>>>>>>> Stashed changes
   },
 });
 
