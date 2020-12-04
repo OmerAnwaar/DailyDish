@@ -2,6 +2,7 @@ import { AsyncStorage } from "react-native";
 import { db } from "../../firebase/Firebase";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import React, { useState, useEffect } from "react";
 
 // export const SIGNUP = 'SIGNUP';
 // export const LOGIN = 'LOGIN';
@@ -20,7 +21,7 @@ export const authenticate = (userId, token, expiryTime) => {
 export const signup = (email, password, name, phnumber) => {
   return async (dispatch) => {
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD8D4NYx8-iJ9xS6nElzJFFUc1hKwp2cIk",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBpPrfCDE4d8352ckKKoca_pQw1bbVbO-E",
       {
         method: "POST",
         headers: {
@@ -52,8 +53,10 @@ export const signup = (email, password, name, phnumber) => {
       .collection("app-users")
       .doc(resData.localId)
       .set({
-        name: name,
+        UserName: name,
+        UserEmail: email,
         phnumber: phnumber,
+        Disable: false,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     dispatch(
@@ -73,7 +76,7 @@ export const signup = (email, password, name, phnumber) => {
 export const login = (email, password) => {
   return async (dispatch) => {
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD8D4NYx8-iJ9xS6nElzJFFUc1hKwp2cIk",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBpPrfCDE4d8352ckKKoca_pQw1bbVbO-E",
       {
         method: "POST",
         headers: {
@@ -145,3 +148,4 @@ const saveDataToStorage = (token, userId, expirationDate) => {
     })
   );
 };
+

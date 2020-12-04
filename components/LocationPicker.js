@@ -3,6 +3,9 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import Geocoder from "react-native-geocoding";
 import MapView from "react-native-maps";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import { CurrentUserProvider } from "../store/actions/auth";
 
 import {
   View,
@@ -23,7 +26,7 @@ const initialLocation = {
   latitudeDelta: 0.0025,
   longitudeDelta: 0.0015,
 };
-
+const db = firebase.firestore();
 const LocationPicker = (props) => {
   const [loading, setloading] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(initialLocation);
@@ -32,7 +35,22 @@ const LocationPicker = (props) => {
   const [displayAdd, setdisplayAdd] = useState(false);
   const [showAddress, setshowAddress] = useState(false);
   const [fetching, setfetching] = useState(false);
-
+  const CordinateSaver = () => {
+    console.log(CurrentUserProvider());
+    // return async (getState) => {
+    //   const userId = getState().auth.userId;
+    //   console.log("user id ====>", userId)
+    //   const getCords = await db
+    //     .collection("app-users")
+    //     .doc(userId)
+    //     .set({
+    //       location: new firebase.firestore.GeoPoint(
+    //         pickedLocation.latitude,
+    //         pickedLocation.longitude
+    //       ),
+    //     });
+    // };
+  };
   // const verifyPermissions = async () => {
   //   const result = await Permissions.askAsync(Permissions.LOCATION);
   //   if (result.status !== "granted") {
@@ -112,6 +130,7 @@ const LocationPicker = (props) => {
     setloading(true);
     const getCord = await _getlocation();
     const getadd = getAdd();
+    const cordsave = CordinateSaver();
     setloading(false);
     setshowAddress(true);
   };
