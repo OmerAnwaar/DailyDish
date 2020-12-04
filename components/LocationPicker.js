@@ -36,7 +36,7 @@ const LocationPicker = (props) => {
   const [showAddress, setshowAddress] = useState(false);
   const [fetching, setfetching] = useState(false);
   const CordinateSaver = () => {
-    console.log(CurrentUserProvider());
+    
     // return async (getState) => {
     //   const userId = getState().auth.userId;
     //   console.log("user id ====>", userId)
