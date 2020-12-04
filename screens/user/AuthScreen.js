@@ -80,7 +80,11 @@ const AuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.password,
+        formState.inputValues.name,
+        formState.inputValues.phnumber,
+        
+        
       );
     } else {
       action = authActions.login(
@@ -145,13 +149,13 @@ const AuthScreen = (props) => {
                />
                 <Input
                  id="phnumber"
-                 label="Phone Number (03XX-XXXXXXX):"
+                 label="Phone Number (03XXXXXXXXX):"
                  keyboardType="numeric"
                  required
                  autoCapitalize="none"
                  errorText="Please enter a Name."
                  onInputChange={inputChangeHandler}
-                 minLength={12}
+                 minLength={11}
                  initialValue=""
                />
                </View>
