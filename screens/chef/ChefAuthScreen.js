@@ -198,13 +198,15 @@ const { height } = Dimensions.get("screen");
 
 ChefAuthScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "All Products",
+    headerTitle: "",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Cart"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-arrow-back"}
-          color="white"
+          title="Back"
+          iconName={
+            Platform.OS === "android" ? "md-arrow-back" : "ios-arrow-back"
+          }
+          color={"white"}
           onPress={() => {
             navData.navigation.navigate("Auth");
           }}
