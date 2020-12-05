@@ -134,3 +134,17 @@ export const updateProduct = (id, title, description, imageUrl) => {
     });
   };
 };
+// export const saveCordinates = (latitudes, longitudes) => {
+//   return async (getState) => {
+//     const userID = getState().auth.userId;
+//     const getCords = await db
+//       .collection("app-users")
+//       .doc(userID)
+//       .set({
+//         location: new firebase.firestore.GeoPoint(latitudes, longitudes),
+//       });
+//       if (!getCords.ok) {
+//         throw new Error("Something went wrong!");
+//       }
+//   };
+// };

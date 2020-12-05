@@ -5,7 +5,8 @@ import Geocoder from "react-native-geocoding";
 import MapView from "react-native-maps";
 import * as firebase from "firebase";
 import "firebase/firestore";
-import { CurrentUserProvider } from "../store/actions/auth";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../store/actions/cordinates";
 
 import {
   View,
@@ -27,7 +28,9 @@ const initialLocation = {
   longitudeDelta: 0.0015,
 };
 const db = firebase.firestore();
+
 const LocationPicker = (props) => {
+  const [currentUser, setcurrentUser] = useState();
   const [loading, setloading] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(initialLocation);
   const [error, seterror] = useState({ error: "" });
@@ -35,21 +38,33 @@ const LocationPicker = (props) => {
   const [displayAdd, setdisplayAdd] = useState(false);
   const [showAddress, setshowAddress] = useState(false);
   const [fetching, setfetching] = useState(false);
-  const CordinateSaver = () => {
-    
-    // return async (getState) => {
-    //   const userId = getState().auth.userId;
-    //   console.log("user id ====>", userId)
-    //   const getCords = await db
-    //     .collection("app-users")
-    //     .doc(userId)
-    //     .set({
-    //       location: new firebase.firestore.GeoPoint(
-    //         pickedLocation.latitude,
-    //         pickedLocation.longitude
-    //       ),
-    //     });
-    // };
+  const dispatch = useDispatch();
+  const ReduxLongitude = useSelector((state) => state.cord.longitude);
+  const ReduxLatitude = useSelector((state) => state.cord.latitude);
+  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const CordinateSaver = async () => {
+    console.log("user id ====>", ReduxCurrentUser);
+    // var thisis =  Number.parseFloat(pickedLocation.latitude.toFixed(4))
+    // console.log(typeof thisis)
+    // console.log(thisis)
+    await db
+      .collection("app-users")
+      .doc(ReduxCurrentUser)
+      .update({
+        location: new firebase.firestore.GeoPoint(
+          Number.parseFloat(pickedLocation.latitude.toFixed(4)),
+          Number.parseFloat(pickedLocation.longitude.toFixed(4))
+        ),
+      });
+  };
+  const saveAddToDb = async () => {
+    await db
+      .collection("app-users")
+      .doc(ReduxCurrentUser)
+      .update({
+        address: firebase.firestore.FieldValue.arrayUnion(address),
+      });
+    setloading(false);
   };
   // const verifyPermissions = async () => {
   //   const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -63,6 +78,7 @@ const LocationPicker = (props) => {
   //   }
   //   return true;
   // };
+
   Geocoder.init("AIzaSyBCSNe6FSjhJtL8iENJ8bk25HjCd0ApAWc");
   const _getlocation = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -84,7 +100,14 @@ const LocationPicker = (props) => {
       latitudeDelta: 0.00019,
       longitudeDelta: 0.0019,
     });
+    dispatch(
+      actions.addCords(
+        pickedLocation.latitude.toFixed(4),
+        pickedLocation.longitude.toFixed(4)
+      )
+    );
     console.log(pickedLocation);
+
     return true;
   };
   const getAdd = () => {
@@ -130,7 +153,13 @@ const LocationPicker = (props) => {
     setloading(true);
     const getCord = await _getlocation();
     const getadd = getAdd();
-    const cordsave = CordinateSaver();
+    // dispatch(
+    //   actions.addCords(
+    //     pickedLocation.latitude.toFixed(4),
+    //     pickedLocation.longitude.toFixed(4)
+    //   )
+    // );
+
     setloading(false);
     setshowAddress(true);
   };
@@ -138,10 +167,14 @@ const LocationPicker = (props) => {
     setloading(true);
     setfetching(true);
     const getadd = await getAdd();
-
+    const savingCords = CordinateSaver();
     setloading(false);
     setshowAddress(true);
     setdisplayAdd(true);
+  };
+  const addSave = async () => {
+    setloading(true);
+    saveAddToDb();
   };
 
   return (
@@ -182,11 +215,9 @@ const LocationPicker = (props) => {
                 >
                   We Got Your Exact Location! 🎯
                 </Text>
+                <Text style={styles.textClr}>Latitude is {ReduxLatitude} </Text>
                 <Text style={styles.textClr}>
-                  Longitude is {pickedLocation.longitude.toString().slice(0, 7)}{" "}
-                </Text>
-                <Text style={styles.textClr}>
-                  Loatitude is {pickedLocation.latitude.toString().slice(0, 7)}
+                  Longitude is {ReduxLongitude}
                 </Text>
               </View>
             ) : (
@@ -211,6 +242,7 @@ const LocationPicker = (props) => {
             {address === INITIAL_ADDRESS ? (
               <ActivityIndicator size="small" color={Colors.primary} />
             ) : (
+              <View>
               <View style={styles.addressContainer}>
                 <Text
                   style={{
@@ -224,6 +256,15 @@ const LocationPicker = (props) => {
                 </Text>
 
                 <Text style={styles.textClr}> {address}</Text>
+                
+              </View>
+              <Button
+                  title="Save Address?"
+                  color={Colors.primary}
+                  onPress={addSave}
+                  style={styles.button}
+                  disabled={loading}
+                ></Button>
               </View>
             )}
             {/* <Text>Your address: {address}</Text> */}
@@ -270,7 +311,7 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: Colors.primary,
     borderRadius: 30,
-    margin: 10,
+    margin: 4,
     height: 100,
     justifyContent: "center",
     textAlign: "center",
@@ -302,7 +343,7 @@ const styles = StyleSheet.create({
   btnView: {
     width: "50%",
     marginLeft: 100,
-    padding: 10,
+    padding: 8,
   },
 });
 
