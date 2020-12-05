@@ -152,18 +152,47 @@ const ChefAuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
-              <Input
-                id="KitchenName"
-                label="Kitchen Name"
-                keyboardType="default"
-                secureTextEntry
-                required
-                minLength={5}
-                autoCapitalize="none"
-                errorText="Please enter a valid Kitchen."
-                onInputChange={inputChangeHandler}
-                initialValue=""
-              />
+              {isSignup == true ? (
+                <View>
+                <Input
+                  id="KitchenName"
+                  label="Set a Kitchen Name"
+                  keyboardType="default"
+                  required
+                  minLength={5}
+                  autoCapitalize="none"
+                  errorText="Please enter a valid Kitchen."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+                <Input
+                  id="chefname"
+                  label="Chef Name:"
+                  keyboardType="default"
+                  required
+                  minLength={5}
+                  autoCapitalize="none"
+                  errorText="Please enter a valid Name."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+                 <Input
+                 id="phnumber"
+                 label="Phone Number (03XX-XXXXXXX):"
+                 keyboardType="numeric"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Name."
+                 onInputChange={inputChangeHandler}
+                 minLength={12}
+                 initialValue=""
+               />
+                
+                </View>
+              ) : (
+                <></>
+              )}
+
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
                   {isLoading ? (
@@ -251,7 +280,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    paddingTop: "30%",
+    paddingTop: "10%",
   },
 });
 

@@ -55,10 +55,14 @@ const AuthScreen = (props) => {
     inputValues: {
       email: "",
       password: "",
+      name: "",
+      phnumber:""
     },
     inputValidities: {
       email: false,
       password: false,
+      name: false,
+      phnumber: false
     },
     formIsValid: false,
   });
@@ -126,6 +130,35 @@ const AuthScreen = (props) => {
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
+              {isSignup==true?(
+                 <View>
+                 <Input
+                 id="name"
+                 label="Full Name"
+                 keyboardType="default"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Name."
+                 onInputChange={inputChangeHandler}
+                 minLength={5}
+                 initialValue=""
+               />
+                <Input
+                 id="phnumber"
+                 label="Phone Number (03XX-XXXXXXX):"
+                 keyboardType="numeric"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Name."
+                 onInputChange={inputChangeHandler}
+                 minLength={12}
+                 initialValue=""
+               />
+               </View>
+               
+              ):(
+                <></>
+              )}
               <Input
                 id="email"
                 label="E-Mail"
@@ -227,7 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    paddingTop: "40%",
+    paddingTop: "20%",
   },
 });
 
