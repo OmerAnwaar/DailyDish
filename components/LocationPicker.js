@@ -8,6 +8,7 @@ import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions/cordinates";
 import Input from "../components/UI/Input";
+import Addresses from './UI/Addresses'
 
 import {
   View,
@@ -71,6 +72,7 @@ const LocationPicker = (props) => {
   const ReduxLongitude = useSelector((state) => state.cord.longitude);
   const ReduxLatitude = useSelector((state) => state.cord.latitude);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const [SavedAddress, setSavedAddress] = useState([]);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -105,12 +107,12 @@ const LocationPicker = (props) => {
       ]);
     }
   }, [error]);
+  useEffect(() => {
+   getSavedAddress()
+  }, [])
 
   const CordinateSaver = async () => {
     console.log("user id ====>", ReduxCurrentUser);
-    // var thisis =  Number.parseFloat(pickedLocation.latitude.toFixed(4))
-    // console.log(typeof thisis)
-    // console.log(thisis)
     await db
       .collection("app-users")
       .doc(ReduxCurrentUser)
@@ -274,6 +276,24 @@ const LocationPicker = (props) => {
     setloading(true);
     saveAddToDb();
   };
+  const getSavedAddress = async () => {
+    await db
+      .collection("app-users")
+      .doc(ReduxCurrentUser)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document recieved", doc.data().SavedAddress);
+          setSavedAddress(doc.data().SavedAddress);
+        } else {
+          console.log("no such doc bro");
+        }
+      })
+      .catch((error) => {
+        console.log("error agya!!!!!!!");
+        seterr(error);
+      });
+  };
 
   return (
     <View style={styles.locationPicker}>
@@ -321,7 +341,7 @@ const LocationPicker = (props) => {
             ) : (
               <View style={styles.NotSetcordContainer}>
                 <Text style={{ fontSize: 15, color: "#f1f2f6" }}>
-                  Address Not Set ❌{" "}
+                  Locate to See Something Awesome!{" "}
                 </Text>
               </View>
             )}
@@ -469,6 +489,8 @@ const LocationPicker = (props) => {
           <></>
         )}
       </View>
+     
+      <Addresses addresses={SavedAddress} />
     </View>
   );
 };

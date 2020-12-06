@@ -157,13 +157,7 @@ const ShopNavigator = createDrawerNavigator(
           .catch((error) => {
             console.log("error agya!!!!!!!");
           });
-        // .onSnapshot((snapshot) => {
-        //   setuserName(
-        //     snapshot.docs.map((doc) => ({
-        //       UserName: doc.data().UserName,
-        //     }))
-        //   );
-        // });
+      
       };
       useEffect(() => {
         getUserName();
