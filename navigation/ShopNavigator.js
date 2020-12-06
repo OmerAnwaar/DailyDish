@@ -175,8 +175,13 @@ const ShopNavigator = createDrawerNavigator(
               source={require("../assets/Omer.png")}
               style={{ width: 150, height: 100 }}
             /> */}
-            <View>
-              <Text>{userName}</Text>
+            <View style={styles.UserNameHolder}>
+              <Ionicons
+              name={Platform.OS=="android"? "md-person": "ios-person" }
+              size={25}
+              
+              /><Text style={styles.usertxt}>Welcome {userName}</Text>
+              
             </View>
             <DrawerNavigatorItems {...props} />
 
@@ -276,6 +281,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     margin: 10,
   },
+  UserNameHolder:{
+    paddingTop: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  usertxt:{
+    marginLeft: 10,
+    fontSize: 20
+  }
 });
 
 export default createAppContainer(MainNavigator);
