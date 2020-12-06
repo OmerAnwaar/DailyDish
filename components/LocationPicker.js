@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import Geocoder from "react-native-geocoding";
@@ -7,6 +7,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions/cordinates";
+import Input from "../components/UI/Input";
 
 import {
   View,
@@ -15,9 +16,34 @@ import {
   ActivityIndicator,
   Alert,
   StyleSheet,
+  Modal,
 } from "react-native";
 import Colors from "../constants/Colors";
-import { add } from "react-native-reanimated";
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    };
+  }
+  return state;
+};
+
 // import MapPreview from "./MapPreview";
 const INITIAL_ADDRESS =
   "Badshahi Mosque, Walled City of Lahore, Lahore, Punjab, Pakistan";
@@ -38,10 +64,48 @@ const LocationPicker = (props) => {
   const [displayAdd, setdisplayAdd] = useState(false);
   const [showAddress, setshowAddress] = useState(false);
   const [fetching, setfetching] = useState(false);
+  const [ModalView, setModalView] = useState(false);
+  const [inputerror, setError] = useState(null);
+  const [manualSetter, setmanualSetter] = useState(false);
   const dispatch = useDispatch();
   const ReduxLongitude = useSelector((state) => state.cord.longitude);
   const ReduxLatitude = useSelector((state) => state.cord.latitude);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      houseNumber: "",
+      street: "",
+      block: "",
+      area: "",
+    },
+    inputValidities: {
+      houseNumber: false,
+      street: false,
+      block: false,
+      area: false,
+    },
+    formIsValid: false,
+  });
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
+  useEffect(() => {
+    if (inputerror) {
+      Alert.alert("Please enter a valid Address", inputerror, [
+        { text: "Okay" },
+      ]);
+    }
+  }, [error]);
+
   const CordinateSaver = async () => {
     console.log("user id ====>", ReduxCurrentUser);
     // var thisis =  Number.parseFloat(pickedLocation.latitude.toFixed(4))
@@ -57,12 +121,46 @@ const LocationPicker = (props) => {
         ),
       });
   };
+  const ManualAddressSaver = async () => {
+    setloading(true);
+    let houseNo = formState.inputValues.houseNumber;
+    let stNo = formState.inputValues.street;
+    let blk = formState.inputValues.block;
+    let areaSet = formState.inputValues.area;
+    let concatAddress =
+      "House" +
+      " " +
+      houseNo +
+      " " +
+      "street number" +
+      " " +
+      stNo +
+      " " +
+      "Block" +
+      " " +
+      blk +
+      " " +
+      areaSet +
+      ",Lahore,Punjab,Pakistan";
+    console.log(concatAddress);
+    await db.collection("app-users").doc(ReduxCurrentUser).update({
+      CurrentAddress: concatAddress,
+    });
+    await db
+      .collection("app-users")
+      .doc(ReduxCurrentUser)
+      .update({
+        SavedAddress: firebase.firestore.FieldValue.arrayUnion(concatAddress),
+      });
+    setloading(false);
+    setmanualSetter(true);
+  };
   const saveAddToDb = async () => {
     await db
       .collection("app-users")
       .doc(ReduxCurrentUser)
       .update({
-        address: firebase.firestore.FieldValue.arrayUnion(address),
+        SavedAddress: firebase.firestore.FieldValue.arrayUnion(address),
       });
     setloading(false);
   };
@@ -231,7 +329,7 @@ const LocationPicker = (props) => {
         )}
         <View style={styles.btnView}>
           <Button
-            title="Set My address"
+            title="Generate Address!"
             color={Colors.primary}
             onPress={genAddress}
             style={styles.button}
@@ -243,34 +341,132 @@ const LocationPicker = (props) => {
               <ActivityIndicator size="small" color={Colors.primary} />
             ) : (
               <View>
-              <View style={styles.addressContainer}>
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: 18,
-                    padding: 5,
-                    color: "#f1f2f6",
-                  }}
-                >
-                  Auto Located Address: 🏘️
-                </Text>
+                <View style={styles.addressContainer}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 18,
+                      padding: 5,
+                      color: "#f1f2f6",
+                    }}
+                  >
+                    Auto Located Address: 🏘️
+                  </Text>
 
-                <Text style={styles.textClr}> {address}</Text>
-                
-              </View>
-              <Button
+                  <Text style={styles.textClr}> {address}</Text>
+                </View>
+                <Button
                   title="Save Address?"
                   color={Colors.primary}
                   onPress={addSave}
                   style={styles.button}
                   disabled={loading}
                 ></Button>
+
+                <Modal
+                  animationType={"slide"}
+                  transparent={true}
+                  visible={ModalView}
+                  onRequestClose={() => {
+                    console.log("Modal has been closed.");
+                  }}
+                >
+                  {/*All views of Modal*/}
+
+                  <View style={styles.modal}>
+                    <View style={styles.inputHanler}>
+                      <Input
+                        id="houseNumber"
+                        label="House Number:"
+                        // placeholder="password"
+                        keyboardType="numeric"
+                        required
+                        minLength={1}
+                        autoCapitalize="none"
+                        errorText="Please enter a Valid Address."
+                        onInputChange={inputChangeHandler}
+                        initialValue=""
+                      />
+                      <Input
+                        id="street"
+                        label="Street Number:"
+                        // placeholder="password"
+                        keyboardType="numeric"
+                        required
+                        minLength={1}
+                        autoCapitalize="none"
+                        errorText="Please enter a Valid Address."
+                        onInputChange={inputChangeHandler}
+                        initialValue=""
+                      />
+                      <Input
+                        id="block"
+                        label="Block:"
+                        // placeholder="password"
+                        keyboardType="default"
+                        required
+                        minLength={1}
+                        maxLength={5}
+                        autoCapitalize="none"
+                        errorText="Please enter a Valid Address."
+                        onInputChange={inputChangeHandler}
+                        initialValue=""
+                      />
+                      <Input
+                        id="area"
+                        label="Area:"
+                        // placeholder="password"
+                        keyboardType="default"
+                        required
+                        minLength={5}
+                        autoCapitalize="none"
+                        errorText="Please enter a Valid Address."
+                        onInputChange={inputChangeHandler}
+                        initialValue=""
+                      />
+                    </View>
+                    <View>
+                      {manualSetter == true ? (
+                        <Text style={{ color: "green" , padding: 10, fontSize: 20}}>Address Saved</Text>
+                      ) : (
+                        <></>
+                      )}
+                    </View>
+                    <View style={styles.modalCloseBtn}>
+                      <Button
+                        disabled={loading}
+                        style={styles.button}
+                        color={Colors.primary}
+                        title=" Save Address"
+                        onPress={ManualAddressSaver}
+                      />
+
+                      <Button
+                        style={styles.button}
+                        color={Colors.primary}
+                        title=" < Go Back"
+                        onPress={() => {
+                          setModalView(false);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Modal>
+                {/*Button will change state to true and view will re-render*/}
+                <Button
+                  style={styles.button}
+                  color={Colors.primary}
+                  title="Not Your Address? 😢 "
+                  onPress={() => {
+                    setModalView(true);
+                  }}
+                />
               </View>
             )}
             {/* <Text>Your address: {address}</Text> */}
           </View>
         ) : (
-          <View></View>
+          <></>
         )}
       </View>
     </View>
@@ -344,6 +540,33 @@ const styles = StyleSheet.create({
     width: "50%",
     marginLeft: 100,
     padding: 8,
+  },
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#dfe6e9",
+    opacity: 2,
+    height: 600,
+    width: "85%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#fff",
+    marginTop: 100,
+    marginLeft: 35,
+  },
+  text: {
+    color: "#3f2949",
+    marginTop: 10,
+  },
+  modalCloseBtn: {
+    top: 70,
+  },
+  inputHanler: {
+    width: "90%",
+    height: 300,
+    padding: 8,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
 });
 
