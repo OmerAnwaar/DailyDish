@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
 import {
   createAppContainer,
   createSwitchNavigator,
@@ -16,6 +19,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Text,
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
@@ -31,9 +35,10 @@ import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
-import { useDispatch } from "react-redux";
+
 import * as authActions from "../store/actions/auth";
 import LocationScreen from "../screens/user/LocationScreen";
+import { db } from "../firebase/Firebase";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -124,6 +129,7 @@ const ShopNavigator = createDrawerNavigator(
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
+    // UserName: 'Hello'
     // Admin: AdminNavigator,
   },
   {
@@ -131,7 +137,37 @@ const ShopNavigator = createDrawerNavigator(
       activeTintColor: Colors.primary,
     },
     contentComponent: (props) => {
+      const [userName, setuserName] = useState("");
+      const db = firebase.firestore();
       const dispatch = useDispatch();
+      const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+      const getUserName = async () => {
+        await db
+          .collection("app-users")
+          .doc(ReduxCurrentUser)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              console.log("Document recieved", doc.data());
+              setuserName(doc.data().UserName);
+            } else {
+              console.log("no such doc bro");
+            }
+          })
+          .catch((error) => {
+            console.log("error agya!!!!!!!");
+          });
+        // .onSnapshot((snapshot) => {
+        //   setuserName(
+        //     snapshot.docs.map((doc) => ({
+        //       UserName: doc.data().UserName,
+        //     }))
+        //   );
+        // });
+      };
+      useEffect(() => {
+        getUserName();
+      }, []);
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -139,6 +175,9 @@ const ShopNavigator = createDrawerNavigator(
               source={require("../assets/Omer.png")}
               style={{ width: 150, height: 100 }}
             /> */}
+            <View>
+              <Text>{userName}</Text>
+            </View>
             <DrawerNavigatorItems {...props} />
 
             <View style={styles.button}>
