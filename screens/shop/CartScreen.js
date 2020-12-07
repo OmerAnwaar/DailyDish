@@ -40,6 +40,7 @@ const CartScreen = (props) => {
     setIsLoading(true);
     await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
     setIsLoading(false);
+    // props.navigation.navigate("SentOrders");
   };
 
   return (

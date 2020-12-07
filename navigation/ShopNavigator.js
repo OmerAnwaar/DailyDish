@@ -202,8 +202,6 @@ const ShopNavigator = createDrawerNavigator(
     Profile: UserProfileNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
-    // UserName: 'Hello'
-    // Admin: AdminNavigator,
   },
   {
     contentOptions: {
@@ -241,6 +239,7 @@ const ShopNavigator = createDrawerNavigator(
               <Ionicons
                 name={Platform.OS == "android" ? "md-person" : "ios-person"}
                 size={25}
+                color={Colors.primary}
               />
               <Text style={styles.usertxt}>Welcome {userName}</Text>
             </View>
@@ -353,6 +352,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   usertxt: {
+    color: Colors.primary,
     marginLeft: 10,
     fontSize: 20,
   },
