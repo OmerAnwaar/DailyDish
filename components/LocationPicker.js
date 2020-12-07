@@ -155,6 +155,7 @@ const LocationPicker = (props) => {
         SavedAddress: firebase.firestore.FieldValue.arrayUnion(concatAddress),
       });
     setloading(false);
+    setmanualSetter(true);
    
   };
   const saveAddToDb = async () => {
@@ -165,7 +166,7 @@ const LocationPicker = (props) => {
         SavedAddress: firebase.firestore.FieldValue.arrayUnion(address),
       });
     setloading(false);
-    setmanualSetter(true);
+  
   };
   // const verifyPermissions = async () => {
   //   const result = await Permissions.askAsync(Permissions.LOCATION);
