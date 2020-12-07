@@ -48,8 +48,8 @@ function Addresses(addresses) {
           <View>
             <View style={styles.listItems}>
               {addresses.addresses.map((add, key) => (
-                <View style={styles.internalListContainer}>
-                  <Text key={key} style={styles.listText}>
+                <View key={add} style={styles.internalListContainer}>
+                  <Text key={add} style={styles.listText}>
                     {add}
                   </Text>
 
