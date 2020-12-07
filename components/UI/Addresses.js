@@ -16,7 +16,7 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import ViewMoreText from "react-native-view-more-text";
 
 function Addresses(addresses) {
-  const saved_address = "Saved Address";
+  const saved_address = "No Saved Address";
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [SavedAddress, setSavedAddress] = useState([]);
   const [curr, setcurr] = useState("");

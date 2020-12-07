@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import Input from "../../components/UI/Input";
 import Card from "../../components/UI/Card";
 import Colors from "../../constants/Colors";
-import * as authActions from "../../store/actions/auth";
+import * as authActions from "../../store/actions/authChef";
 
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -57,10 +57,18 @@ const ChefAuthScreen = (props) => {
     inputValues: {
       email: "",
       password: "",
+      cnic:"",
+      kitchenname:"",
+      chefname: "",
+      phnumber: ""
     },
     inputValidities: {
       email: false,
       password: false,
+      cnic:false,
+      kitchenname:false,
+      chefname: false,
+      phnumber: false
     },
     formIsValid: false,
   });
@@ -78,7 +86,11 @@ const ChefAuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.password,
+        formState.inputValues.chefname,
+        formState.inputValues.phnumber,
+        formState.inputValues.kitchenname,
+        formState.inputValues.cnic
       );
     } else {
       action = authActions.login(
@@ -154,40 +166,51 @@ const ChefAuthScreen = (props) => {
               />
               {isSignup == true ? (
                 <View>
-                <Input
-                  id="KitchenName"
-                  label="Set a Kitchen Name"
-                  keyboardType="default"
-                  required
-                  minLength={5}
-                  autoCapitalize="none"
-                  errorText="Please enter a valid Kitchen."
-                  onInputChange={inputChangeHandler}
-                  initialValue=""
-                />
-                <Input
-                  id="chefname"
-                  label="Chef Name:"
-                  keyboardType="default"
-                  required
-                  minLength={5}
-                  autoCapitalize="none"
-                  errorText="Please enter a valid Name."
-                  onInputChange={inputChangeHandler}
-                  initialValue=""
-                />
-                 <Input
-                 id="phnumber"
-                 label="Phone Number (03XX-XXXXXXX):"
-                 keyboardType="numeric"
-                 required
-                 autoCapitalize="none"
-                 errorText="Please enter a Name."
-                 onInputChange={inputChangeHandler}
-                 minLength={12}
-                 initialValue=""
-               />
-                
+                  <Input
+                    id="cnic"
+                    label="CNIC (No spacing)"
+                    // placeholder="password"
+                    keyboardType="numeric"
+                    required
+                    minLength={13}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid CNIC."
+                    onInputChange={inputChangeHandler}
+                    initialValue=""
+                  />
+                  <Input
+                    id="kitchenname"
+                    label="Set a Kitchen Name"
+                    keyboardType="default"
+                    required
+                    minLength={5}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid Kitchen Name , Min Length 5."
+                    onInputChange={inputChangeHandler}
+                    initialValue=""
+                  />
+                  <Input
+                    id="chefname"
+                    label="Chef Name:"
+                    keyboardType="default"
+                    required
+                    minLength={5}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid Name."
+                    onInputChange={inputChangeHandler}
+                    initialValue=""
+                  />
+                  <Input
+                    id="phnumber"
+                    label="Phone Number (03XXXXXXXXX):"
+                    keyboardType="numeric"
+                    required
+                    autoCapitalize="none"
+                    errorText="Please enter a Valid Number."
+                    onInputChange={inputChangeHandler}
+                    minLength={12}
+                    initialValue=""
+                  />
                 </View>
               ) : (
                 <></>
@@ -262,12 +285,13 @@ const styles = StyleSheet.create({
     // paddingLeft: 5,
   },
   logo: {
-    width: "60%",
-    height: "40%",
+    width: 150,
+    height: 150,
+    marginTop: 70,
   },
   authContainer: {
     width: "100%",
-    height: 900,
+    height: 1000,
     maxWidth: 400,
     padding: 30,
     marginHorizontal: 7.5,

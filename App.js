@@ -10,6 +10,7 @@ import ordersReducer from "./store/reducers/orders";
 import authReducer from "./store/reducers/auth";
 import cartReducer from "./store/reducers/cart";
 import CordinateReducer from './store/reducers/cordinates'
+import authChefReducer from './store/reducers/authChef'
 
 import NavigationContainer from "./navigation/NavigationContainer";
 
@@ -18,7 +19,9 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   orders: ordersReducer,
   auth: authReducer,
+  authChef: authChefReducer,
   cord: CordinateReducer
+
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

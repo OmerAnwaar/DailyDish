@@ -8,7 +8,7 @@ import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions/cordinates";
 import Input from "../components/UI/Input";
-import Addresses from './UI/Addresses'
+import Addresses from "./UI/Addresses";
 
 import {
   View,
@@ -108,8 +108,8 @@ const LocationPicker = (props) => {
     }
   }, [error]);
   useEffect(() => {
-   getSavedAddress()
-  }, [SavedAddress])
+    getSavedAddress();
+  }, [SavedAddress]);
 
   const CordinateSaver = async () => {
     console.log("user id ====>", ReduxCurrentUser);
@@ -156,7 +156,6 @@ const LocationPicker = (props) => {
       });
     setloading(false);
     setmanualSetter(true);
-   
   };
   const saveAddToDb = async () => {
     await db
@@ -165,8 +164,10 @@ const LocationPicker = (props) => {
       .update({
         SavedAddress: firebase.firestore.FieldValue.arrayUnion(address),
       });
+    await db.collection("app-users").doc(ReduxCurrentUser).update({
+      CurrentAddress: address,
+    });
     setloading(false);
-  
   };
   // const verifyPermissions = async () => {
   //   const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -277,6 +278,7 @@ const LocationPicker = (props) => {
   const addSave = async () => {
     setloading(true);
     saveAddToDb();
+    getSavedAddress();
   };
   const getSavedAddress = async () => {
     await db
@@ -449,7 +451,12 @@ const LocationPicker = (props) => {
                     </View>
                     <View>
                       {manualSetter == true ? (
-                        <Text style={{ color: "green" , padding: 10, fontSize: 20}}> Saved and Set to Current Address!</Text>
+                        <Text
+                          style={{ color: "green", padding: 10, fontSize: 20 }}
+                        >
+                          {" "}
+                          Saved and Set to Current Address!
+                        </Text>
                       ) : (
                         <></>
                       )}
@@ -491,7 +498,7 @@ const LocationPicker = (props) => {
           <></>
         )}
       </View>
-     
+
       <Addresses addresses={SavedAddress} />
     </View>
   );
