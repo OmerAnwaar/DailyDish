@@ -109,7 +109,7 @@ const LocationPicker = (props) => {
   }, [error]);
   useEffect(() => {
    getSavedAddress()
-  }, [])
+  }, [SavedAddress])
 
   const CordinateSaver = async () => {
     console.log("user id ====>", ReduxCurrentUser);
@@ -155,7 +155,7 @@ const LocationPicker = (props) => {
         SavedAddress: firebase.firestore.FieldValue.arrayUnion(concatAddress),
       });
     setloading(false);
-    setmanualSetter(true);
+   
   };
   const saveAddToDb = async () => {
     await db
@@ -165,6 +165,7 @@ const LocationPicker = (props) => {
         SavedAddress: firebase.firestore.FieldValue.arrayUnion(address),
       });
     setloading(false);
+    setmanualSetter(true);
   };
   // const verifyPermissions = async () => {
   //   const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -283,7 +284,7 @@ const LocationPicker = (props) => {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          console.log("Document recieved", doc.data().SavedAddress);
+          // console.log("Document recieved", doc.data().SavedAddress);
           setSavedAddress(doc.data().SavedAddress);
         } else {
           console.log("no such doc bro");
@@ -447,7 +448,7 @@ const LocationPicker = (props) => {
                     </View>
                     <View>
                       {manualSetter == true ? (
-                        <Text style={{ color: "green" , padding: 10, fontSize: 20}}>Address Saved</Text>
+                        <Text style={{ color: "green" , padding: 10, fontSize: 20}}> Saved and Set to Current Address!</Text>
                       ) : (
                         <></>
                       )}
