@@ -270,6 +270,7 @@ const ChefShopNavigator = createDrawerNavigator(
     Products: ProductsNavigator,
     AddProducts: AdminNavigator,
     Profile: ChefProfileNavigator,
+    Address: LocationNavigator,
     ReceivedOrders: ReceivedOrdersNavigator,
   },
   {
