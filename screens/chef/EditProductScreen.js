@@ -12,10 +12,12 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
-import HeaderButton from "../../components/UI/HeaderButton";
+import CategoryPickerItem from "../../components/CategoryPickerItem";
+import Picker from "../../components/categories/Picker";
 import * as productsActions from "../../store/actions/products";
-import Input from "../../components/UI/Input";
+import HeaderButton from "../../components/UI/HeaderButton";
 import ImagePicker from "../../components/ImagePicker";
+import Input from "../../components/UI/Input";
 import Colors from "../../constants/Colors";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
@@ -43,6 +45,63 @@ const formReducer = (state, action) => {
   return state;
 };
 
+const categories = [
+  {
+    backgroundColor: "#fc5c65",
+    icon: "pizza",
+    label: "Fast Food",
+    value: 1,
+  },
+  {
+    backgroundColor: "#fd9644",
+    icon: "food-fork-drink",
+    label: "Desi",
+    value: 2,
+  },
+  {
+    backgroundColor: "#fed330",
+    icon: "bowl",
+    label: "Chinease",
+    value: 3,
+  },
+  {
+    backgroundColor: "#26de81",
+    icon: "fish",
+    label: "Sea Food",
+    value: 4,
+  },
+  {
+    backgroundColor: "#2bcbba",
+    icon: "food-variant",
+    label: "Continental",
+    value: 5,
+  },
+  {
+    backgroundColor: "#45aaf2",
+    icon: "food",
+    label: "Turkish",
+    value: 6,
+  },
+  {
+    backgroundColor: "#4b7bec",
+    icon: "baguette",
+    label: "Cakes and Bakery",
+    value: 7,
+  },
+  {
+    backgroundColor: "#a55eea",
+    icon: "cake-variant",
+    label: "Desserts",
+    value: 8,
+  },
+  {
+    backgroundColor: "#778ca3",
+    icon: "application",
+    label: "Other",
+    value: 9,
+  },
+];
+
 const EditProductScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -58,12 +117,14 @@ const EditProductScreen = (props) => {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
       // imageUrl: editedProduct ? editedProduct.imageUrl : "",
+      category: editedProduct ? editedProduct.category : null,
       description: editedProduct ? editedProduct.description : "",
       price: "",
     },
     inputValidities: {
       title: editedProduct ? true : false,
       // imageUrl: editedProduct ? true : false,
+      category: editedProduct ? editedProduct.category : null,
       description: editedProduct ? true : false,
       price: editedProduct ? true : false,
     },
@@ -92,6 +153,7 @@ const EditProductScreen = (props) => {
           productsActions.updateProduct(
             prodId,
             formState.inputValues.title,
+            formState.inputValues.category,
             formState.inputValues.description,
             selectedImage
             // formState.inputValues.imageUrl
@@ -101,6 +163,7 @@ const EditProductScreen = (props) => {
         await dispatch(
           productsActions.createProduct(
             formState.inputValues.title,
+            formState.inputValues.category,
             formState.inputValues.description,
             selectedImage,
 
@@ -171,7 +234,14 @@ const EditProductScreen = (props) => {
             onImageTaken={imageTakenHandler}
             // initialValue={editedProduct ? editedProduct.imageUrl : ""}
           />
-
+          <Picker
+            items={categories}
+            name="category"
+            numberOfColumns={3}
+            PickerItemComponent={CategoryPickerItem}
+            placeholder="Category"
+            width="50%"
+          />
           {editedProduct ? null : (
             <Input
               id="price"
