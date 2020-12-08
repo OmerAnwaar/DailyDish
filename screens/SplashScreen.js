@@ -13,7 +13,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 // import { useTheme } from "@react-navigation/native";
 import Colors from "../constants/Colors";
-
+import ignoreWarnings from "react-native-ignore-warnings";
+ignoreWarnings("Can't perform a");
 const SplashScreen = (props) => {
   //   const { colors } = useTheme();
 

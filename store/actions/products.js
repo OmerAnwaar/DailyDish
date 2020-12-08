@@ -1,9 +1,14 @@
 import Product from "../../models/product";
+import * as firebase from "firebase";
+import "firebase/firestore";
+
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
+const db = firebase.firestore();
+
 
 export const fetchProducts = () => {
   return async (dispatch, getState) => {
@@ -17,10 +22,33 @@ export const fetchProducts = () => {
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
+      const pArr = [];
+      const tofire = await db.collection("products-view").onSnapshot(
+        (snap) => {
+        
+            snap.docs.map(
+              (doc) =>
+              pArr.push(
+                new Product(
+                  doc.id,
+                  doc.data().ownerId,
+                  doc.data().title,
+                  doc.data().imageUrl,
+                  doc.data().description,
+                  doc.data().price
+                )
+            )
+          );
+          
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
       const resData = await response.json();
       const loadedProducts = [];
-
+      console.log("i am the key babe", resData.key);
       for (const key in resData) {
         loadedProducts.push(
           new Product(
@@ -33,11 +61,13 @@ export const fetchProducts = () => {
           )
         );
       }
+    
+      console.log('bawajeee=====>', pArr);
 
       dispatch({
         type: SET_PRODUCTS,
-        products: loadedProducts,
-        userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
+        products: pArr,
+        userProducts: pArr.filter((prod) => prod.ownerId === userId),
       });
     } catch (err) {
       // send to custom analytics server
@@ -134,17 +164,3 @@ export const updateProduct = (id, title, description, imageUrl) => {
     });
   };
 };
-// export const saveCordinates = (latitudes, longitudes) => {
-//   return async (getState) => {
-//     const userID = getState().auth.userId;
-//     const getCords = await db
-//       .collection("app-users")
-//       .doc(userID)
-//       .set({
-//         location: new firebase.firestore.GeoPoint(latitudes, longitudes),
-//       });
-//       if (!getCords.ok) {
-//         throw new Error("Something went wrong!");
-//       }
-//   };
-// };

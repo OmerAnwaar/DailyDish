@@ -20,6 +20,7 @@ import {
   StyleSheet,
   Image,
   Text,
+ 
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
@@ -250,7 +251,7 @@ const ShopNavigator = createDrawerNavigator(
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color="white"
+                  color={Platform.OS === 'android' ? Colors.primary : 'white'}
                   onPress={() => {
                     dispatch(authActions.logout());
                     // props.navigation.navigate("Auth");
@@ -334,7 +335,7 @@ const MainNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 390,
+    paddingTop: 250,
   },
   chef: {
     borderColor: Colors.primary,

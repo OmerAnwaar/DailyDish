@@ -19,7 +19,9 @@ const ProductItem = (props) => {
   }
 
   return (
+  
     <Card style={styles.product}>
+      {console.log(props.image)}
       <View style={styles.touchable}>
         <TouchableCmp onPress={props.onSelect} useForeground>
           <View>
@@ -28,7 +30,7 @@ const ProductItem = (props) => {
             </View>
             <View style={styles.details}>
               <Text style={styles.title}>{props.title}</Text>
-              <Text style={styles.price}>Rs {props.price.toFixed(2)}</Text>
+              <Text style={styles.price}>Rs {(Number.parseInt(props.price).toFixed(2)) }</Text>
             </View>
             <View style={styles.actions}>{props.children}</View>
           </View>

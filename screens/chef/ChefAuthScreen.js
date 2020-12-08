@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Text,
+  SafeAreaView, 
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -190,7 +191,7 @@ const ChefAuthScreen = (props) => {
         </View>
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
-            <ScrollView>
+            <ScrollView style={{flex: 1}}>
               <Input
                 id="email"
                 label="E-Mail"
@@ -339,12 +340,13 @@ const styles = StyleSheet.create({
     // paddingLeft: 5,
   },
   logo: {
-    width: "60%",
-    height: "40%",
+    width: 160,
+    height: 150,
+    padding: 20
   },
   authContainer: {
     width: "100%",
-    height: 900,
+    height: 1000,
     maxWidth: 400,
     padding: 30,
     marginHorizontal: 7.5,

@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#dfe6e9",
     opacity: 2,
-    height: 600,
+    height: "80%",
     width: "85%",
     borderRadius: 10,
     borderWidth: 1,
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   modalCloseBtn: {
-    top: 70,
+    top: 50,
   },
   inputHanler: {
     width: "90%",

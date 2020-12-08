@@ -56,13 +56,13 @@ const AuthScreen = (props) => {
       email: "",
       password: "",
       name: "",
-      phnumber:""
+      phnumber: "",
     },
     inputValidities: {
       email: false,
       password: false,
       name: false,
-      phnumber: false
+      phnumber: false,
     },
     formIsValid: false,
   });
@@ -82,9 +82,7 @@ const AuthScreen = (props) => {
         formState.inputValues.email,
         formState.inputValues.password,
         formState.inputValues.name,
-        formState.inputValues.phnumber,
-        
-        
+        formState.inputValues.phnumber
       );
     } else {
       action = authActions.login(
@@ -134,33 +132,32 @@ const AuthScreen = (props) => {
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
-              {isSignup==true?(
-                 <View>
-                 <Input
-                 id="name"
-                 label="Full Name"
-                 keyboardType="default"
-                 required
-                 autoCapitalize="none"
-                 errorText="Please enter a Name."
-                 onInputChange={inputChangeHandler}
-                 minLength={5}
-                 initialValue=""
-               />
-                <Input
-                 id="phnumber"
-                 label="Phone Number (03XXXXXXXXX):"
-                 keyboardType="numeric"
-                 required
-                 autoCapitalize="none"
-                 errorText="Please enter a Name."
-                 onInputChange={inputChangeHandler}
-                 minLength={11}
-                 initialValue=""
-               />
-               </View>
-               
-              ):(
+              {isSignup == true ? (
+                <View>
+                  <Input
+                    id="name"
+                    label="Full Name"
+                    keyboardType="default"
+                    required
+                    autoCapitalize="none"
+                    errorText="Please enter a Name."
+                    onInputChange={inputChangeHandler}
+                    minLength={5}
+                    initialValue=""
+                  />
+                  <Input
+                    id="phnumber"
+                    label="Phone Number (03XXXXXXXXX):"
+                    keyboardType="numeric"
+                    required
+                    autoCapitalize="none"
+                    errorText="Please enter a Name."
+                    onInputChange={inputChangeHandler}
+                    minLength={11}
+                    initialValue=""
+                  />
+                </View>
+              ) : (
                 <></>
               )}
               <Input

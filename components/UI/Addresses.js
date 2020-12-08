@@ -7,6 +7,7 @@ import {
   Alert,
   TouchableOpacity,
   Button,
+  Platform
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -55,7 +56,7 @@ function Addresses(addresses) {
 
                   <Button
                     style={styles.button}
-                    color="white"
+                    color={Platform.OS === 'android' ? Colors.primary : 'white'}
                     title="Make this Current Address"
                     onPress={async () => {
                       await db
