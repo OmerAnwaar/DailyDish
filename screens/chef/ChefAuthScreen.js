@@ -8,8 +8,10 @@ import {
   ScrollView,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Text,
 } from "react-native";
-
+import * as firebase from "firebase";
+import "firebase/firestore";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 
@@ -21,6 +23,7 @@ import * as authActions from "../../store/actions/authChef";
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
+import { set } from "react-native-reanimated";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -48,31 +51,43 @@ const formReducer = (state, action) => {
 };
 
 const ChefAuthScreen = (props) => {
+  const db = firebase.firestore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
+  const [CheckCnic, setCheckCnic] = useState([]);
+  const [cnicArr, setcnicArr] = useState([]);
   const dispatch = useDispatch();
+  const [Checker, setChecker] = useState(false);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: "",
       password: "",
-      cnic:"",
-      kitchenname:"",
+      cnic: "",
+      kitchenname: "",
       chefname: "",
-      phnumber: ""
+      phnumber: "",
     },
     inputValidities: {
       email: false,
       password: false,
-      cnic:false,
-      kitchenname:false,
+      cnic: false,
+      kitchenname: false,
       chefname: false,
-      phnumber: false
+      phnumber: false,
     },
     formIsValid: false,
   });
-
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      getCheckers();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   useEffect(() => {
     if (error) {
       Alert.alert("Please enter Email Address or Password!", error, [
@@ -81,17 +96,53 @@ const ChefAuthScreen = (props) => {
     }
   }, [error]);
 
+  const getCheckers = async () => {
+    await db.collection("chefs").onSnapshot((snap) => {
+      setCheckCnic(
+        snap.docs.map((doc) => ({
+          cnic: doc.data().cnic,
+          KitchenName: doc.data().KitchenName,
+          phnumber: doc.data().phnumber,
+          id: doc.id,
+        }))
+      );
+    });
+  };
   const authHandler = async () => {
     let action;
+    getCheckers();
     if (isSignup) {
-      action = authActions.signup(
-        formState.inputValues.email,
-        formState.inputValues.password,
-        formState.inputValues.chefname,
-        formState.inputValues.phnumber,
-        formState.inputValues.kitchenname,
-        formState.inputValues.cnic
+      var boolCnic = CheckCnic.some(
+        (item) => item.cnic === formState.inputValues.cnic
       );
+      var boolPhnumber = CheckCnic.some(
+        (item) => item.phnumber === formState.inputValues.phnumber
+      );
+      var boolKitchen = CheckCnic.some(
+        (item) => item.KitchenName === formState.inputValues.kitchenname
+      );
+      console.log("hoja bhae", boolKitchen);
+      if (boolCnic === true) {
+        Alert.alert("CNIC already exist!");
+      } else if (boolKitchen === true) {
+        Alert.alert("Kitchen Name Already Exits!");
+      } else if (boolPhnumber === true) {
+        Alert.alert("Phone Number Already Registered!");
+      } else if (
+        boolPhnumber === false &&
+        boolCnic === false &&
+        boolKitchen === false
+      ) {
+        action = authActions.signup(
+          formState.inputValues.email,
+          formState.inputValues.password,
+          formState.inputValues.chefname,
+          formState.inputValues.phnumber,
+          formState.inputValues.kitchenname,
+          formState.inputValues.cnic
+        );
+        console.log("okay scene");
+      }
     } else {
       action = authActions.login(
         formState.inputValues.email,
@@ -208,9 +259,12 @@ const ChefAuthScreen = (props) => {
                     autoCapitalize="none"
                     errorText="Please enter a Valid Number."
                     onInputChange={inputChangeHandler}
-                    minLength={12}
+                    minLength={11}
                     initialValue=""
                   />
+                  {/* {CheckCnic.map((cnic) => (
+                    <Text key={cnic.id}>{cnic.cnic}</Text>
+                  ))} */}
                 </View>
               ) : (
                 <></>

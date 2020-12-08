@@ -57,7 +57,7 @@ export const signup = (email, password, name, phnumber,kitchenname,cnic) => {
         UserEmail: email,
         phnumber: phnumber,
         KitchenName: kitchenname,
-        CNIC: cnic,
+        cnic: cnic,
         Disable: false,
         userAccount: true,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -122,6 +122,7 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
+    console.log("hello")
   clearLogoutTimer();
   AsyncStorage.removeItem("userData");
   return { type: LOGOUT };

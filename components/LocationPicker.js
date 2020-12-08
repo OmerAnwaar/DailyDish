@@ -108,8 +108,14 @@ const LocationPicker = (props) => {
     }
   }, [error]);
   useEffect(() => {
-    getSavedAddress();
-  }, [SavedAddress]);
+    let isMounted = true;
+    if (isMounted) {
+      getSavedAddress();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [SavedAddress, getAddressHandler]);
 
   const CordinateSaver = async () => {
     console.log("user id ====>", ReduxCurrentUser);

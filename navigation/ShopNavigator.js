@@ -37,6 +37,7 @@ import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
 
 import * as authActions from "../store/actions/auth";
+import * as chefauth from "../store/actions/authChef";
 import LocationScreen from "../screens/user/LocationScreen";
 import { db } from "../firebase/Firebase";
 
@@ -157,7 +158,6 @@ const ShopNavigator = createDrawerNavigator(
           .catch((error) => {
             console.log("error agya!!!!!!!");
           });
-      
       };
       useEffect(() => {
         getUserName();
@@ -171,11 +171,10 @@ const ShopNavigator = createDrawerNavigator(
             /> */}
             <View style={styles.UserNameHolder}>
               <Ionicons
-              name={Platform.OS=="android"? "md-person": "ios-person" }
-              size={25}
-              
-              /><Text style={styles.usertxt}>Welcome {userName}</Text>
-              
+                name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                size={25}
+              />
+              <Text style={styles.usertxt}>Welcome {userName}</Text>
             </View>
             <DrawerNavigatorItems {...props} />
 
@@ -220,8 +219,9 @@ const ChefShopNavigator = createDrawerNavigator(
                   title="Logout"
                   color="white"
                   onPress={() => {
-                    dispatch(authActions.logout());
-                    // props.navigation.navigate("Auth");
+                    console.log("i amhere");
+                    dispatch(chefauth.logout());
+                    props.navigation.navigate("Auth");
                   }}
                 />
               </View>
@@ -275,18 +275,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     margin: 10,
   },
-  UserNameHolder:{
+  UserNameHolder: {
     paddingTop: 20,
     paddingVertical: 15,
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
-  usertxt:{
+  usertxt: {
     marginLeft: 10,
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
 
 export default createAppContainer(MainNavigator);
