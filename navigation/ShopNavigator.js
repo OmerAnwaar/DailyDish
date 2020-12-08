@@ -30,6 +30,10 @@ import SplashScreen from "../screens/SplashScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/chef/EditProductScreen";
+import ChefProfileScreen from "../screens/chef/ChefProfileScreen";
+import ReceivedOrdersScreen from "../screens/chef/ReceivedOrdersScreen";
+import UserProfileScreen from "../screens/user/UserProfileScreen";
+import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
 
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
@@ -91,6 +95,74 @@ const OrdersNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+const SentOrdersNavigator = createStackNavigator(
+  {
+    SentOrders: SentOrdersScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-list" : "ios-list"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const ReceivedOrdersNavigator = createStackNavigator(
+  {
+    ReceivedOrders: ReceivedOrdersScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-list" : "ios-list"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const UserProfileNavigator = createStackNavigator(
+  {
+    Profile: UserProfileScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-person" : "ios-person"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const ChefProfileNavigator = createStackNavigator(
+  {
+    Profile: ChefProfileScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-person" : "ios-person"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const LocationNavigator = createStackNavigator(
   {
@@ -128,10 +200,9 @@ const AdminNavigator = createStackNavigator(
 const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
+    Profile: UserProfileNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
-    // UserName: 'Hello'
-    // Admin: AdminNavigator,
   },
   {
     contentOptions: {
@@ -165,14 +236,11 @@ const ShopNavigator = createDrawerNavigator(
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            {/* <Image
-              source={require("../assets/Omer.png")}
-              style={{ width: 150, height: 100 }}
-            /> */}
             <View style={styles.UserNameHolder}>
               <Ionicons
                 name={Platform.OS == "android" ? "md-person" : "ios-person"}
                 size={25}
+                color={Colors.primary}
               />
               <Text style={styles.usertxt}>Welcome {userName}</Text>
             </View>
@@ -201,6 +269,8 @@ const ChefShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     AddProducts: AdminNavigator,
+    Profile: ChefProfileNavigator,
+    ReceivedOrders: ReceivedOrdersNavigator,
   },
   {
     contentOptions: {
@@ -264,7 +334,7 @@ const MainNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 500,
+    paddingTop: 390,
   },
   chef: {
     borderColor: Colors.primary,
@@ -284,6 +354,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   usertxt: {
+    color: Colors.primary,
     marginLeft: 10,
     fontSize: 20,
   },

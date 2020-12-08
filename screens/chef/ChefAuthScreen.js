@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import Input from "../../components/UI/Input";
 import Card from "../../components/UI/Card";
 import Colors from "../../constants/Colors";
-import * as authActions from "../../store/actions/authChef";
+import * as authActions from "../../store/actions/auth";
 
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -339,13 +339,12 @@ const styles = StyleSheet.create({
     // paddingLeft: 5,
   },
   logo: {
-    width: 150,
-    height: 150,
-    marginTop: 70,
+    width: "60%",
+    height: "40%",
   },
   authContainer: {
     width: "100%",
-    height: 1000,
+    height: 900,
     maxWidth: 400,
     padding: 30,
     marginHorizontal: 7.5,
