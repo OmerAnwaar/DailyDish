@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   logo: {
-    width: "70%",
+    width: "80%",
     height: "60%",
   },
   title: {

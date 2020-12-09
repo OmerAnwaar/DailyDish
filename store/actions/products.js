@@ -1,16 +1,18 @@
 import Product from "../../models/product";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import {db} from '../../firebase/Firebase'
 
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
-const db = firebase.firestore();
+//const db = firebase.firestore();
 
 
 export const fetchProducts = () => {
+
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
@@ -25,7 +27,7 @@ export const fetchProducts = () => {
       const pArr = [];
       const tofire = await db.collection("products-view").onSnapshot(
         (snap) => {
-        
+        Load =true;
             snap.docs.map(
               (doc) =>
               pArr.push(
@@ -33,13 +35,14 @@ export const fetchProducts = () => {
                   doc.id,
                   doc.data().ownerId,
                   doc.data().title,
+                  doc.data().KitchenName,
                   doc.data().imageUrl,
                   doc.data().description,
                   doc.data().price
                 )
             )
           );
-          
+  
         },
         (error) => {
           console.log(error);
