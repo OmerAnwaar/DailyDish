@@ -11,13 +11,13 @@ const ChefProfileScreen = (props) => {
       <Text style={styles.info}>CONTACT INFORMATION</Text>
       <Text style={styles.data}>User Name {props.userName} </Text>
       <ListItemSeparator />
+      <Text style={styles.data}>Kitchen Name </Text>
+      <ListItemSeparator />
       <Text style={styles.data}>Address</Text>
       <ListItemSeparator />
       <Text style={styles.data}>Email Address </Text>
       <ListItemSeparator />
       <Text style={styles.data}>Mobile Number </Text>
-      <ListItemSeparator />
-      <Text style={styles.data}>Kitchen Name </Text>
       <ListItemSeparator />
       <Text style={styles.data}>joined on </Text>
       <ListItemSeparator />
