@@ -57,6 +57,7 @@ export const signup = (email, password, name, phnumber) => {
         UserEmail: email,
         phnumber: phnumber,
         Disable: false,
+        reviewStatus: false,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     dispatch(

@@ -19,14 +19,17 @@ import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
+import UserName from "../user/UserName";
 
 const ProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState();
+  const [userName, setuserName] = useState("");
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
+  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
 
   const loadProducts = useCallback(async () => {
     setError(null);
@@ -88,7 +91,7 @@ const ProductsOverviewScreen = (props) => {
   if (!isLoading && products.length === 0) {
     return (
       <View style={styles.centered}>
-        <Text>No products found. Maybe start adding some!</Text>
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -136,7 +139,6 @@ const ProductsOverviewScreen = (props) => {
     </>
   );
 };
-
 
 ProductsOverviewScreen.navigationOptions = (navData) => {
   return {

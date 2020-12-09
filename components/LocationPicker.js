@@ -320,7 +320,7 @@ const LocationPicker = (props) => {
           <Button
             title="Locate Me on Map"
             onPress={getAddressHandler}
-            color={Colors.primary}
+            color={Platform.OS === "android" ? "white" : Colors.primary}
             style={styles.button}
           ></Button>
         </View>
@@ -360,7 +360,7 @@ const LocationPicker = (props) => {
         <View style={styles.btnView}>
           <Button
             title="Generate Address!"
-            color={Colors.primary}
+            color={Platform.OS === "android" ? "white" : Colors.primary}
             onPress={genAddress}
             style={styles.button}
           ></Button>
@@ -387,7 +387,7 @@ const LocationPicker = (props) => {
                 </View>
                 <Button
                   title="Save Address?"
-                  color={Colors.primary}
+                  color={Platform.OS === "android" ? "white" : Colors.primary}
                   onPress={addSave}
                   style={styles.button}
                   disabled={loading}
@@ -471,14 +471,14 @@ const LocationPicker = (props) => {
                       <Button
                         disabled={loading}
                         style={styles.button}
-                        color={Colors.primary}
+                        color={Platform.OS === "android" ? "white" : Colors.primary}
                         title=" Save Address"
                         onPress={ManualAddressSaver}
                       />
 
                       <Button
                         style={styles.button}
-                        color={Colors.primary}
+                        color={Platform.OS === "android" ? "white" : Colors.primary}
                         title=" < Go Back"
                         onPress={() => {
                           setModalView(false);
@@ -490,7 +490,7 @@ const LocationPicker = (props) => {
                 {/*Button will change state to true and view will re-render*/}
                 <Button
                   style={styles.button}
-                  color={Colors.primary}
+                  color={Platform.OS === "android" ? "white" : Colors.primary}
                   title="Not Your Address? 😢 "
                   onPress={() => {
                     setModalView(true);

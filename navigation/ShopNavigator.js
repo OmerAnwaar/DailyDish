@@ -23,6 +23,8 @@ import {
  
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import ignoreWarnings from 'react-native-ignore-warnings';
+
 
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
@@ -45,6 +47,7 @@ import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
 import LocationScreen from "../screens/user/LocationScreen";
 import { db } from "../firebase/Firebase";
+import UserName from "../screens/user/UserName";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -213,6 +216,7 @@ const ShopNavigator = createDrawerNavigator(
       const [userName, setuserName] = useState("");
       const db = firebase.firestore();
       const dispatch = useDispatch();
+      ignoreWarnings('Possible Unhandled Promise');
       const ReduxCurrentUser = useSelector((state) => state.auth.userId);
       const getUserName = async () => {
         await db
@@ -230,10 +234,14 @@ const ShopNavigator = createDrawerNavigator(
           .catch((error) => {
             console.log("error agya!!!!!!!");
           });
+        
       };
       useEffect(() => {
         getUserName();
-      }, []);
+        return(()=>{
+          getUserName()
+        })
+      }, [userName]);
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -244,6 +252,7 @@ const ShopNavigator = createDrawerNavigator(
                 color={Colors.primary}
               />
               <Text style={styles.usertxt}>Welcome {userName}</Text>
+              <UserName/>
             </View>
             <DrawerNavigatorItems {...props} />
 
@@ -280,6 +289,7 @@ const ChefShopNavigator = createDrawerNavigator(
     },
     contentComponent: (props) => {
       const dispatch = useDispatch();
+      ignoreWarnings('Possible Unhandled Promise');
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -289,7 +299,7 @@ const ChefShopNavigator = createDrawerNavigator(
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color="white"
+                  color={Platform.OS === "android" ? "white" : Colors.primary}
                   onPress={() => {
                     console.log("i amhere");
                     dispatch(chefauth.logout());

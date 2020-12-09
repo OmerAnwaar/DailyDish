@@ -1,7 +1,7 @@
 import Product from "../../models/product";
 import * as firebase from "firebase";
 import "firebase/firestore";
-import {db} from '../../firebase/Firebase'
+import { db } from "../../firebase/Firebase";
 
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
@@ -10,9 +10,7 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 //const db = firebase.firestore();
 
-
 export const fetchProducts = () => {
-
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
@@ -25,53 +23,74 @@ export const fetchProducts = () => {
         throw new Error("Something went wrong!");
       }
       const pArr = [];
-      const tofire = await db.collection("products-view").onSnapshot(
-        (snap) => {
-        Load =true;
-            snap.docs.map(
-              (doc) =>
-              pArr.push(
-                new Product(
-                  doc.id,
-                  doc.data().ownerId,
-                  doc.data().title,
-                  doc.data().KitchenName,
-                  doc.data().imageUrl,
-                  doc.data().description,
-                  doc.data().price
-                )
+      const getProducts = async () => {
+        let productref = db.collection("products-view");
+        let allProducts = await productref.get();
+        for (const doc of allProducts.docs) {
+          pArr.push(
+            new Product(
+              doc.id,
+              doc.data().ownerId,
+              doc.data().title,
+              doc.data().KitchenName,
+              doc.data().imageUrl,
+              doc.data().description,
+              doc.data().price
             )
           );
-  
-        },
-        (error) => {
-          console.log(error);
         }
-      );
+       
+        dispatch({
+          type: SET_PRODUCTS,
+          products: pArr,
+          userProducts: pArr.filter((prod) => prod.ownerId === userId),
+        });
+      };
+
+      getProducts().catch((error) => {
+        console.log(error);
+      });
+      // logproducts();
+      // const pArr = [];
+      // const tofire = await db.collection("products-view").onSnapshot(
+      //   (snap) => {
+
+      //     snap.docs.map((doc) =>
+      //       pArr.push(
+      //         new Product(
+      //           doc.id,
+      //           doc.data().ownerId,
+      //           doc.data().title,
+      //           doc.data().KitchenName,
+      //           doc.data().imageUrl,
+      //           doc.data().description,
+      //           doc.data().price
+      //         )
+      //       )
+      //     );
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   }
+      // );
 
       const resData = await response.json();
       const loadedProducts = [];
-      console.log("i am the key babe", resData.key);
-      for (const key in resData) {
-        loadedProducts.push(
-          new Product(
-            key,
-            resData[key].ownerId,
-            resData[key].title,
-            resData[key].imageUrl,
-            resData[key].description,
-            resData[key].price
-          )
-        );
-      }
-    
-      console.log('bawajeee=====>', pArr);
+      // console.log("i am the key babe", resData.key);
+      // for (const key in resData) {
+      //   loadedProducts.push(
+      //     new Product(
+      //       key,
+      //       resData[key].ownerId,
+      //       resData[key].title,
+      //       resData[key].imageUrl,
+      //       resData[key].description,
+      //       resData[key].price
+      //     )
+      //   );
+      // }
 
-      dispatch({
-        type: SET_PRODUCTS,
-        products: pArr,
-        userProducts: pArr.filter((prod) => prod.ownerId === userId),
-      });
+      
     } catch (err) {
       // send to custom analytics server
       throw err;
