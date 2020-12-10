@@ -3,7 +3,6 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { db } from "../../firebase/Firebase";
 
-
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
@@ -15,13 +14,13 @@ export const fetchProducts = () => {
     // any async code you want!
     const userId = getState().auth.userId;
     try {
-      const response = await fetch(
-        "https://rn-shopping-3e552.firebaseio.com/products.json"
-      );
+      // const response = await fetch(
+      //   "https://rn-shopping-3e552.firebaseio.com/products.json"
+      // );
 
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Something went wrong!");
+      // }
       const pArr = [];
       const getProducts = async () => {
         let productref = db.collection("products-view");
@@ -35,11 +34,11 @@ export const fetchProducts = () => {
               doc.data().KitchenName,
               doc.data().imageUrl,
               doc.data().description,
-              doc.data().price
+              Number.parseInt(doc.data().price)
             )
           );
         }
-       
+
         dispatch({
           type: SET_PRODUCTS,
           products: pArr,
@@ -74,8 +73,8 @@ export const fetchProducts = () => {
       //   }
       // );
 
-      const resData = await response.json();
-      const loadedProducts = [];
+      // const resData = await response.json();
+      // const loadedProducts = [];
       // console.log("i am the key babe", resData.key);
       // for (const key in resData) {
       //   loadedProducts.push(
@@ -89,8 +88,6 @@ export const fetchProducts = () => {
       //     )
       //   );
       // }
-
-      
     } catch (err) {
       // send to custom analytics server
       throw err;

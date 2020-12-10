@@ -31,7 +31,7 @@ const ProductItem = (props) => {
               <Text style={styles.title}>{props.title}</Text>
               <Text style={styles.kitchen}>{props.kitchenName}</Text>
               <Text style={styles.price}>
-                Rs {Number.parseInt(props.price).toFixed(2)}
+                Rs {props.price.toFixed(2)}
               </Text>
             </View>
             <View style={styles.actions}>{props.children}</View>
