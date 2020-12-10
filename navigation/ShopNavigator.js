@@ -20,11 +20,9 @@ import {
   StyleSheet,
   Image,
   Text,
- 
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import ignoreWarnings from 'react-native-ignore-warnings';
-
+import ignoreWarnings from "react-native-ignore-warnings";
 
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
@@ -107,7 +105,7 @@ const SentOrdersNavigator = createStackNavigator(
     navigationOptions: {
       drawerIcon: (drawerConfig) => (
         <Ionicons
-          name={Platform.OS === "android" ? "md-list" : "ios-list"}
+          name={Platform.OS === "android" ? "md-clock" : "ios-clock"}
           size={23}
           color={drawerConfig.tintColor}
         />
@@ -207,6 +205,7 @@ const ShopNavigator = createDrawerNavigator(
     Profile: UserProfileNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
+    InProgress: SentOrdersNavigator,
   },
   {
     contentOptions: {
@@ -216,7 +215,7 @@ const ShopNavigator = createDrawerNavigator(
       const [userName, setuserName] = useState("");
       const db = firebase.firestore();
       const dispatch = useDispatch();
-      ignoreWarnings('Possible Unhandled Promise');
+      ignoreWarnings("Possible Unhandled Promise");
       const ReduxCurrentUser = useSelector((state) => state.auth.userId);
       const getUserName = async () => {
         await db
@@ -234,13 +233,12 @@ const ShopNavigator = createDrawerNavigator(
           .catch((error) => {
             console.log("error agya!!!!!!!");
           });
-        
       };
       useEffect(() => {
         getUserName();
-        return(()=>{
-          getUserName()
-        })
+        return () => {
+          getUserName();
+        };
       }, [userName]);
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
@@ -252,7 +250,7 @@ const ShopNavigator = createDrawerNavigator(
                 color={Colors.primary}
               />
               <Text style={styles.usertxt}>Welcome {userName}</Text>
-              <UserName/>
+              <UserName />
             </View>
             <DrawerNavigatorItems {...props} />
 
@@ -260,7 +258,7 @@ const ShopNavigator = createDrawerNavigator(
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color={Platform.OS === 'android' ? Colors.primary : 'white'}
+                  color={Platform.OS === "android" ? Colors.primary : "white"}
                   onPress={() => {
                     dispatch(authActions.logout());
                     // props.navigation.navigate("Auth");
@@ -289,7 +287,7 @@ const ChefShopNavigator = createDrawerNavigator(
     },
     contentComponent: (props) => {
       const dispatch = useDispatch();
-      ignoreWarnings('Possible Unhandled Promise');
+      ignoreWarnings("Possible Unhandled Promise");
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -342,6 +340,7 @@ const MainNavigator = createSwitchNavigator({
   ChefAuth: ChefAuthNavigator,
   Shop: ShopNavigator,
   Chef: ChefShopNavigator,
+  SentOrders: SentOrdersNavigator,
 });
 
 const styles = StyleSheet.create({
