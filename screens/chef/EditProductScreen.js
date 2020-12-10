@@ -12,7 +12,7 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
-import CategoryPickerItem from "../../components/CategoryPickerItem";
+import CategoryPickerItem from "../../components/categories/CategoryPickerItem";
 import Picker from "../../components/categories/Picker";
 import * as productsActions from "../../store/actions/products";
 import HeaderButton from "../../components/UI/HeaderButton";
