@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import CategoryPickerItem from "../../components/categories/CategoryPickerItem";
 import Picker from "../../components/categories/Picker";
+// import FormPicker from "../../components/categories/FormPicker";
 import * as productsActions from "../../store/actions/products";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ImagePicker from "../../components/ImagePicker";

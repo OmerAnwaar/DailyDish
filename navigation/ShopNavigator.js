@@ -35,6 +35,8 @@ import ChefProfileScreen from "../screens/chef/ChefProfileScreen";
 import ReceivedOrdersScreen from "../screens/chef/ReceivedOrdersScreen";
 import UserProfileScreen from "../screens/user/UserProfileScreen";
 import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
+import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
+import LocationScreen from "../screens/user/LocationScreen";
 
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
@@ -43,7 +45,6 @@ import StartupScreen from "../screens/StartupScreen";
 
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
-import LocationScreen from "../screens/user/LocationScreen";
 import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 
@@ -168,7 +169,21 @@ const ChefProfileNavigator = createStackNavigator(
 
 const LocationNavigator = createStackNavigator(
   {
-    Adddress: LocationScreen,
+    Address: LocationScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Entypo name={"address"} size={23} color={drawerConfig.tintColor} />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const ChefLocationNavigator = createStackNavigator(
+  {
+    Address: ChefLocationScreen,
   },
   {
     navigationOptions: {
@@ -278,7 +293,7 @@ const ChefShopNavigator = createDrawerNavigator(
     Products: ProductsNavigator,
     AddProducts: AdminNavigator,
     Profile: ChefProfileNavigator,
-    Address: LocationNavigator,
+    Address: ChefLocationNavigator,
     ReceivedOrders: ReceivedOrdersNavigator,
   },
   {
@@ -372,3 +387,4 @@ const styles = StyleSheet.create({
 });
 
 export default createAppContainer(MainNavigator);
+// export default createAppContainer(AdminNavigator);

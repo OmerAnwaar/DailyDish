@@ -56,10 +56,6 @@ const CartScreen = (props) => {
           <ActivityIndicator size="small" color={Colors.primary} />
         ) : (
           <Button
-            // color={Colors.accent}
-            // title="Order Now"
-            // disabled={cartItems.length === 0}
-            // onPress={sendOrderHandler}
             color={Colors.accent}
             title="Order Now"
             disabled={cartItems.length === 0}
