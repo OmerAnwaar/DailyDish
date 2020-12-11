@@ -30,6 +30,13 @@ const ProductDetailScreen = (props) => {
             dispatch(cartActions.addToCart(selectedProduct));
           }}
         />
+        <Button
+          color={Colors.primary}
+          title="All products from this kitchen"
+          onPress={() => {
+            props.navigation.navigate("AllProd");
+          }}
+        />
       </View>
       <Text style={styles.price}>
         Rs {Number.parseInt(selectedProduct.price).toFixed(2)}

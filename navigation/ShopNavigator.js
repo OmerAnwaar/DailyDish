@@ -47,6 +47,7 @@ import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
 import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
+import AllProductsScreen from "../screens/shop/AllProductsScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -65,6 +66,7 @@ const ProductsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductsOverviewScreen,
     ProductDetail: ProductDetailScreen,
+    AllProd: AllProductsScreen,
     Cart: CartScreen,
   },
   {
@@ -316,7 +318,7 @@ const ChefShopNavigator = createDrawerNavigator(
                   onPress={() => {
                     console.log("i amhere");
                     dispatch(chefauth.logout());
-                    props.navigation.navigate("Auth");
+                    // props.navigation.navigate("Auth");
                   }}
                 />
               </View>

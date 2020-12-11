@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PickerItem from "../categories/PickerItem";
 
 const AppPicker = ({ items, placeholder }) => {
-  // const AppPicker = (props) => {
+  // const AppPicker = (props) => {             <-- above line works like this line.
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setselectedItem] = useState();
 
