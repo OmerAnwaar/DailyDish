@@ -139,7 +139,7 @@ const UserProfileScreen = (props) => {
                 <ListItemSeparator />
                 {reviewStatus === true ? (
                   <Text style={styles.data}>
-                    Thanks For Reviewing DailyDish 👍{" "}
+                    Thanks For Reviewing DailyDish 👍
                   </Text>
                 ) : (
                   <View>
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 20,
     justifyContent: "space-around",
+    textAlign:"center"
   },
   reviewTitle: {
     paddingTop: "2%",

@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from "react-native";
-
+import ignoreWarnings from 'react-native-ignore-warnings';
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 
@@ -46,6 +46,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = (props) => {
+  ignoreWarnings('Require cycle:');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
