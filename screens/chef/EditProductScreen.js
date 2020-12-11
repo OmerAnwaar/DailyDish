@@ -12,7 +12,6 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
-import CategoryPickerItem from "../../components/categories/CategoryPickerItem";
 import Picker from "../../components/categories/Picker";
 import * as productsActions from "../../store/actions/products";
 import HeaderButton from "../../components/UI/HeaderButton";
@@ -48,55 +47,55 @@ const formReducer = (state, action) => {
 const categories = [
   {
     backgroundColor: "#fc5c65",
-    icon: "pizza",
+    // icon: "pizza",
     label: "Fast Food",
     value: 1,
   },
   {
     backgroundColor: "#fd9644",
-    icon: "food-fork-drink",
+    // icon: "food-fork-drink",
     label: "Desi",
     value: 2,
   },
   {
     backgroundColor: "#fed330",
-    icon: "bowl",
+    // icon: "bowl",
     label: "Chinease",
     value: 3,
   },
   {
     backgroundColor: "#26de81",
-    icon: "fish",
+    // icon: "fish",
     label: "Sea Food",
     value: 4,
   },
   {
     backgroundColor: "#2bcbba",
-    icon: "food-variant",
+    // icon: "food-variant",
     label: "Continental",
     value: 5,
   },
   {
     backgroundColor: "#45aaf2",
-    icon: "food",
+    // icon: "food",
     label: "Turkish",
     value: 6,
   },
   {
     backgroundColor: "#4b7bec",
-    icon: "baguette",
+    // icon: "baguette",
     label: "Cakes and Bakery",
     value: 7,
   },
   {
     backgroundColor: "#a55eea",
-    icon: "cake-variant",
+    // icon: "cake-variant",
     label: "Desserts",
     value: 8,
   },
   {
     backgroundColor: "#778ca3",
-    icon: "application",
+    // icon: "application",
     label: "Other",
     value: 9,
   },
@@ -237,8 +236,8 @@ const EditProductScreen = (props) => {
           <Picker
             items={categories}
             name="category"
-            numberOfColumns={3}
-            PickerItemComponent={CategoryPickerItem}
+            // numberOfColumns={3}
+            // PickerItemComponent={CategoryPickerItem}
             placeholder="Category"
             width="50%"
           />
