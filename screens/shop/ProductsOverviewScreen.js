@@ -28,6 +28,7 @@ const ProductsOverviewScreen = (props) => {
   const [error, setError] = useState();
   const [userName, setuserName] = useState("");
   const products = useSelector((state) => state.products.availableProducts);
+  const filtered = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
 
@@ -104,6 +105,7 @@ const ProductsOverviewScreen = (props) => {
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
       <Text style={styles.title}>Latest Additions</Text>
+     
       <FlatList
         onRefresh={loadProducts}
         refreshing={isRefreshing}

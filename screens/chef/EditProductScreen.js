@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useReducer,
+} from "react";
 import {
   View,
   ScrollView,
@@ -7,6 +13,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Text
 } from "react-native";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -18,6 +25,7 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import ImagePicker from "../../components/ImagePicker";
 import Input from "../../components/UI/Input";
 import Colors from "../../constants/Colors";
+import theContext from "../../components/categories/theContext";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -60,7 +68,7 @@ const categories = [
   {
     backgroundColor: "#fed330",
     // icon: "bowl",
-    label: "Chinease",
+    label: "Chinese",
     value: 3,
   },
   {
@@ -106,6 +114,7 @@ const EditProductScreen = (props) => {
   const [error, setError] = useState();
   const [selectedImage, setSelectedImage] = useState();
 
+  const { CatProvide } = useContext(theContext);
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === prodId)
@@ -215,6 +224,7 @@ const EditProductScreen = (props) => {
       <ScrollView>
         <View style={styles.form}>
           <View style={styles.title}>
+            <Text>{CatProvide}</Text>
             <Input
               id="title"
               label="Title"

@@ -32,7 +32,7 @@ const ProductDetailScreen = (props) => {
         />
         <Button
           color={Colors.primary}
-          title="All products from this kitchen"
+          title={selectedProduct.kitchenName}
           onPress={() => {
             props.navigation.navigate("AllProd");
           }}
@@ -41,6 +41,7 @@ const ProductDetailScreen = (props) => {
       <Text style={styles.price}>
         Rs {Number.parseInt(selectedProduct.price).toFixed(2)}
       </Text>
+      <Text style={styles.desTitle}>Description: </Text>
       <Text style={styles.description}>{selectedProduct.description}</Text>
     </ScrollView>
   );
@@ -70,10 +71,18 @@ const styles = StyleSheet.create({
   },
   description: {
     fontFamily: "open-sans",
-    fontSize: 14,
+    fontSize: 15,
     textAlign: "center",
     marginHorizontal: 20,
   },
+  desTitle:{
+    fontFamily: "open-sans-bold",
+    fontSize: 16,
+    textAlign: "center",
+    marginHorizontal: 20,
+    paddingBottom: "2%"
+    
+  }
 });
 
 export default ProductDetailScreen;
