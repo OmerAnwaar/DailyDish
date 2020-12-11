@@ -187,7 +187,8 @@ const styles = StyleSheet.create({
     fontSize:20,
     fontWeight: "bold",
     justifyContent:"center",
-    marginTop: "2%"
+    marginTop: "2%",
+    color: "#95a5a6"
   }
 });
 
