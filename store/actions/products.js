@@ -24,7 +24,7 @@ export const fetchProducts = () => {
       const pArr = [];
       const getProducts = async () => {
         let productref = db.collection("products-view");
-        let allProducts = await productref.get();
+        let allProducts = await productref.orderBy("timestamp", "desc").get();
         for (const doc of allProducts.docs) {
           pArr.push(
             new Product(

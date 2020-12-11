@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 import Colors from "../../constants/Colors";
 import CartItem from "../../components/shop/CartItem";
@@ -16,31 +18,45 @@ import * as cartActions from "../../store/actions/cart";
 import * as ordersActions from "../../store/actions/orders";
 
 const CartScreen = (props) => {
+  const db = firebase.firestore();
+  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [inCartObj, setinCartObj] = useState({});
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
+  const ProductOwner = useSelector((state) => state.cart.ownerId);
+  let ProductId;
+  console.log("ownerid=", ProductOwner);
+  // 
+    
+
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
     for (const key in state.cart.items) {
+      ProductId = key;
+      console.log("i am cart items", state.cart.items);
       transformedCartItems.push({
+       
         productId: key,
+        ownerId: state.cart.items[key].ownerId,
         productTitle: state.cart.items[key].productTitle,
         productPrice: state.cart.items[key].productPrice,
         quantity: state.cart.items[key].quantity,
         sum: state.cart.items[key].sum,
+        kitchenName: state.cart.items[key].kitchenName,
       });
     }
     return transformedCartItems.sort((a, b) =>
       a.productId > b.productId ? 1 : -1
     );
   });
+  console.log("product id=", ProductId);
   const dispatch = useDispatch();
-
+  // cartItems ={[ProductId]: transformedCartItems}
   const sendOrderHandler = async () => {
     setIsLoading(true);
     await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
-    setIsLoading(false);
     // props.navigation.navigate("SentOrders");
+    setIsLoading(false);
   };
 
   return (
@@ -63,10 +79,7 @@ const CartScreen = (props) => {
             color={Colors.accent}
             title="Order Now"
             disabled={cartItems.length === 0}
-            // onPress={sendOrderHandler}
-            onPress={() => {
-              props.navigation.navigate("SentOrders");
-            }}
+            onPress={sendOrderHandler}
           />
         )}
       </Card>

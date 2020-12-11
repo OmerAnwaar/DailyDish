@@ -14,11 +14,36 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
 import * as ordersActions from "../../store/actions/orders";
 import Colors from "../../constants/Colors";
+import { db } from "../../firebase/Firebase";
 
-const OrdersScreen = props => {
+const OrdersScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const orders = useSelector(state => state.orders.orders);
+  const [OrderHistory, setOrderHistory] = useState([]);
+  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  // const orderHistoryGetter = async () => {
+  //   let orderHisRef = db
+  //     .collection("app-users")
+  //     .doc(ReduxCurrentUser)
+  //     .collection("orders-history");
+  //   let allorder = await orderHisRef.get();
+  //   setOrderHistory(
+  //     allorder.docs.map((doc) => ({
+  //       KitchenName: doc.data().KitchenName,
+  //       cartitems: doc.data().cartitems,
+  //       date: doc.data().toDate().toString().slice(0, 21),
+  //       totalBill: doc.data().totalBill,
+  //     }))
+  //   );
+  //   console.log("main agya yahan================>:", OrderHistory);
+  //   console.log("chal ja bhae")
+  // };
+  // useEffect(() => {
+  //   orderHistoryGetter();
+  //   return () => {
+  //     orderHistoryGetter();
+  //   };
+  // }, []);
+  const orders = useSelector((state) => state.orders.orders);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,8 +72,8 @@ const OrdersScreen = props => {
   return (
     <FlatList
       data={orders}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => (
         <OrderItem
           amount={itemData.item.totalAmount}
           date={itemData.item.readableDate}
@@ -59,7 +84,7 @@ const OrdersScreen = props => {
   );
 };
 
-OrdersScreen.navigationOptions = navData => {
+OrdersScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Your Orders",
     headerLeft: () => (
