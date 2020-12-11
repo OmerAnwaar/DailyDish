@@ -52,11 +52,11 @@ const UserProfileScreen = (props) => {
     let reviewref = db.collection("app-users").doc(ReduxCurrentUser);
     await reviewref.update({
       review: input,
-      reviewStatus: true
+      reviewStatus: true,
     });
   };
   const reviewSetter = async () => {
-    setLoading(true)
+    setLoading(true);
     setReview();
     gettimeStamp();
   };
@@ -138,7 +138,9 @@ const UserProfileScreen = (props) => {
                 </Text>
                 <ListItemSeparator />
                 {reviewStatus === true ? (
-                  <Text style={styles.data}>Thanks For Reviewing DailyDish 👍 </Text>
+                  <Text style={styles.data}>
+                    Thanks For Reviewing DailyDish 👍{" "}
+                  </Text>
                 ) : (
                   <View>
                     <Text style={styles.reviewTitle}>
