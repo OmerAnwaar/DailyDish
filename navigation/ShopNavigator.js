@@ -48,6 +48,7 @@ import * as chefauth from "../store/actions/authChef";
 import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import AllProductsScreen from "../screens/shop/AllProductsScreen";
+import CategoriesScreen from "../screens/shop/CategoriesScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -100,6 +101,7 @@ const OrdersNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+
 const SentOrdersNavigator = createStackNavigator(
   {
     SentOrders: SentOrdersScreen,
@@ -117,6 +119,7 @@ const SentOrdersNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+
 const ReceivedOrdersNavigator = createStackNavigator(
   {
     ReceivedOrders: ReceivedOrdersScreen,
@@ -134,6 +137,7 @@ const ReceivedOrdersNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+
 const UserProfileNavigator = createStackNavigator(
   {
     Profile: UserProfileScreen,
@@ -151,6 +155,7 @@ const UserProfileNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+
 const ChefProfileNavigator = createStackNavigator(
   {
     Profile: ChefProfileScreen,
@@ -160,6 +165,24 @@ const ChefProfileNavigator = createStackNavigator(
       drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-person" : "ios-person"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const CategoriesNavigator = createStackNavigator(
+  {
+    Categories: CategoriesScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-browsers" : "ios-browsers"}
           size={23}
           color={drawerConfig.tintColor}
         />
@@ -222,6 +245,7 @@ const ShopNavigator = createDrawerNavigator(
     Profile: UserProfileNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
+    Categories: CategoriesNavigator,
     InProgress: SentOrdersNavigator,
   },
   {
