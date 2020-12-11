@@ -31,6 +31,7 @@ const UserProductsScreen = (props) => {
 
   if (userProducts.length === 0) {
     return (
+      
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>No Products Found, maybe start creating some!</Text>
       </View>

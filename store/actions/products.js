@@ -38,11 +38,14 @@ export const fetchProducts = () => {
             )
           );
         }
-
+        console.log("user id", userId);
+        pArr.map((item) => {
+          console.log("owner id", item.ownerId);
+        });
         dispatch({
           type: SET_PRODUCTS,
           products: pArr,
-          userProducts: pArr.filter((prod) => prod.ownerId === userId),
+          userProducts: pArr.filter((pArr) => pArr.ownerId === userId),
         });
       };
 

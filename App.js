@@ -14,6 +14,7 @@ import authChefReducer from "./store/reducers/authChef";
 import ignoreWarnings from 'react-native-ignore-warnings';
 
 import NavigationContainer from "./navigation/NavigationContainer";
+import theContext from "./components/categories/theContext";
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -35,6 +36,7 @@ const fetchFonts = () => {
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
+ 
   ignoreWarnings('Setting a timer');
   if (!fontLoaded) {
     return (

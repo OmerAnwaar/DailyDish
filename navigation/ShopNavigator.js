@@ -312,7 +312,7 @@ const ChefShopNavigator = createDrawerNavigator(
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color={Platform.OS === "android" ? "white" : Colors.primary}
+                  color={Platform.OS === "android" ? "white" : "white"}
                   onPress={() => {
                     console.log("i amhere");
                     dispatch(chefauth.logout());

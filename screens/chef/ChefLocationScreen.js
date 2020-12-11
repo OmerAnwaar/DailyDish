@@ -8,12 +8,13 @@ import ProductItem from "../../components/shop/ProductItem";
 import Constants from 'expo-constants';
 import LocationPicker from "../../components/LocationPicker";
 import Addresses from '../../components/UI/Addresses'
+import ChefLocationPicker from '../../components/ChefLocationPicker'
 
 const LocationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <LocationPicker />
+        < ChefLocationPicker/>
       </ScrollView>
       
     </SafeAreaView>

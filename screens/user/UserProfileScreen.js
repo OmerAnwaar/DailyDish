@@ -19,8 +19,6 @@ import ListItemSeparator from "../../components/UI/ListItemSeparator";
 import Colors from "../../constants/Colors";
 import { db } from "../../firebase/Firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { isLoading } from "expo-font";
-import UserName from "./UserName";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const UserProfileScreen = (props) => {

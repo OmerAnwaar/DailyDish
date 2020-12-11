@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -11,18 +11,24 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import PickerItem from "../categories/PickerItem";
+import theContext from "./theContext";
+
 
 const AppPicker = ({ items, placeholder }) => {
   // const AppPicker = (props) => {
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setselectedItem] = useState();
+  const [selectedItem, setselectedItem] = useState("not choosen");
+  const {CatProvide, setCatProvide} = useContext(theContext)
+
 
   return (
+    //<CategoryContext.Provider value={labelContext}>
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
         <View style={styles.container}>
           {selectedItem ? (
-            <Text style={styles.text}>{selectedItem.label}</Text>
+            <Text style={styles.text}>{selectedItem}</Text>
           ) : (
             <Text style={styles.placeholder}>{placeholder}</Text>
           )}
@@ -32,7 +38,6 @@ const AppPicker = ({ items, placeholder }) => {
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.screen}>
-          <Button title="Close" onPress={() => setModalVisible(false)} />
           <FlatList
             data={items}
             keyExtractor={(item) => item.value.toString()}
@@ -41,15 +46,18 @@ const AppPicker = ({ items, placeholder }) => {
                 item={item}
                 label={item.label}
                 onPress={() => {
+                  setselectedItem(item.label);
+                  setCatProvide(item.label)
                   setModalVisible(false);
-                  setSelectedItem(item);
                 }}
               />
             )}
           />
         </View>
       </Modal>
+      {console.log("ye hai category====>", selectedItem)}
     </>
+    // </CategoryContext.Provider>
   );
 };
 
