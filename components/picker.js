@@ -7,7 +7,7 @@ import {
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import PickerItem from "../components/PickerItem";
+import PickerItem from "../components/categories/PickerItem";
 
 const Picker = ({
   icon,
