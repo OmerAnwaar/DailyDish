@@ -42,10 +42,14 @@ export default (state = initialState, action) => {
         action.pid,
         state.userProducts[productIndex].ownerId,
         action.productData.title,
+        action.productData.kitchenName,
         action.productData.imageUrl,
         action.productData.description,
-        state.userProducts[productIndex].price
+        state.userProducts[productIndex].price,
+        action.productData.category,
+        state.userProducts[productIndex].timestamp
       );
+      
       const updatedUserProducts = [...state.userProducts];
       updatedUserProducts[productIndex] = updatedProduct;
       const availableProductIndex = state.availableProducts.findIndex(

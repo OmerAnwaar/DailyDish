@@ -258,29 +258,14 @@ const ShopNavigator = createDrawerNavigator(
       const dispatch = useDispatch();
       ignoreWarnings("Possible Unhandled Promise");
       const ReduxCurrentUser = useSelector((state) => state.auth.userId);
-      const getUserName = async () => {
-        await db
-          .collection("app-users")
-          .doc(ReduxCurrentUser)
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              console.log("Document recieved", doc.data());
-              setuserName(doc.data().UserName);
-            } else {
-              console.log("no such doc bro");
-            }
-          })
-          .catch((error) => {
-            console.log("error agya!!!!!!!");
-          });
-      };
-      useEffect(() => {
-        getUserName();
-        return () => {
-          getUserName();
+      
+        const getUserName = async () => {
+          let userNameRef = db.collection("app-users").doc(ReduxCurrentUser);
+          let userNameGetter = await userNameRef.get();
+          setuserName(userNameGetter.data().UserName);
+          {console.log("i am running========>", userNameGetter.data())}
         };
-      }, [userName]);
+      getUserName()
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -327,11 +312,33 @@ const ChefShopNavigator = createDrawerNavigator(
       activeTintColor: Colors.primary,
     },
     contentComponent: (props) => {
+      const [userName, setuserName] = useState("");
       const dispatch = useDispatch();
+      const db = firebase.firestore();
+      ignoreWarnings("Possible Unhandled Promise");
+      const getUserName = async () => {
+        const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+        let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
+        let userNameGetter = await userNameRef.get();
+        setuserName(userNameGetter.data().ChefName);
+        {console.log("i am running========>", userNameGetter.data())}
+      };
+
+      getUserName();
+
       ignoreWarnings("Possible Unhandled Promise");
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <View style={styles.UserNameHolder}>
+              <Ionicons
+                name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                size={25}
+                color={Colors.primary}
+              />
+              <Text style={styles.usertxt}>Welcome {userName}</Text>
+              <UserName />
+            </View>
             <DrawerNavigatorItems {...props} />
 
             <View style={styles.button}>

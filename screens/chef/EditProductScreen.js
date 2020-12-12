@@ -127,7 +127,7 @@ const EditProductScreen = (props) => {
       // imageUrl: editedProduct ? editedProduct.imageUrl : "",
       // category: editedProduct ? editedProduct.category : "",
       description: editedProduct ? editedProduct.description : "",
-      price: "",
+      price: editedProduct ? editedProduct.price : "",
     },
     inputValidities: {
       title: editedProduct ? true : false,
@@ -161,24 +161,19 @@ const EditProductScreen = (props) => {
           productsActions.updateProduct(
             prodId,
             formState.inputValues.title,
-            //formState.inputValues.category,
             formState.inputValues.description,
-            selectedImage,
+            +formState.inputValues.price,
             CatProvide
-            // formState.inputValues.imageUrl
           )
         );
       } else {
         await dispatch(
           productsActions.createProduct(
             formState.inputValues.title,
-            //formState.inputValues.category,
             formState.inputValues.description,
             selectedImage,
             +formState.inputValues.price,
             CatProvide
-
-            // formState.inputValues.imageUrl,
           )
         );
       }
@@ -240,30 +235,52 @@ const EditProductScreen = (props) => {
               required
             />
           </View>
-          <ImagePicker
-            onImageTaken={imageTakenHandler}
-            // initialValue={editedProduct ? editedProduct.imageUrl : ""}
-          />
-          <Picker
-            items={categories}
-            name="category"
-            // numberOfColumns={3}
-            // PickerItemComponent={CategoryPickerItem}
-            placeholder="Category"
-            width="50%"
-          />
-          {editedProduct ? null : (
-            <Input
-              id="price"
-              label="Price"
-              errorText="Please enter a valid price!"
-              keyboardType="decimal-pad"
-              returnKeyType="next"
-              onInputChange={inputChangeHandler}
-              required
-              min={1}
-            />
+          {editedProduct == null ? (
+            <ImagePicker onImageTaken={imageTakenHandler} />
+          ) : (
+            <></>
           )}
+          {editedProduct == null ? (
+            <Picker
+              items={categories}
+              name="category"
+              // numberOfColumns={3}
+              // PickerItemComponent={CategoryPickerItem}
+              placeholder="Category"
+              width="50%"
+            />
+          ) : (
+            <>
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                Current Category:{" "}
+                <Text style={{ color: "green" }}>{CatProvide}</Text>
+              </Text>
+              <Picker
+                items={categories}
+                name="category"
+                // numberOfColumns={3}
+                // PickerItemComponent={CategoryPickerItem}
+                placeholder="Category"
+                width="50%"
+              />
+            </>
+          )}
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            Current Price:{" "}
+            <Text style={{ color: "green" }}>{editedProduct.price}</Text>
+          </Text>
+
+          <Input
+            id="price"
+            label="Price"
+            errorText="Please enter a valid price!"
+            keyboardType="decimal-pad"
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            required
+            min={1}
+          />
+
           <Input
             id="description"
             label="Description"
@@ -286,7 +303,8 @@ const EditProductScreen = (props) => {
               in Categories section!
             </Text>
             <Text style={styles.noteDesc}>
-             This Platform is made for your benifit! Be careful in what you Submit. 
+              This Platform is made for your benifit! Be careful in what you
+              Submit.
             </Text>
           </View>
         </View>
@@ -327,20 +345,20 @@ const styles = StyleSheet.create({
   title: {
     paddingVertical: 20,
   },
-  noteContainer:{
-    padding: "5%"
+  noteContainer: {
+    padding: "5%",
   },
-  note:{
+  note: {
     fontWeight: "bold",
     fontSize: 20,
     textAlign: "center",
     color: "red",
     marginBottom: "3%",
   },
-  noteDesc:{
+  noteDesc: {
     fontSize: 14,
-    padding: 5
-  }
+    padding: 5,
+  },
 });
 
 export default EditProductScreen;

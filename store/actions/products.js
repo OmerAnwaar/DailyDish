@@ -105,16 +105,18 @@ export const fetchProducts = () => {
 export const deleteProduct = (productId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
-    const response = await fetch(
-      `https://rn-shopping-3e552.firebaseio.com/products/${productId}.json?auth=${token}`,
-      {
-        method: "DELETE",
-      }
-    );
+    // const response = await fetch(
+    //   `https://rn-shopping-3e552.firebaseio.com/products/${productId}.json?auth=${token}`,
+    //   {
+    //     method: "DELETE",
+    //   }
+    // );
 
-    if (!response.ok) {
-      throw new Error("Something went wrong!");
-    }
+    // if (!response.ok) {
+    //   throw new Error("Something went wrong!");
+    // }
+    let docRef = db.collection("products-view").doc(productId);
+    await docRef.delete();
     dispatch({ type: DELETE_PRODUCT, pid: productId });
   };
 };
@@ -151,12 +153,11 @@ export const createProduct = (
 
     let kitchenNameRef = db.collection("chefs").doc(userId);
     let kitchennameExtractor = await kitchenNameRef.get();
-    console.log(kitchennameExtractor)
     const kName = kitchennameExtractor.data().KitchenName;
     console.log("kitchen name =====>>>", kName);
 
     let ProductViewRef = db.collection("products-view").doc();
-    const res = await ProductViewRef.set({
+    await ProductViewRef.set({
       KitchenName: kName,
       category: category,
       description: description,
@@ -164,7 +165,7 @@ export const createProduct = (
       ownerId: userId,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       title: title,
-      price: price
+      price: price,
     });
     let docID = 0;
     let docIdRef = db.collection("products-view");
@@ -175,7 +176,6 @@ export const createProduct = (
     });
     console.log("doc id ye set ki hai ======>", docID);
 
-  
     const intNumber = Number.parseInt(price);
     dispatch({
       type: CREATE_PRODUCT,
@@ -192,35 +192,51 @@ export const createProduct = (
   };
 };
 
-export const updateProduct = (id, title, description, imageUrl) => {
+export const updateProduct = (id, title, description, price, category) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
-    const response = await fetch(
-      `https://rn-shopping-3e552.firebaseio.com/products/${id}.json?auth=${token}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          imageUrl,
-        }),
-      }
-    );
+    // const response = await fetch(
+    //   `https://rn-shopping-3e552.firebaseio.com/products/${id}.json?auth=${token}`,
+    //   {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       title,
+    //       description,
+    //       imageUrl,
+    //     }),
+    //   }
+    // );
 
-    if (!response.ok) {
-      throw new Error("Something went wrong!");
-    }
-
+    // if (!response.ok) {
+    //   throw new Error("Something went wrong!");
+    // }
+    let imgUrlRef = db.collection("products-view").doc(id);
+    let imageURL = await imgUrlRef.get();
+    const imgURLdb = imageURL.data().imageUrl;
+    const kitchenName = imageURL.data().KitchenName;
+    const time = imageURL.data().timestamp;
+    let ProductViewRef = db.collection("products-view").doc(id);
+    await ProductViewRef.update({
+      description: description,
+      title: title,
+      price: price,
+      category: category,
+    });
+    const intNumber = Number.parseInt(price);
     dispatch({
       type: UPDATE_PRODUCT,
       pid: id,
       productData: {
         title,
+        kitchenName,
+        imgURLdb,
         description,
-        imageUrl,
+        intNumber,
+        time,
+        category,
       },
     });
   };
