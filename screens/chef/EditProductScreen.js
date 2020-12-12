@@ -13,7 +13,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Text
+  Text,
 } from "react-native";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -125,14 +125,14 @@ const EditProductScreen = (props) => {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
       // imageUrl: editedProduct ? editedProduct.imageUrl : "",
-      category: editedProduct ? editedProduct.category : null,
+      // category: editedProduct ? editedProduct.category : "",
       description: editedProduct ? editedProduct.description : "",
       price: "",
     },
     inputValidities: {
       title: editedProduct ? true : false,
       // imageUrl: editedProduct ? true : false,
-      category: editedProduct ? editedProduct.category : null,
+      // category: editedProduct ? editedProduct.category : null,
       description: editedProduct ? true : false,
       price: editedProduct ? true : false,
     },
@@ -161,9 +161,10 @@ const EditProductScreen = (props) => {
           productsActions.updateProduct(
             prodId,
             formState.inputValues.title,
-            formState.inputValues.category,
+            //formState.inputValues.category,
             formState.inputValues.description,
-            selectedImage
+            selectedImage,
+            CatProvide
             // formState.inputValues.imageUrl
           )
         );
@@ -171,12 +172,13 @@ const EditProductScreen = (props) => {
         await dispatch(
           productsActions.createProduct(
             formState.inputValues.title,
-            formState.inputValues.category,
+            //formState.inputValues.category,
             formState.inputValues.description,
             selectedImage,
+            +formState.inputValues.price,
+            CatProvide
 
             // formState.inputValues.imageUrl,
-            +formState.inputValues.price
           )
         );
       }
@@ -224,7 +226,6 @@ const EditProductScreen = (props) => {
       <ScrollView>
         <View style={styles.form}>
           <View style={styles.title}>
-            <Text>{CatProvide}</Text>
             <Input
               id="title"
               label="Title"
@@ -260,7 +261,7 @@ const EditProductScreen = (props) => {
               returnKeyType="next"
               onInputChange={inputChangeHandler}
               required
-              min={0.1}
+              min={1}
             />
           )}
           <Input
@@ -278,6 +279,16 @@ const EditProductScreen = (props) => {
             required
             minLength={5}
           />
+          <View style={styles.noteContainer}>
+            <Text style={styles.note}>Note: </Text>
+            <Text style={styles.noteDesc}>
+              If you don't select a category, your Product will not been shown
+              in Categories section!
+            </Text>
+            <Text style={styles.noteDesc}>
+             This Platform is made for your benifit! Be careful in what you Submit. 
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -316,6 +327,20 @@ const styles = StyleSheet.create({
   title: {
     paddingVertical: 20,
   },
+  noteContainer:{
+    padding: "5%"
+  },
+  note:{
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    color: "red",
+    marginBottom: "3%",
+  },
+  noteDesc:{
+    fontSize: 14,
+    padding: 5
+  }
 });
 
 export default EditProductScreen;

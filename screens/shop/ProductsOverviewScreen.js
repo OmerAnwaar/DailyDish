@@ -105,7 +105,7 @@ const ProductsOverviewScreen = (props) => {
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
       <Text style={styles.title}>Latest Additions</Text>
-     
+
       <FlatList
         onRefresh={loadProducts}
         refreshing={isRefreshing}
@@ -184,14 +184,14 @@ const styles = StyleSheet.create({
     borderBottomColor: "#26a69a",
     borderBottomWidth: 1,
   },
-  title:{
+  title: {
     textAlign: "center",
-    fontSize:20,
+    fontSize: 20,
     fontWeight: "bold",
-    justifyContent:"center",
+    justifyContent: "center",
     marginTop: "2%",
-    color: "#95a5a6"
-  }
+    color: "#95a5a6",
+  },
 });
 
 export default ProductsOverviewScreen;

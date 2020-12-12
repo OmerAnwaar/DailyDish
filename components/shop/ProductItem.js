@@ -30,9 +30,8 @@ const ProductItem = (props) => {
             <View style={styles.details}>
               <Text style={styles.title}>{props.title}</Text>
               <Text style={styles.kitchen}>{props.kitchenName}</Text>
-              <Text style={styles.price}>
-                Rs {props.price.toFixed(2)}
-              </Text>
+              <Text style={styles.time}>{props.timestamp}</Text>
+              <Text style={styles.price}>Rs {props.price}</Text>
             </View>
             <View style={styles.actions}>{props.children}</View>
           </View>
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#888",
     marginVertical: 4,
+    bottom: "35%"
   },
   actions: {
     flexDirection: "row",
@@ -90,8 +90,12 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     fontFamily: "open-sans-bold",
     fontSize: 16,
-    color: "#95a5a6"
+    color: "#95a5a6",
   },
+  time:{
+    paddingBottom: "2%",
+    bottom: "25%"
+  }
 });
 
 export default ProductItem;

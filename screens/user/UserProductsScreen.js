@@ -1,8 +1,16 @@
-import React from "react";
-import { FlatList, Button, Platform, Alert, View, Text } from "react-native";
+import React, { useState } from "react";
+import {
+  FlatList,
+  Button,
+  Platform,
+  Alert,
+  View,
+  Text,
+  StyleSheet,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
@@ -31,7 +39,6 @@ const UserProductsScreen = (props) => {
 
   if (userProducts.length === 0) {
     return (
-      
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>No Products Found, maybe start creating some!</Text>
       </View>
@@ -39,34 +46,48 @@ const UserProductsScreen = (props) => {
   }
 
   return (
-    <FlatList
-      data={userProducts}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => (
-        <ProductItem
-          image={itemData.item.imageUrl}
-          // image={itemData.item.imageUri}
-          title={itemData.item.title}
-          price={itemData.item.price}
-          onSelect={() => {
-            editProductHandler(itemData.item.id);
-          }}
-        >
-          <Button
-            color={Colors.primary}
-            title="Edit"
-            onPress={() => {
+    <>
+      <View style={styles.kitchenNameContainer}>
+        {userProducts.slice(0, 1).map((docs) => (
+          <Text key={docs.id} style={styles.name}>
+            <Ionicons
+              name={Platform.OS === "android" ? "md-basket" : "ios-basket"}
+              size={28}
+            ></Ionicons>{" "}
+            {docs.kitchenName}
+          </Text>
+        ))}
+      </View>
+      <FlatList
+        data={userProducts}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => (
+          <ProductItem
+            image={itemData.item.imageUrl}
+            // image={itemData.item.imageUri}
+            title={itemData.item.title}
+            timestamp={itemData.item.timestamp}
+            price={itemData.item.price}
+            onSelect={() => {
               editProductHandler(itemData.item.id);
             }}
-          />
-          <Button
-            color={Colors.primary}
-            title="Delete"
-            onPress={deleteHandler.bind(this, itemData.item.id)}
-          />
-        </ProductItem>
-      )}
-    />
+          >
+            <Button
+              color={Colors.primary}
+              title="Edit"
+              onPress={() => {
+                editProductHandler(itemData.item.id);
+              }}
+            />
+            <Button
+              color={Colors.primary}
+              title="Delete"
+              onPress={deleteHandler.bind(this, itemData.item.id)}
+            />
+          </ProductItem>
+        )}
+      />
+    </>
   );
 };
 
@@ -97,5 +118,18 @@ UserProductsScreen.navigationOptions = (navData) => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  kitchenNameContainer: {
+    textAlign: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  name: {
+    textAlign: "center",
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+});
 
 export default UserProductsScreen;
