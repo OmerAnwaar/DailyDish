@@ -37,6 +37,7 @@ import UserProfileScreen from "../screens/user/UserProfileScreen";
 import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
 import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
 import LocationScreen from "../screens/user/LocationScreen";
+import ChefProductsOverviewScreen from "../screens/chef/ChefProductOverviewScreen";
 
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
@@ -69,6 +70,26 @@ const ProductsNavigator = createStackNavigator(
     ProductDetail: ProductDetailScreen,
     AllProd: AllProductsScreen,
     Cart: CartScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const ChefProductsNavigator = createStackNavigator(
+  {
+    ChefProductsOverview: ChefProductsOverviewScreen,
+    ProductDetail: ProductDetailScreen,
+    AllProd: AllProductsScreen,
   },
   {
     navigationOptions: {
@@ -258,14 +279,16 @@ const ShopNavigator = createDrawerNavigator(
       const dispatch = useDispatch();
       ignoreWarnings("Possible Unhandled Promise");
       const ReduxCurrentUser = useSelector((state) => state.auth.userId);
-      
-        const getUserName = async () => {
-          let userNameRef = db.collection("app-users").doc(ReduxCurrentUser);
-          let userNameGetter = await userNameRef.get();
-          setuserName(userNameGetter.data().UserName);
-          {console.log("i am running========>", userNameGetter.data())}
-        };
-      getUserName()
+
+      const getUserName = async () => {
+        let userNameRef = db.collection("app-users").doc(ReduxCurrentUser);
+        let userNameGetter = await userNameRef.get();
+        setuserName(userNameGetter.data().UserName);
+        {
+          console.log("i am running========>", userNameGetter.data());
+        }
+      };
+      getUserName();
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -301,7 +324,7 @@ const ShopNavigator = createDrawerNavigator(
 
 const ChefShopNavigator = createDrawerNavigator(
   {
-    Products: ProductsNavigator,
+    Products: ChefProductsNavigator,
     AddProducts: AdminNavigator,
     Profile: ChefProfileNavigator,
     Address: ChefLocationNavigator,
@@ -321,7 +344,9 @@ const ChefShopNavigator = createDrawerNavigator(
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
         setuserName(userNameGetter.data().ChefName);
-        {console.log("i am running========>", userNameGetter.data())}
+        {
+          console.log("i am running========>", userNameGetter.data());
+        }
       };
 
       getUserName();
