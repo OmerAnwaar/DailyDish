@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Text,
-  SafeAreaView, 
+  SafeAreaView,
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import Input from "../../components/UI/Input";
 import Card from "../../components/UI/Card";
 import Colors from "../../constants/Colors";
-import * as authActions from "../../store/actions/auth";
+import * as authActions from "../../store/actions/authChef";
 
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -191,7 +191,7 @@ const ChefAuthScreen = (props) => {
         </View>
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
-            <ScrollView style={{flex: 1}}>
+            <ScrollView style={{ flex: 1 }}>
               <Input
                 id="email"
                 label="E-Mail"
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 160,
     height: 150,
-    padding: 20
+    padding: 20,
   },
   authContainer: {
     width: "100%",

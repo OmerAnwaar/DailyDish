@@ -71,7 +71,7 @@ const LocationPicker = (props) => {
   const dispatch = useDispatch();
   const ReduxLongitude = useSelector((state) => state.cord.longitude);
   const ReduxLatitude = useSelector((state) => state.cord.latitude);
-  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [SavedAddress, setSavedAddress] = useState([]);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {

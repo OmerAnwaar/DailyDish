@@ -17,9 +17,20 @@ export const fetchOrders = () => {
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
+      const loadedOrders = [];
+      const getOrders = db.collection("orders").where("Customer",'==',userId).where("orderStats",'==','requested')
+      const order = await getOrders.get()
+      for (const doc in order.docs){
+        loadedOrders.push(
+          new Order(
+            doc.id,
+           
+          )
+        );
+      }
 
       const resData = await response.json();
-      const loadedOrders = [];
+      
 
       for (const key in resData) {
         loadedOrders.push(
@@ -62,25 +73,56 @@ export const addOrder = (cartItems, totalAmount) => {
     //   throw new Error("Something went wrong!");
     // }
     console.log("yahan tak tou aya=======>", userId);
-    cartItems.map((items) => {
-      db.collection("app-users")
+
+    const gettingUserInfoRef = db.collection("app-users").doc(userId);
+    const gettingUserInfo = await gettingUserInfoRef.get();
+    const CurrAdress = gettingUserInfo.data().CurrentAddress;
+    const phnumber = gettingUserInfo.data().phnumber;
+    const UserName = gettingUserInfo.data().UserName;
+
+    cartItems.map(async (items) => {
+      const ordersetterRef = db
+        .collection("app-users")
         .doc(userId)
         .collection("orders-history")
-        .doc()
-        .set({
-          kitchenName: items.kitchenName,
-          ownerId: items.ownerId,
-          productPrice: items.productPrice,
-          id: items.productId,
-          productTitle: items.productTitle,
-          quantity: items.quantity,
-          sum: items.sum,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          orderStatus: "pending",
-          deliverystatus: "pending"
-        });
-    });
+        .doc();
 
+      await ordersetterRef.set({
+        kitchenName: items.kitchenName,
+        ownerId: items.ownerId,
+        productPrice: items.productPrice,
+        id: items.productId,
+        productTitle: items.productTitle,
+        quantity: items.quantity,
+        sum: items.sum,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        orderStatus: "requested",
+        deliverystatus: "requested",
+        CurrentAddress: CurrAdress,
+        phnumber: phnumber,
+        CustomerName: UserName,
+      });
+    });
+    cartItems.map(async (items) => {
+      const ordersetterRef = db.collection("orders").doc();
+
+      await ordersetterRef.set({
+        kitchenName: items.kitchenName,
+        ownerId: items.ownerId,
+        productPrice: items.productPrice,
+        id: items.productId,
+        productTitle: items.productTitle,
+        quantity: items.quantity,
+        sum: items.sum,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        orderStatus: "requested",
+        deliverystatus: "requested",
+        CurrentAddress: CurrAdress,
+        phnumber: phnumber,
+        CustomerName: UserName,
+        Customer: userId
+      });
+    });
     cartItems.map((items) => {
       console.log("Items info", items);
     });

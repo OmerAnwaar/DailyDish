@@ -20,6 +20,7 @@ import {
   StyleSheet,
   Image,
   Text,
+  Alert,
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import ignoreWarnings from "react-native-ignore-warnings";
@@ -37,7 +38,7 @@ import UserProfileScreen from "../screens/user/UserProfileScreen";
 import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
 import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
 import LocationScreen from "../screens/user/LocationScreen";
-
+import ChefProductOverViewScreen from "../screens/chef/ChefProductOverViewScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
@@ -69,6 +70,25 @@ const ProductsNavigator = createStackNavigator(
     ProductDetail: ProductDetailScreen,
     AllProd: AllProductsScreen,
     Cart: CartScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const ChefProductsNavigator = createStackNavigator(
+  {
+    ProductsOverview: ChefProductOverViewScreen,
+    ProductDetail: ProductDetailScreen,
+    AllProd: AllProductsScreen,
   },
   {
     navigationOptions: {
@@ -258,14 +278,17 @@ const ShopNavigator = createDrawerNavigator(
       const dispatch = useDispatch();
       ignoreWarnings("Possible Unhandled Promise");
       const ReduxCurrentUser = useSelector((state) => state.auth.userId);
-      
-        const getUserName = async () => {
-          let userNameRef = db.collection("app-users").doc(ReduxCurrentUser);
-          let userNameGetter = await userNameRef.get();
-          setuserName(userNameGetter.data().UserName);
-          {console.log("i am running========>", userNameGetter.data())}
-        };
-      getUserName()
+
+      const getUserName = async () => {
+        let userNameRef = db.collection("app-users").doc(ReduxCurrentUser);
+        let userNameGetter = await userNameRef.get();
+        setuserName(userNameGetter.data().UserName);
+        {
+          console.log("i am running========>", userNameGetter.data());
+        }
+      };
+      getUserName();
+
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -301,7 +324,7 @@ const ShopNavigator = createDrawerNavigator(
 
 const ChefShopNavigator = createDrawerNavigator(
   {
-    Products: ProductsNavigator,
+    Products: ChefProductsNavigator,
     AddProducts: AdminNavigator,
     Profile: ChefProfileNavigator,
     Address: ChefLocationNavigator,
@@ -313,17 +336,28 @@ const ChefShopNavigator = createDrawerNavigator(
     },
     contentComponent: (props) => {
       const [userName, setuserName] = useState("");
+      const [ChefStatus, setChefStatus] = useState(false);
       const dispatch = useDispatch();
       const db = firebase.firestore();
+      const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
       ignoreWarnings("Possible Unhandled Promise");
+      const CheckChef = async () => {
+        let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
+        let statusGetter = await checkChefRef.get();
+        setChefStatus( statusGetter.data().chefStatus)
+        console.log("Ye status mila hai", ChefStatus);
+        if (ChefStatus === false) {
+          Alert.alert("Sign Up as a Chef!");
+          dispatch(chefauth.logout());
+          props.navigation.navigate("Auth");
+        }
+      };
+     CheckChef()
       const getUserName = async () => {
-        const ReduxCurrentUser = useSelector((state) => state.auth.userId);
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
         setuserName(userNameGetter.data().ChefName);
-        {console.log("i am running========>", userNameGetter.data())}
       };
-
       getUserName();
 
       ignoreWarnings("Possible Unhandled Promise");
@@ -348,8 +382,8 @@ const ChefShopNavigator = createDrawerNavigator(
                   color={Platform.OS === "android" ? "white" : "white"}
                   onPress={() => {
                     console.log("i amhere");
-                    dispatch(chefauth.logout());
-                    // props.navigation.navigate("Auth");
+                    dispatch(authActions.logout());
+                    props.navigation.navigate("Auth");
                   }}
                 />
               </View>

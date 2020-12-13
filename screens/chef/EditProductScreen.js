@@ -263,13 +263,14 @@ const EditProductScreen = (props) => {
                 placeholder="Category"
                 width="50%"
               />
-            </>
-          )}
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
             Current Price:{" "}
             <Text style={{ color: "green" }}>{editedProduct.price}</Text>
           </Text>
 
+            </>
+          )}
+        
           <Input
             id="price"
             label="Price"

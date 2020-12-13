@@ -22,7 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const ChefProfileScreen = (props) => {
-  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [loading, setLoading] = useState(false);
   const [Profile, setProfile] = useState({});
   const [timeStamp, settimeStamp] = useState("");
