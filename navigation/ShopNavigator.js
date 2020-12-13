@@ -104,6 +104,26 @@ const ChefProductsNavigator = createStackNavigator(
   }
 );
 
+const ChefProductsNavigator = createStackNavigator(
+  {
+    ChefProductsOverview: ChefProductsOverviewScreen,
+    ProductDetail: ProductDetailScreen,
+    AllProd: AllProductsScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
 const OrdersNavigator = createStackNavigator(
   {
     Orders: OrdersScreen,
@@ -288,7 +308,6 @@ const ShopNavigator = createDrawerNavigator(
         }
       };
       getUserName();
-
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
