@@ -24,7 +24,7 @@ import {
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import ignoreWarnings from "react-native-ignore-warnings";
-
+import CategoryDisplay from "../screens/shop/CategoryDisplay";
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
@@ -74,6 +74,7 @@ const ProductsNavigator = createStackNavigator(
     ProductsOverview: ProductsOverviewScreen,
     ProductDetail: ProductDetailScreen,
     AllProd: AllProductsScreen,
+    CatDisplay: CategoryDisplay,
     Cart: CartScreen,
   },
   {
@@ -202,7 +203,7 @@ const ChefProfileNavigator = createStackNavigator(
 const CategoriesNavigator = createStackNavigator(
   {
     Categories: CategoriesScreen,
-    CategorizedProducts: CategorizedProductsScreen,
+    CatDisplay: CategoryDisplay,
   },
   {
     navigationOptions: {
