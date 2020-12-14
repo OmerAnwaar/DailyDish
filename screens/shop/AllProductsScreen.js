@@ -12,6 +12,8 @@ import { useSelector, useDispatch } from "react-redux";
 import * as cartActions from "../../store/actions/cart";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButton from "../../components/UI/HeaderButton";
 
 const AllProductsScreen = (props) => {
   const dispatch = useDispatch();
