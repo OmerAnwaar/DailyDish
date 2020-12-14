@@ -23,7 +23,7 @@ import * as authActions from "../../store/actions/authChef";
 
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import HeaderButton from "../../components/UI/HeaderButton";
+import HeaderButtonAuth from "../../components/UI/HeaderButtonAuth";
 import { set } from "react-native-reanimated";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
@@ -305,13 +305,17 @@ const { height } = Dimensions.get("screen");
 
 ChefAuthScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "All Products",
+    headerTitle: "Chef",
     headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <HeaderButtons HeaderButtonComponent={HeaderButtonAuth}>
         <Item
           title="Cart"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-arrow-back"}
-          color="white"
+          iconName={
+            Platform.OS === "android"
+              ? "md-arrow-dropleft-circle"
+              : "ios-arrow-dropleft-circle"
+          }
+          // color={"white"}
           onPress={() => {
             navData.navigation.navigate("Auth");
           }}

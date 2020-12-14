@@ -3,19 +3,16 @@ import { View, Text, StyleSheet } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 
-const CategorizedProductsScreen = (props) => {
+const RiderOrderScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <Text style={styles.hello}>
-        {" "}
-        Hello All Categorised products from Omer!!!{" "}
-      </Text>
+      <Text style={styles.hello}> Hello All RECEIVED ORDERS from Omer!!! </Text>
       <Text style={styles.saad}> Have fun working here, SAAD. Good Luck!</Text>
     </View>
   );
 };
 
-CategorizedProductsScreen.navigationOptions = (navData) => {
+RiderOrderScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Your Orders",
     headerLeft: () => (
@@ -47,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategorizedProductsScreen;
+export default RiderOrderScreen;

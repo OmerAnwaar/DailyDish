@@ -38,11 +38,15 @@ import UserProfileScreen from "../screens/user/UserProfileScreen";
 import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
 import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
 import LocationScreen from "../screens/user/LocationScreen";
-import ChefProductOverViewScreen from "../screens/chef/ChefProductOverViewScreen";
+import ChefProductOverviewScreen from "../screens/chef/ChefProductOverviewScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
+import RiderAuthScreen from "../screens/shop/RiderAuthScreen";
+import RiderHomeScreen from "../screens/shop/RiderHomeScreen";
+import RiderOrderScreen from "../screens/shop/RiderOrderScreen";
+import RiderProfileScreen from "../screens/shop/RiderProfileScreen";
 
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
@@ -87,7 +91,7 @@ const ProductsNavigator = createStackNavigator(
 );
 const ChefProductsNavigator = createStackNavigator(
   {
-    ProductsOverview: ChefProductOverViewScreen,
+    ProductsOverview: ChefProductOverviewScreen,
     ProductDetail: ProductDetailScreen,
     AllProd: AllProductsScreen,
   },
@@ -260,6 +264,61 @@ const AdminNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+const RiderHomeNavigator = createStackNavigator(
+  {
+    RiderHome: RiderHomeScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-home" : "ios-home"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const RiderProfileNavigator = createStackNavigator(
+  {
+    RiderProfile: RiderProfileScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-contact" : "ios-contact"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const RiderOrdersNavigator = createStackNavigator(
+  {
+    RiderOrder: RiderOrderScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={
+            Platform.OS === "android"
+              ? "md-checkmark-circle"
+              : "ios-checkmark-circle"
+          }
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const ShopNavigator = createDrawerNavigator(
   {
@@ -341,15 +400,14 @@ const ChefShopNavigator = createDrawerNavigator(
       const dispatch = useDispatch();
       const db = firebase.firestore();
       const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
-    const [chefCnic, setchefCnic] = useState("")
+      const [chefCnic, setchefCnic] = useState("");
       ignoreWarnings("Possible Unhandled Promise");
-      
+
       const CheckChef = async () => {
-       
         let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
         let statusGetter = await checkChefRef.get();
         //setChefStatus( statusGetter.data().chefStatus)
-        let chefStat = statusGetter.data().chefStatus
+        let chefStat = statusGetter.data().chefStatus;
         console.log("Ye status mila hai", chefStat);
         if (chefStat === false) {
           Alert.alert("Sign Up as a Chef!");
@@ -357,8 +415,10 @@ const ChefShopNavigator = createDrawerNavigator(
           props.navigation.navigate("Auth");
         }
       };
-      setTimeout(function(){ CheckChef() }, 5000);
-     
+      setTimeout(function () {
+        CheckChef();
+      }, 5000);
+
       const getUserName = async () => {
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
@@ -382,6 +442,51 @@ const ChefShopNavigator = createDrawerNavigator(
             <DrawerNavigatorItems {...props} />
 
             <View style={styles.button}>
+              <View style={styles.logout}>
+                <Button
+                  title="Logout"
+                  color={Platform.OS === "android" ? "white" : "white"}
+                  onPress={() => {
+                    dispatch(authActions.logout());
+                    props.navigation.navigate("Auth");
+                    console.log("i amhere");
+                  }}
+                />
+              </View>
+            </View>
+          </SafeAreaView>
+        </View>
+      );
+    },
+  }
+);
+const RiderNavigator = createDrawerNavigator(
+  {
+    Home: RiderHomeNavigator,
+    Profile: RiderProfileNavigator,
+    CompletedOrders: RiderOrdersNavigator,
+  },
+  {
+    contentOptions: {
+      activeTintColor: Colors.primary,
+    },
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+      return (
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <View style={styles.UserNameHolder}>
+              <Ionicons
+                name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                size={25}
+                color={Colors.primary}
+              />
+              {/* <Text style={styles.usertxt}>Welcome {userName}</Text> */}
+              <UserName />
+            </View>
+            <DrawerNavigatorItems {...props} />
+
+            <View style={styles.buttonRider}>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
@@ -420,6 +525,14 @@ const ChefAuthNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
+const RiderAuthNavigator = createStackNavigator(
+  {
+    RiderAuth: RiderAuthScreen,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const MainNavigator = createSwitchNavigator({
   StartUp: StartupScreen,
@@ -429,6 +542,8 @@ const MainNavigator = createSwitchNavigator({
   Shop: ShopNavigator,
   Chef: ChefShopNavigator,
   SentOrders: SentOrdersNavigator,
+  RiderAuth: RiderAuthNavigator,
+  Rider: RiderNavigator,
 });
 
 const styles = StyleSheet.create({
@@ -457,7 +572,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 20,
   },
+  buttonRider: {
+    paddingTop: 430,
+  },
 });
 
 export default createAppContainer(MainNavigator);
-// export default createAppContainer(AdminNavigator);
+// export default createAppContainer(RiderNavigator);

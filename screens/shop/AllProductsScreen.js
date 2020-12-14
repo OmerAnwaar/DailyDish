@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButton from "../../components/UI/HeaderButton";
 
 const AllProductsScreen = (props) => {
   return (
@@ -8,6 +10,22 @@ const AllProductsScreen = (props) => {
       <Text style={styles.saad}> Have fun working here, SAAD. Good Luck!</Text>
     </View>
   );
+};
+AllProductsScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "Your Orders",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
