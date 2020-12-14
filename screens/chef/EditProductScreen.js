@@ -20,7 +20,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
 import Picker from "../../components/categories/Picker";
-import * as productsActions from "../../store/actions/products";
+import * as productsActions from "../../store/actions/Chefproducts";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ImagePicker from "../../components/ImagePicker";
 import Input from "../../components/UI/Input";
@@ -117,7 +117,7 @@ const EditProductScreen = (props) => {
   const { CatProvide } = useContext(theContext);
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state) =>
-    state.products.userProducts.find((prod) => prod.id === prodId)
+    state.chefproducts.userProducts.find((prod) => prod.id === prodId)
   );
   const dispatch = useDispatch();
 
@@ -212,6 +212,9 @@ const EditProductScreen = (props) => {
   const imageTakenHandler = (imagePath) => {
     setSelectedImage(imagePath);
   };
+  const selectImage = (imagePath) => {
+    setSelectedImage(imagePath);
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -236,7 +239,7 @@ const EditProductScreen = (props) => {
             />
           </View>
           {editedProduct == null ? (
-            <ImagePicker onImageTaken={imageTakenHandler} />
+            <ImagePicker  onSelectImage={selectImage}  onImageTaken={imageTakenHandler} />
           ) : (
             <></>
           )}
@@ -253,7 +256,7 @@ const EditProductScreen = (props) => {
             <>
               <Text style={{ fontSize: 15, fontWeight: "bold" }}>
                 Current Category:{" "}
-                <Text style={{ color: "green" }}>{CatProvide}</Text>
+                <Text style={{ color: "green" }}>{editedProduct.category}</Text>
               </Text>
               <Picker
                 items={categories}
@@ -307,6 +310,7 @@ const EditProductScreen = (props) => {
               This Platform is made for your benifit! Be careful in what you
               Submit.
             </Text>
+        
           </View>
         </View>
       </ScrollView>

@@ -38,6 +38,20 @@ const ImgPicker = (props) => {
     setPickedImage(image.uri);
     props.onImageTaken(image.uri);
   };
+  const selectImage = async () => {
+    const hasPermission = await verifyPermissions();
+    if (!hasPermission) {
+      return;
+    }
+    const image = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5,
+    });
+
+    setPickedImage(image.uri);
+    props.onSelectImage(image.uri);
+  };
 
   return (
     <View style={styles.imagePicker}>
@@ -53,6 +67,13 @@ const ImgPicker = (props) => {
         color={Colors.primary}
         onPress={takeImageHandler}
       />
+      <Button
+      title="select fom Gallery"
+      color={Colors.primary}
+      onPress={selectImage}
+      
+      ></Button>
+      
     </View>
   );
 };

@@ -16,7 +16,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 import * as cartActions from "../../store/actions/cart";
-import * as productsActions from "../../store/actions/products";
+import * as productsActions from "../../store/actions/Chefproducts";
 import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
 import UserName from "../user/UserName";
@@ -27,11 +27,11 @@ const ProductsOverviewScreen = (props) => {
   const [search, setSearch] = useState("");
   const [error, setError] = useState();
   const [userName, setuserName] = useState("");
-  const products = useSelector((state) => state.products.availableProducts);
-  const filtered = useSelector((state) => state.products.userProducts);
+  const products = useSelector((state) => state.chefproducts.availableProducts);
+  const filtered = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
-
+console.log("filtered=================>", filtered)
   
   const loadProducts = useCallback(async () => {
     setError(null);
