@@ -104,7 +104,6 @@ const ChefProductsNavigator = createStackNavigator(
   }
 );
 
-
 const OrdersNavigator = createStackNavigator(
   {
     Orders: OrdersScreen,

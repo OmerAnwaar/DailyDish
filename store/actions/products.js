@@ -14,8 +14,13 @@ export const fetchProducts = () => {
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
+<<<<<<< HEAD
+    const chefUserId = getState().authChef.userId;
+    console.log("chef id ==>>>>>", chefUserId);
+=======
     const useChef = getState().authChef.userId
   
+>>>>>>> 02e6c7e22d7203760dc8e274ff7e7259b7077556
     try {
       // const response = await fetch(
       //   "https://rn-shopping-3e552.firebaseio.com/products.json"
