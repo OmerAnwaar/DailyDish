@@ -20,7 +20,7 @@ import * as productsActions from "../../store/actions/Chefproducts";
 import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
 import UserName from "../user/UserName";
-import {db} from '../../firebase/Firebase'
+import { db } from "../../firebase/Firebase";
 const ProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -31,13 +31,12 @@ const ProductsOverviewScreen = (props) => {
   const filtered = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
-console.log("filtered=================>", filtered)
-  
+  console.log("filtered=================>", filtered);
+
   const loadProducts = useCallback(async () => {
     setError(null);
     setIsRefreshing(true);
     try {
-  
       await dispatch(productsActions.fetchProducts());
     } catch (err) {
       setError(err.message);
@@ -154,17 +153,6 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
           iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
           onPress={() => {
             navData.navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Cart"
-          iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
-          onPress={() => {
-            navData.navigation.navigate("Cart");
           }}
         />
       </HeaderButtons>

@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PickerItem from "../components/categories/PickerItem";
 
 const Picker = ({
+  props,
   icon,
   items,
   numberOfColumns = 1,
@@ -25,7 +26,9 @@ const Picker = ({
         <PickerItemComponent
           item={item}
           label={item.label}
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate("AllProd");
+          }}
         />
       )}
     />

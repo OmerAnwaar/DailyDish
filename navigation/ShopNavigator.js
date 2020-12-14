@@ -50,6 +50,7 @@ import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import AllProductsScreen from "../screens/shop/AllProductsScreen";
 import CategoriesScreen from "../screens/shop/CategoriesScreen";
+import CategorizedProductsScreen from "../screens/shop/CategorizedProductsScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -197,6 +198,7 @@ const ChefProfileNavigator = createStackNavigator(
 const CategoriesNavigator = createStackNavigator(
   {
     Categories: CategoriesScreen,
+    CategorizedProducts: CategorizedProductsScreen,
   },
   {
     navigationOptions: {

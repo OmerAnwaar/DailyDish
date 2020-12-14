@@ -71,6 +71,10 @@ const CategoriesScreen = (props) => {
         PickerItemComponent={CategoryPickerItem}
         placeholder="Category"
         width="50%"
+        // onPress={() => {
+        //   props.navigation.navigate("CategorizedProducts");
+        //   console.log("category pe gya ya nai?", onPress);
+        // }}
       />
     </View>
   );
