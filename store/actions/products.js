@@ -14,13 +14,8 @@ export const fetchProducts = () => {
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
-<<<<<<< HEAD
-    const chefUserId = getState().authChef.userId;
-    console.log("chef id ==>>>>>", chefUserId);
-=======
-    const useChef = getState().authChef.userId
-  
->>>>>>> 02e6c7e22d7203760dc8e274ff7e7259b7077556
+    const useChef = getState().authChef.userId;
+
     try {
       // const response = await fetch(
       //   "https://rn-shopping-3e552.firebaseio.com/products.json"
@@ -29,7 +24,7 @@ export const fetchProducts = () => {
       // if (!response.ok) {
       //   throw new Error("Something went wrong!");
       // }
-      console.log("my user ID========>", useChef)
+     
       const pArr = [];
       const getProducts = async () => {
         let productref = db.collection("products-view");
@@ -50,14 +45,13 @@ export const fetchProducts = () => {
           );
         }
 
-        
         pArr.map((item) => {
           console.log("owner id", item);
         });
         dispatch({
           type: SET_PRODUCTS,
           products: pArr,
-          userProducts: pArr.filter((pArr) => pArr.ownerId === userId),
+          userProducts: pArr.filter((pArr) => pArr.ownerId === useChef),
         });
       };
 
