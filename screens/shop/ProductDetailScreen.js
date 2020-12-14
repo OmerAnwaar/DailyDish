@@ -14,11 +14,16 @@ import * as cartActions from "../../store/actions/cart";
 
 const ProductDetailScreen = (props) => {
   const productId = props.navigation.getParam("productId");
+  const ownerId = props.navigation.getParam("ownerId");
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
   const dispatch = useDispatch();
-
+  const selectItemHandler = (ownerId) => {
+    props.navigation.navigate("AllProd", {
+      ownerId: ownerId
+    });
+  };
   return (
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
@@ -34,7 +39,7 @@ const ProductDetailScreen = (props) => {
           color={Colors.primary}
           title={selectedProduct.kitchenName}
           onPress={() => {
-            props.navigation.navigate("AllProd");
+            selectItemHandler(selectedProduct.ownerId)
           }}
         />
       </View>
