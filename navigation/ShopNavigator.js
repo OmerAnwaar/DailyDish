@@ -340,19 +340,24 @@ const ChefShopNavigator = createDrawerNavigator(
       const dispatch = useDispatch();
       const db = firebase.firestore();
       const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
+    const [chefCnic, setchefCnic] = useState("")
       ignoreWarnings("Possible Unhandled Promise");
+      
       const CheckChef = async () => {
+       
         let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
         let statusGetter = await checkChefRef.get();
-        setChefStatus( statusGetter.data().chefStatus)
-        console.log("Ye status mila hai", ChefStatus);
-        if (ChefStatus === false) {
+        //setChefStatus( statusGetter.data().chefStatus)
+        let chefStat = statusGetter.data().chefStatus
+        console.log("Ye status mila hai", chefStat);
+        if (chefStat === false) {
           Alert.alert("Sign Up as a Chef!");
           dispatch(chefauth.logout());
           props.navigation.navigate("Auth");
         }
       };
-     CheckChef()
+      setTimeout(function(){ CheckChef() }, 5000);
+     
       const getUserName = async () => {
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();

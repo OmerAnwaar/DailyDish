@@ -1,0 +1,110 @@
+Date : 2020-12-14 16:07:18
+Directory : /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish
+Total : 68 files,  14054 codes, 486 comments, 535 blanks, all 15075 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          4 |      7,713 |          6 |          3 |      7,722 |
+| JavaScript |         64 |      6,341 |        480 |        532 |      7,353 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                               | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                  |         68 |     14,054 |        486 |        535 |     15,075 |
+| .expo-shared                                                                                       |          1 |          4 |          0 |          1 |          5 |
+| components                                                                                         |         19 |      1,941 |        105 |        143 |      2,189 |
+| components/UI                                                                                      |          6 |        307 |          3 |         35 |        345 |
+| components/categories                                                                              |          3 |         97 |          4 |         15 |        116 |
+| components/shop                                                                                    |          3 |        218 |          0 |         17 |        235 |
+| constants                                                                                          |          1 |          4 |          0 |          1 |          5 |
+| data                                                                                               |          1 |         52 |          0 |          3 |         55 |
+| firebase                                                                                           |          1 |         16 |          4 |          5 |         25 |
+| models                                                                                             |          3 |         40 |          7 |          8 |         55 |
+| navigation                                                                                         |          2 |        453 |          3 |         32 |        488 |
+| screens                                                                                            |         20 |      2,747 |        127 |        207 |      3,081 |
+| screens/chef                                                                                       |          6 |      1,263 |         40 |         85 |      1,388 |
+| screens/shop                                                                                       |          7 |        623 |         81 |         66 |        770 |
+| screens/user                                                                                       |          5 |        679 |          4 |         41 |        724 |
+| store                                                                                              |         14 |      1,028 |        234 |        121 |      1,383 |
+| store/actions                                                                                      |          7 |        696 |        232 |         90 |      1,018 |
+| store/reducers                                                                                     |          7 |        332 |          2 |         31 |        365 |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                           | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/.expo-shared/assets.json                  | JSON       |          4 |          0 |          1 |          5 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/App.js                                    | JavaScript |         50 |          0 |          9 |         59 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/app.json                                  | JSON       |         17 |          6 |          0 |         23 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/babel.config.js                           | JavaScript |          6 |          0 |          1 |          7 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/CategoryPickerItem.js          | JavaScript |         30 |          0 |          5 |         35 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/ChefLocationPicker.js          | JavaScript |        544 |         49 |         23 |        616 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/Icon.js                        | JavaScript |         25 |          0 |          3 |         28 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/ImagePicker.js                 | JavaScript |         90 |          0 |         12 |        102 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/LocationPicker.js              | JavaScript |        540 |         49 |         22 |        611 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/MapPreview.js                  | JavaScript |         38 |          0 |          7 |         45 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/Addresses.js                | JavaScript |        122 |          0 |          7 |        129 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/Card.js                     | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/HeaderButton.js             | JavaScript |         16 |          2 |          4 |         22 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/Input.js                    | JavaScript |         98 |          0 |         11 |        109 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/ListItemSeparator.js        | JavaScript |         14 |          0 |          5 |         19 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/UI/SearchBar.js                | JavaScript |         39 |          1 |          4 |         44 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/categories/Picker.js           | JavaScript |         79 |          4 |         10 |         93 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/categories/PickerItem.js       | JavaScript |         15 |          0 |          4 |         19 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/categories/theContext.js       | JavaScript |          3 |          0 |          1 |          4 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/picker.js                      | JavaScript |         52 |          0 |          4 |         56 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/shop/CartItem.js               | JavaScript |         60 |          0 |          4 |         64 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/shop/OrderItem.js              | JavaScript |         63 |          0 |          6 |         69 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/components/shop/ProductItem.js            | JavaScript |         95 |          0 |          7 |        102 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/constants/Colors.js                       | JavaScript |          4 |          0 |          1 |          5 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/data/dummy-data.js                        | JavaScript |         52 |          0 |          3 |         55 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/env.js                                    | JavaScript |          4 |          0 |          2 |          6 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/firebase/Firebase.js                      | JavaScript |         16 |          4 |          5 |         25 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/models/cart-item.js                       | JavaScript |         12 |          0 |          2 |         14 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/models/order.js                           | JavaScript |         14 |          7 |          4 |         25 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/models/product.js                         | JavaScript |         14 |          0 |          2 |         16 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/navigation/NavigationContainer.js         | JavaScript |         24 |          0 |          6 |         30 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/navigation/ShopNavigator.js               | JavaScript |        429 |          3 |         26 |        458 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/package-lock.json                         | JSON       |      7,639 |          0 |          1 |      7,640 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/package.json                              | JSON       |         53 |          0 |          1 |         54 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/SplashScreen.js                   | JavaScript |        136 |          2 |          5 |        143 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/StartupScreen.js                  | JavaScript |         46 |          0 |         10 |         56 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/ChefAuthScreen.js            | JavaScript |        346 |          4 |         15 |        365 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/ChefLocationScreen.js        | JavaScript |         44 |          1 |          8 |         53 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/ChefProductOverviewScreen.js | JavaScript |        181 |          1 |         18 |        200 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/ChefProfileScreen.js         | JavaScript |        256 |          1 |          8 |        265 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/EditProductScreen.js         | JavaScript |        329 |         17 |         24 |        370 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/chef/ReceivedOrdersScreen.js      | JavaScript |        107 |         16 |         12 |        135 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/AllProductsScreen.js         | JavaScript |         25 |          0 |          4 |         29 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/CartScreen.js                | JavaScript |        115 |          2 |          9 |        126 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/CategoriesScreen.js          | JavaScript |         78 |          0 |          6 |         84 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/OrdersScreen.js              | JavaScript |         80 |         23 |         10 |        113 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/ProductDetailScreen.js       | JavaScript |         81 |          0 |          8 |         89 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/ProductsOverviewScreen.js    | JavaScript |        179 |          1 |         18 |        198 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/shop/SentOrdersScreen.js          | JavaScript |         65 |         55 |         11 |        131 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/user/AuthScreen.js                | JavaScript |        254 |          1 |         15 |        270 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/user/LocationScreen.js            | JavaScript |         43 |          1 |          8 |         52 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/user/UserName.js                  | JavaScript |          8 |          0 |          3 |         11 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/user/UserProductsScreen.js        | JavaScript |        135 |          1 |          8 |        144 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/screens/user/UserProfileScreen.js         | JavaScript |        239 |          1 |          7 |        247 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/Chefproducts.js             | JavaScript |        140 |         90 |         18 |        248 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/auth.js                     | JavaScript |        136 |          2 |         16 |        154 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/authChef.js                 | JavaScript |        151 |          2 |         16 |        169 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/cart.js                     | JavaScript |          8 |          0 |          3 |         11 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/cordinates.js               | JavaScript |         10 |          0 |          3 |         13 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/orders.js                   | JavaScript |        112 |         48 |         16 |        176 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/actions/products.js                 | JavaScript |        139 |         90 |         18 |        247 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/Chefproducts.js            | JavaScript |         73 |          0 |          5 |         78 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/auth.js                    | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/authChef.js                | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/cart.js                    | JavaScript |        108 |          2 |          5 |        115 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/cordinates.js              | JavaScript |         16 |          0 |          4 |         20 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/orders.js                  | JavaScript |         26 |          0 |          4 |         30 |
+| /Users/saadahmed/Documents/GitHub/dailydishapp/DailyDish/store/reducers/products.js                | JavaScript |         73 |          0 |          5 |         78 |
+| Total                                                                                              |            |     14,054 |        486 |        535 |     15,075 |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
