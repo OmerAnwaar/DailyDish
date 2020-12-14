@@ -14,6 +14,8 @@ export const fetchProducts = () => {
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
+    const chefUserId = getState().authChef.userId;
+    console.log("chef id ==>>>>>", chefUserId);
     try {
       // const response = await fetch(
       //   "https://rn-shopping-3e552.firebaseio.com/products.json"
@@ -151,6 +153,7 @@ export const createProduct = (
 
     //const resData = await response.json();
 
+    console.log("User id =====>>>", userId);
     let kitchenNameRef = db.collection("chefs").doc(userId);
     let kitchennameExtractor = await kitchenNameRef.get();
     const kName = kitchennameExtractor.data().KitchenName;

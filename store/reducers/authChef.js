@@ -1,4 +1,4 @@
-import { AUTHENTICATE, LOGOUT } from '../actions/authChef';
+import { AUTHENTICATE_CHEF, LOGOUT_CHEF } from "../actions/authChef";
 
 const initialState = {
   token: null,
@@ -7,13 +7,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case AUTHENTICATE:
+    case AUTHENTICATE_CHEF:
       return {
         token: action.token,
         userId: action.userId,
       };
 
-    case LOGOUT:
+    case LOGOUT_CHEF:
       return initialState;
     default:
       return state;

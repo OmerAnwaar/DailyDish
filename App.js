@@ -10,8 +10,8 @@ import ordersReducer from "./store/reducers/orders";
 import authReducer from "./store/reducers/auth";
 import cartReducer from "./store/reducers/cart";
 import CordinateReducer from "./store/reducers/cordinates";
-import authChefReducer from "./store/reducers/authChef";
-import ignoreWarnings from 'react-native-ignore-warnings';
+import authChefReducer from "../DailyDish/store/reducers/authChef";
+import ignoreWarnings from "react-native-ignore-warnings";
 
 import NavigationContainer from "./navigation/NavigationContainer";
 import theContext from "./components/categories/theContext";
@@ -36,8 +36,8 @@ const fetchFonts = () => {
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
- 
-  ignoreWarnings('Setting a timer');
+
+  ignoreWarnings("Setting a timer");
   if (!fontLoaded) {
     return (
       <AppLoading

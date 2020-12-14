@@ -374,7 +374,7 @@ const ChefShopNavigator = createDrawerNavigator(
                   onPress={() => {
                     console.log("i amhere");
                     dispatch(chefauth.logout());
-                    // props.navigation.navigate("Auth");
+                    props.navigation.navigate("Auth");
                   }}
                 />
               </View>

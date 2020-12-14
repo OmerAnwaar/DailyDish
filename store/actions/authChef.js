@@ -6,19 +6,19 @@ import React, { useState, useEffect } from "react";
 
 // export const SIGNUP = 'SIGNUP';
 // export const LOGIN = 'LOGIN';
-export const AUTHENTICATE = "AUTHENTICATE-CHEF";
-export const LOGOUT = "LOGOUT-CHEF";
+export const AUTHENTICATE_CHEF = "AUTHENTICATE_CHEF";
+export const LOGOUT_CHEF = "LOGOUT_CHEF";
 
 let timer;
 
 export const authenticate = (userId, token, expiryTime) => {
   return (dispatch) => {
     dispatch(setLogoutTimer(expiryTime));
-    dispatch({ type: AUTHENTICATE, userId: userId, token: token });
+    dispatch({ type: AUTHENTICATE_CHEF, userId: userId, token: token });
   };
 };
 
-export const signup = (email, password, name, phnumber,kitchenname,cnic) => {
+export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
   return async (dispatch) => {
     const response = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBpPrfCDE4d8352ckKKoca_pQw1bbVbO-E",
@@ -122,10 +122,10 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-    console.log("hello")
+  console.log("hello");
   clearLogoutTimer();
   AsyncStorage.removeItem("userData");
-  return { type: LOGOUT };
+  return { type: LOGOUT_CHEF };
 };
 
 const clearLogoutTimer = () => {
@@ -152,4 +152,3 @@ const saveDataToStorage = (token, userId, expirationDate) => {
     })
   );
 };
-
