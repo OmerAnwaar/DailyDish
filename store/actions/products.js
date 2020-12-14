@@ -24,7 +24,7 @@ export const fetchProducts = () => {
       // if (!response.ok) {
       //   throw new Error("Something went wrong!");
       // }
-      console.log("my user ID========>", useChef);
+
       const pArr = [];
       const getProducts = async () => {
         let productref = db.collection("products-view");
@@ -51,7 +51,7 @@ export const fetchProducts = () => {
         dispatch({
           type: SET_PRODUCTS,
           products: pArr,
-          userProducts: pArr.filter((pArr) => pArr.ownerId === userId),
+          userProducts: pArr.filter((pArr) => pArr.ownerId === useChef),
         });
       };
 
