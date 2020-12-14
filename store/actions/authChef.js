@@ -62,6 +62,20 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         userAccount: true,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
+      await firebase
+      .firestore()
+      .collection("app-users")
+      .doc(resData.localId)
+      .set({
+        UserName: name,
+        UserEmail: email,
+        phnumber: phnumber,
+        Disable: false,
+        reviewStatus: false,
+        chefStatus: true,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
     dispatch(
       authenticate(
         resData.localId,

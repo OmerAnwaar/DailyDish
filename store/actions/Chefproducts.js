@@ -14,13 +14,8 @@ export const fetchProducts = () => {
   return async (dispatch, getState) => {
     // any async code you want!
     const userId = getState().auth.userId;
-<<<<<<< HEAD
-    const chefUserId = getState().authChef.userId;
-    console.log("chef id ==>>>>>", chefUserId);
-=======
     const useChef = getState().authChef.userId
   
->>>>>>> 02e6c7e22d7203760dc8e274ff7e7259b7077556
     try {
       // const response = await fetch(
       //   "https://rn-shopping-3e552.firebaseio.com/products.json"
@@ -57,7 +52,7 @@ export const fetchProducts = () => {
         dispatch({
           type: SET_PRODUCTS,
           products: pArr,
-          userProducts: pArr.filter((pArr) => pArr.ownerId === userId),
+          userProducts: pArr.filter((pArr) => pArr.ownerId === useChef),
         });
       };
 
@@ -140,6 +135,7 @@ export const createProduct = (
     // any async code you want!
     const token = getState().auth.token;
     const userId = getState().auth.userId;
+    const useChef = getState().authChef.userId
     // const response = await fetch(
     //   `https://rn-shopping-3e552.firebaseio.com/products.json?auth=${token}`,
     //   {
@@ -159,7 +155,7 @@ export const createProduct = (
 
     //const resData = await response.json();
 console.log("Ye hai id teri",userId)
-    let kitchenNameRef = db.collection("chefs").doc(userId);
+    let kitchenNameRef = db.collection("chefs").doc(useChef);
     let kitchennameExtractor = await kitchenNameRef.get();
     const kName = kitchennameExtractor.data().KitchenName;
     console.log("kitchen name =====>>>", kName);
@@ -170,7 +166,7 @@ console.log("Ye hai id teri",userId)
       category: category,
       description: description,
       imageUrl: imageUrl,
-      ownerId: userId,
+      ownerId: useChef,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       title: title,
       price: price,

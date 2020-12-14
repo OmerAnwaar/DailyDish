@@ -23,7 +23,6 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const ChefProfileScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
-  console.log("owner id", ReduxCurrentUser);
   const [loading, setLoading] = useState(false);
   const [Profile, setProfile] = useState({});
   const [timeStamp, settimeStamp] = useState("");

@@ -26,8 +26,7 @@ const CartScreen = (props) => {
   const ProductOwner = useSelector((state) => state.cart.ownerId);
   let ProductId;
   console.log("ownerid=", ProductOwner);
-  // 
-    
+  //
 
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
@@ -35,7 +34,6 @@ const CartScreen = (props) => {
       ProductId = key;
       console.log("i am cart items", state.cart.items);
       transformedCartItems.push({
-       
         productId: key,
         ownerId: state.cart.items[key].ownerId,
         productTitle: state.cart.items[key].productTitle,
@@ -54,8 +52,9 @@ const CartScreen = (props) => {
   // cartItems ={[ProductId]: transformedCartItems}
   const sendOrderHandler = async () => {
     setIsLoading(true);
-    await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
-    // props.navigation.navigate("SentOrders");
+    dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+    setTimeout(function(){  props.navigation.navigate("SentOrders"); }, 4000);
+   
     setIsLoading(false);
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   FlatList,
   Button,
@@ -14,12 +14,13 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
-import * as productsActions from "../../store/actions/products";
+import * as productsActions from "../../store/actions/Chefproducts";
+import ignoreWarnings from 'react-native-ignore-warnings';
 
 const UserProductsScreen = (props) => {
-  const userProducts = useSelector((state) => state.products.userProducts);
+  const userProducts = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
-
+  ignoreWarnings('Each child in');
   const editProductHandler = (id) => {
     props.navigation.navigate("EditProduct", { productId: id });
   };
@@ -57,6 +58,10 @@ const UserProductsScreen = (props) => {
             {docs.kitchenName}
           </Text>
         ))}
+        <Ionicons style={styles.refresh} name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+              size={25} onPress={()=>{
+                dispatch(productsActions.fetchProducts())
+              }} ></Ionicons>
       </View>
       <FlatList
         data={userProducts}
@@ -130,6 +135,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
   },
+  refresh:{
+    alignSelf: 'flex-end'
+  }
 });
 
 export default UserProductsScreen;

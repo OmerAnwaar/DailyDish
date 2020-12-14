@@ -11,13 +11,14 @@ import authReducer from "./store/reducers/auth";
 import cartReducer from "./store/reducers/cart";
 import CordinateReducer from "./store/reducers/cordinates";
 import authChefReducer from "../DailyDish/store/reducers/authChef";
+import chefProductsReducer from "../DailyDish/store/reducers/Chefproducts";
 import ignoreWarnings from "react-native-ignore-warnings";
 
 import NavigationContainer from "./navigation/NavigationContainer";
-import theContext from "./components/categories/theContext";
 
 const rootReducer = combineReducers({
   products: productsReducer,
+  chefproducts: chefProductsReducer,
   cart: cartReducer,
   orders: ordersReducer,
   auth: authReducer,

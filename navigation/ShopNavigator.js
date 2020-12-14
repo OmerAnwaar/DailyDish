@@ -20,6 +20,7 @@ import {
   StyleSheet,
   Image,
   Text,
+  Alert,
 } from "react-native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import ignoreWarnings from "react-native-ignore-warnings";
@@ -37,8 +38,7 @@ import UserProfileScreen from "../screens/user/UserProfileScreen";
 import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
 import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
 import LocationScreen from "../screens/user/LocationScreen";
-import ChefProductsOverviewScreen from "../screens/chef/ChefProductOverviewScreen";
-
+import ChefProductOverViewScreen from "../screens/chef/ChefProductOverViewScreen";
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
@@ -84,10 +84,9 @@ const ProductsNavigator = createStackNavigator(
     defaultNavigationOptions: defaultNavOptions,
   }
 );
-
 const ChefProductsNavigator = createStackNavigator(
   {
-    ChefProductsOverview: ChefProductsOverviewScreen,
+    ProductsOverview: ChefProductOverViewScreen,
     ProductDetail: ProductDetailScreen,
     AllProd: AllProductsScreen,
   },
@@ -336,19 +335,28 @@ const ChefShopNavigator = createDrawerNavigator(
     },
     contentComponent: (props) => {
       const [userName, setuserName] = useState("");
+      const [ChefStatus, setChefStatus] = useState(false);
       const dispatch = useDispatch();
       const db = firebase.firestore();
+      const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
       ignoreWarnings("Possible Unhandled Promise");
+      const CheckChef = async () => {
+        let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
+        let statusGetter = await checkChefRef.get();
+        setChefStatus(statusGetter.data().chefStatus);
+        console.log("Ye status mila hai", ChefStatus);
+        if (ChefStatus === false) {
+          Alert.alert("Sign Up as a Chef!");
+          dispatch(chefauth.logout());
+          props.navigation.navigate("Auth");
+        }
+      };
+      CheckChef();
       const getUserName = async () => {
-        const ReduxCurrentUser = useSelector((state) => state.auth.userId);
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
         setuserName(userNameGetter.data().ChefName);
-        {
-          console.log("i am running========>", userNameGetter.data());
-        }
       };
-
       getUserName();
 
       ignoreWarnings("Possible Unhandled Promise");
@@ -373,7 +381,7 @@ const ChefShopNavigator = createDrawerNavigator(
                   color={Platform.OS === "android" ? "white" : "white"}
                   onPress={() => {
                     console.log("i amhere");
-                    dispatch(chefauth.logout());
+                    dispatch(authActions.logout());
                     props.navigation.navigate("Auth");
                   }}
                 />
