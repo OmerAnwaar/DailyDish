@@ -19,6 +19,8 @@ import Colors from "../../constants/Colors";
 import * as authActions from "../../store/actions/auth";
 
 import * as Animatable from "react-native-animatable";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButton from "../../components/UI/HeaderButton";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -150,15 +152,47 @@ const ChefAuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
-              <Input
-                id="phone"
-                label="Phone number"
-                keyboardType="phone-pad"
-                required
-                errorText="Please enter a valid phone number."
-                onInputChange={inputChangeHandler}
-                initialValue=""
-              />
+              {isSignup == true ? (
+                <View>
+                <Input
+                  id="KitchenName"
+                  label="Set a Kitchen Name"
+                  keyboardType="default"
+                  required
+                  minLength={5}
+                  autoCapitalize="none"
+                  errorText="Please enter a valid Kitchen."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+                <Input
+                  id="chefname"
+                  label="Chef Name:"
+                  keyboardType="default"
+                  required
+                  minLength={5}
+                  autoCapitalize="none"
+                  errorText="Please enter a valid Name."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+                 <Input
+                 id="phnumber"
+                 label="Phone Number (03XX-XXXXXXX):"
+                 keyboardType="numeric"
+                 required
+                 autoCapitalize="none"
+                 errorText="Please enter a Name."
+                 onInputChange={inputChangeHandler}
+                 minLength={12}
+                 initialValue=""
+               />
+                
+                </View>
+              ) : (
+                <></>
+              )}
+
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
                   {isLoading ? (
@@ -191,14 +225,29 @@ const ChefAuthScreen = (props) => {
 
 const { height } = Dimensions.get("screen");
 
-ChefAuthScreen.navigationOptions = {
-  headerTitle: "",
-  headerLeft: () => null,
-  headerStyle: {
-    backgroundColor: "#FF6347",
-    shadowColor: "transparent",
-  },
-  headerTintColor: "white",
+ChefAuthScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Back"
+          iconName={
+            Platform.OS === "android" ? "md-arrow-back" : "ios-arrow-back"
+          }
+          color={"white"}
+          onPress={() => {
+            navData.navigation.navigate("Auth");
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerStyle: {
+      backgroundColor: "#FF6347",
+      shadowColor: "transparent",
+    },
+    headerTintColor: "white",
+  };
 };
 
 const styles = StyleSheet.create({
@@ -231,7 +280,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    paddingTop: "30%",
+    paddingTop: "10%",
   },
 });
 
