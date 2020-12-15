@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import Input from "../../components/UI/Input";
 import Card from "../../components/UI/Card";
 import Colors from "../../constants/Colors";
-import * as authActions from "../../store/actions/auth";
+import * as authActions from "../../store/actions/authRider";
 
 import * as Animatable from "react-native-animatable";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";

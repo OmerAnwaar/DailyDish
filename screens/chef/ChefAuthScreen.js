@@ -337,11 +337,10 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 80,
+    paddingTop: 92,
   },
   gradient: {
     justifyContent: "center",
-    // paddingLeft: 5,
   },
   logo: {
     width: 160,
@@ -350,7 +349,7 @@ const styles = StyleSheet.create({
   },
   authContainer: {
     width: "100%",
-    height: 1000,
+    height: 850,
     maxWidth: 400,
     padding: 30,
     marginHorizontal: 7.5,

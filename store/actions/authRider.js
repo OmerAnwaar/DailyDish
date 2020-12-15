@@ -4,19 +4,19 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import React, { useState, useEffect } from "react";
 
-export const AUTHENTICATE_CHEF = "AUTHENTICATE_CHEF";
-export const LOGOUT_CHEF = "LOGOUT_CHEF";
+export const AUTHENTICATE_RIDER = "AUTHENTICATE_RIDER";
+export const LOGOUT_RIDER = "LOGOUT_RIDER";
 
 let timer;
 
 export const authenticate = (userId, token, expiryTime) => {
   return (dispatch) => {
     dispatch(setLogoutTimer(expiryTime));
-    dispatch({ type: AUTHENTICATE_CHEF, userId: userId, token: token });
+    dispatch({ type: AUTHENTICATE_RIDER, userId: userId, token: token });
   };
 };
 
-export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
+export const signup = (email, password, name, phnumber) => {
   return async (dispatch) => {
     const response = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBpPrfCDE4d8352ckKKoca_pQw1bbVbO-E",
@@ -48,20 +48,6 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
 
     const setting = await firebase
       .firestore()
-      .collection("chefs")
-      .doc(resData.localId)
-      .set({
-        ChefName: name,
-        UserEmail: email,
-        phnumber: phnumber,
-        KitchenName: kitchenname,
-        cnic: cnic,
-        Disable: false,
-        userAccount: true,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-    await firebase
-      .firestore()
       .collection("app-users")
       .doc(resData.localId)
       .set({
@@ -70,10 +56,9 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         phnumber: phnumber,
         Disable: false,
         reviewStatus: false,
-        chefStatus: true,
+        chefStatus: false,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
-
     dispatch(
       authenticate(
         resData.localId,
@@ -134,10 +119,9 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  console.log("hello");
   clearLogoutTimer();
   AsyncStorage.removeItem("userData");
-  return { type: LOGOUT_CHEF };
+  return { type: LOGOUT_RIDER };
 };
 
 const clearLogoutTimer = () => {

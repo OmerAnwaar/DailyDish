@@ -130,7 +130,7 @@ const AuthScreen = (props) => {
             resizeMode="cover"
           />
         </View>
-        <Animatable.View style={styles.Container} animation="fadeInUpBig">
+        <Animatable.View animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
               {isSignup == true ? (
@@ -250,13 +250,14 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: 45,
   },
   gradient: {
     justifyContent: "center",
   },
   authContainer: {
     width: "100%",
-    height: 600,
+    height: 700,
     maxWidth: 400,
     padding: 30,
     borderTopLeftRadius: 20,
@@ -264,8 +265,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   logo: {
-    width: "60%",
-    height: "40%",
+    width: 160,
+    height: 150,
+    padding: 20,
   },
   buttonContainer: {
     marginTop: 10,
