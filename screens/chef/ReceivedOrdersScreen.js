@@ -4,7 +4,8 @@ import { db } from "../../firebase/Firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
-
+import OrderItem from "../../components/shop/OrderItem";
+import ItemHolder from "../../components/categories/ItemHolder";
 const ReceievedOrdersScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [recieved, setrecieved] = useState([]);
@@ -15,24 +16,20 @@ const ReceievedOrdersScreen = (props) => {
     const recievedOrderRef = db
       .collection("orders")
       .where("ownerId", "==", ReduxCurrentUser)
-      .where("orderStatus", "==", "requested")
-     await recievedOrderRef.get().then(res=>{
+      .where("orderStatus", "==", "requested");
+    await recievedOrderRef.get().then((res) => {
       setorderRecieved(
         res.docs.map((doc) => ({
           id: doc.id,
           CustomerName: doc.data().CustomerName,
           phnumber: doc.data().phnumber,
           CurrentAddr: doc.data().CurrentAddress,
-          productTitle: doc.data().productTitle,
-          quantity: doc.data().quantity,
-          productPrice: doc.data().productPrice,
-          sum: doc.data().sum,
+          item: doc.data().items,
+          totalAmount: doc.data().totalAmount,
           timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
         }))
       );
-    }
-    
-      )
+    });
 
     // setorderRecieved(
     //   recievedOrder.docs.map((doc) => ({
@@ -64,34 +61,35 @@ const ReceievedOrdersScreen = (props) => {
     };
   }, []);
 
-  if( orderRecieved.length==0){
-    return(
+  if (orderRecieved.length == 0) {
+    return (
       <View>
-      <Text>Refresh maybe!</Text>
-      <Button label="refresh" title="refresh" onPress={recievedOrders}></Button>
+        <Text>Refresh maybe!</Text>
+        <Button
+          label="refresh"
+          title="refresh"
+          onPress={recievedOrders}
+        ></Button>
       </View>
-    )
+    );
   }
   return (
     <View>
-      
       <FlatList
-      data={orderRecieved}
-      renderItem={({item})=>(
-        <View style={styles.container}>
-      <Text>Customer Name: {item.CustomerName}</Text>
-      <Text>Customer Phone Number: {item.phnumber}</Text>
-      <Text>Customer Address: {item.CurrentAddr}</Text>
-      <Text>Product: {item.productTitle }</Text>
-      <Text>Price: {item.productPrice}</Text>
-      <Text>Quantity: {item.quantity}</Text>
-      <Text>Total of this product: {item.sum}</Text>
-      <Text> Placed On: {item.timestamp}</Text>
-      </View>
-      )}
-      keyExtractor={item=>item.id}
+        data={orderRecieved}
+        renderItem={({ item }) => (
+          <View style={styles.container}>
+            <Text>Customer Name: {item.CustomerName}</Text>
+            <Text>Customer Phone Number: {item.phnumber}</Text>
+            <Text>Customer Address: {item.CurrentAddr}</Text>
+
+            <Text> Placed On: {item.timestamp}</Text>
+            <ItemHolder data={item.item} />
+            <Text>Total: {item.totalAmount}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
       />
-     
     </View>
   );
 };
@@ -122,13 +120,13 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
   },
-  container:{
+  container: {
     padding: "2%",
     margin: "2%",
     borderColor: "grey",
     borderWidth: 3,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 });
 
 export default ReceievedOrdersScreen;

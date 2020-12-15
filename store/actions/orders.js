@@ -18,19 +18,16 @@ export const fetchOrders = () => {
         throw new Error("Something went wrong!");
       }
       const loadedOrders = [];
-      const getOrders = db.collection("orders").where("Customer",'==',userId).where("orderStats",'==','requested')
-      const order = await getOrders.get()
-      for (const doc in order.docs){
-        loadedOrders.push(
-          new Order(
-            doc.id,
-           
-          )
-        );
+      const getOrders = db
+        .collection("orders")
+        .where("Customer", "==", userId)
+        .where("orderStats", "==", "requested");
+      const order = await getOrders.get();
+      for (const doc in order.docs) {
+        loadedOrders.push(new Order(doc.id));
       }
 
       const resData = await response.json();
-      
 
       for (const key in resData) {
         loadedOrders.push(
@@ -73,59 +70,93 @@ export const addOrder = (cartItems, totalAmount) => {
     //   throw new Error("Something went wrong!");
     // }
     console.log("yahan tak tou aya=======>", userId);
-
+let ownerID = ""
+cartItems.map(doc=>{
+  ownerID = doc.ownerId
+})
     const gettingUserInfoRef = db.collection("app-users").doc(userId);
     const gettingUserInfo = await gettingUserInfoRef.get();
     const CurrAdress = gettingUserInfo.data().CurrentAddress;
     const phnumber = gettingUserInfo.data().phnumber;
     const UserName = gettingUserInfo.data().UserName;
-
-    cartItems.map(async (items) => {
-      const ordersetterRef = db
-        .collection("app-users")
-        .doc(userId)
-        .collection("orders-history")
-        .doc();
-
-      await ordersetterRef.set({
-        kitchenName: items.kitchenName,
-        ownerId: items.ownerId,
-        productPrice: items.productPrice,
-        id: items.productId,
-        productTitle: items.productTitle,
-        quantity: items.quantity,
-        sum: items.sum,
+    console.log("Ye hain cart items========>", cartItems, totalAmount);
+    
+    const presetterRef = await db.collection("orders").add({
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         orderStatus: "requested",
         deliverystatus: "requested",
         CurrentAddress: CurrAdress,
         phnumber: phnumber,
         CustomerName: UserName,
-      });
-    });
-    cartItems.map(async (items) => {
-      const ordersetterRef = db.collection("orders").doc();
+        totalAmount: totalAmount,
+        ownerId: ownerID
+      })
+     const docID =  presetterRef.id
 
-      await ordersetterRef.set({
-        kitchenName: items.kitchenName,
-        ownerId: items.ownerId,
-        productPrice: items.productPrice,
-        id: items.productId,
-        productTitle: items.productTitle,
-        quantity: items.quantity,
-        sum: items.sum,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        orderStatus: "requested",
-        deliverystatus: "requested",
-        CurrentAddress: CurrAdress,
-        phnumber: phnumber,
-        CustomerName: UserName,
-        Customer: userId
-      });
-    });
-    cartItems.map((items) => {
-      console.log("Items info", items);
-    });
+  console.log("yeh hai docref=========>", docID)
+
+    const ordersetterref= db.collection("orders").doc(docID)
+    cartItems.map( async (items)=>{
+      await ordersetterref.update({
+        items:firebase.firestore.FieldValue.arrayUnion({
+            kitchenName: items.kitchenName,
+            ownerId: items.ownerId,
+            productId: items.productId,
+            productPrice: items.productPrice,
+            productTitle: items.productTitle,
+            quantity: items.quantity,
+            sum: items.sum,
+
+        })
+      })
+    })
+
+    // cartItems.map(async (items) => {
+    //   const ordersetterRef = db
+    //     .collection("app-users")
+    //     .doc(userId)
+    //     .collection("orders-history")
+    //     .doc();
+
+    //   await ordersetterRef.set({
+    //     kitchenName: items.kitchenName,
+    //     ownerId: items.ownerId,
+    //     productPrice: items.productPrice,
+    //     id: items.productId,
+    //     productTitle: items.productTitle,
+    //     quantity: items.quantity,
+    //     sum: items.sum,
+    //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    //     orderStatus: "requested",
+    //     deliverystatus: "requested",
+    //     CurrentAddress: CurrAdress,
+    //     phnumber: phnumber,
+    //     CustomerName: UserName,
+    //   });
+    // });
+    // cartItems.map(async (items) => {
+    //   const ordersetterRef = db.collection("orders").doc();
+
+    //   await ordersetterRef.set({
+    //     kitchenName: items.kitchenName,
+    //     ownerId: items.ownerId,
+    //     productPrice: items.productPrice,
+    //     id: items.productId,
+    //     productTitle: items.productTitle,
+    //     quantity: items.quantity,
+    //     sum: items.sum,
+    //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    //     orderStatus: "requested",
+    //     deliverystatus: "requested",
+    //     CurrentAddress: CurrAdress,
+    //     phnumber: phnumber,
+    //     CustomerName: UserName,
+    //     Customer: userId
+    //   });
+    // });
+    // cartItems.map((items) => {
+    //   console.log("Items info", items);
+    // });
 
     // await db
     //   .collection("app-users")
