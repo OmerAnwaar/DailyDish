@@ -1,4 +1,4 @@
-import { AUTHENTICATE_RIDER, LOGOUT_RIDER } from "../actions/auth";
+import { AUTHENTICATE_RIDER, LOGOUT_RIDER } from "../actions/authRider";
 
 const initialState = {
   token: null,

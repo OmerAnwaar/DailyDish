@@ -48,6 +48,19 @@ export const signup = (email, password, name, phnumber) => {
 
     const setting = await firebase
       .firestore()
+      .collection("riders")
+      .doc(resData.localId)
+      .set({
+        UserName: name,
+        UserEmail: email,
+        phnumber: phnumber,
+        Disable: false,
+        reviewStatus: false,
+        chefStatus: false,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      await firebase
+      .firestore()
       .collection("app-users")
       .doc(resData.localId)
       .set({

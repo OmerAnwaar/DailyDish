@@ -129,13 +129,13 @@ const ProductsOverviewScreen = (props) => {
                 selectItemHandler(itemData.item.id, itemData.item.title);
               }}
             />
-            <Button
+            {/* <Button
               color={Colors.primary}
               title="To Cart"
               onPress={() => {
                 dispatch(cartActions.addToCart(itemData.item));
               }}
-            />
+            /> */}
           </ProductItem>
         )}
       />

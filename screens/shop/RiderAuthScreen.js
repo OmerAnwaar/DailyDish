@@ -58,10 +58,14 @@ const RiderAuthScreen = (props) => {
     inputValues: {
       email: "",
       password: "",
+      ridername: "",
+      phnumber: "",
     },
     inputValidities: {
       email: false,
       password: false,
+      ridername: false,
+      phnumber: false,
     },
     formIsValid: false,
   });
@@ -79,7 +83,9 @@ const RiderAuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.password,   
+        formState.inputValues.ridername,
+        formState.inputValues.phnumber
       );
     } else {
       action = authActions.login(
@@ -154,17 +160,7 @@ const RiderAuthScreen = (props) => {
               />
               {isSignup == true ? (
                 <View>
-                  <Input
-                    id="cnic"
-                    label="CNIC (No spacing)"
-                    keyboardType="numeric"
-                    required
-                    minLength={13}
-                    autoCapitalize="none"
-                    errorText="Please enter a valid CNIC."
-                    onInputChange={inputChangeHandler}
-                    initialValue=""
-                  />
+            
                   <Input
                     id="ridername"
                     label="Rider Name:"

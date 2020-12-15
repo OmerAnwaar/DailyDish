@@ -6,17 +6,31 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
 import ItemHolder from "../../components/categories/ItemHolder";
+import * as firebase from "firebase";
+import "firebase/firestore";
 const ReceievedOrdersScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [recieved, setrecieved] = useState([]);
   const [loading, setloading] = useState(false);
   const [orderRecieved, setorderRecieved] = useState([]);
+  const [orderStatus, setorderStatus] = useState("");
+  const [Kname, setKname] = useState("");
+  const [Cname, setCname] = useState("");
+  const [Aname, setAname] = useState("");
+  const [Pname, setPname] = useState("");
 
+  const kitchenInfoGetter = async () => {
+    const kitchenDataRef = db.collection("chefs").doc(ReduxCurrentUser);
+    const kitchenData = await kitchenDataRef.get();
+    setKname(kitchenData.data().KitchenName);
+    setCname(kitchenData.data().ChefName);
+    setAname(kitchenData.data().CurrentAddress);
+    setPname(kitchenData.data().phnumber);
+  };
   const recievedOrders = async () => {
     const recievedOrderRef = db
       .collection("orders")
-      .where("ownerId", "==", ReduxCurrentUser)
-      .where("orderStatus", "==", "requested");
+      .where("ownerId", "==", ReduxCurrentUser);
     await recievedOrderRef.get().then((res) => {
       setorderRecieved(
         res.docs.map((doc) => ({
@@ -27,6 +41,8 @@ const ReceievedOrdersScreen = (props) => {
           item: doc.data().items,
           totalAmount: doc.data().totalAmount,
           timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
+          orderStatus: doc.data().orderStatus,
+          deliverystatus: doc.data().deliverystatus,
         }))
       );
     });
@@ -51,13 +67,16 @@ const ReceievedOrdersScreen = (props) => {
   };
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     recievedOrders();
+    kitchenInfoGetter();
     console.log("focussed");
   });
 
   useEffect(() => {
+    kitchenInfoGetter();
     recievedOrders();
     return () => {
       recievedOrders();
+      kitchenInfoGetter();
     };
   }, []);
 
@@ -75,20 +94,90 @@ const ReceievedOrdersScreen = (props) => {
   }
   return (
     <View>
+      <Button label="refresh" title="refresh" onPress={recievedOrders}></Button>
       <FlatList
         data={orderRecieved}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.container}>
             <Text>Customer Name: {item.CustomerName}</Text>
             <Text>Customer Phone Number: {item.phnumber}</Text>
             <Text>Customer Address: {item.CurrentAddr}</Text>
-
             <Text> Placed On: {item.timestamp}</Text>
             <ItemHolder data={item.item} />
             <Text>Total: {item.totalAmount}</Text>
+            <View>
+              {item.orderStatus === "requested" ? (
+                <>
+                  <Button
+                    label="accepting-order"
+                    title="Accept Order"
+                    onPress={() => {
+                      db.collection("orders").doc(item.id).update({
+                        orderStatus: "accepted",
+                      });
+                    }}
+                  ></Button>
+                  <Button
+                    label="decline-order"
+                    title="Decline Order"
+                    onPress={() => {
+                      db.collection("orders").doc(item.id).update({
+                        orderStatus: "declined",
+                      });
+                    }}
+                  ></Button>
+                </>
+              ) : (
+                <>
+                  {item.orderStatus === "accepted" ? (
+                    <>
+                      <Button
+                        label="req-delivery"
+                        title="Request Delivery"
+                        onPress={() => {
+                          db.collection("orders").doc(item.id).update({
+                            orderStatus: "completed",
+                            deliverystatus: "live",
+                          });
+                          db.collection("live-orders").add({
+                            orderId: item.id,
+                            KitchenName: Kname,
+                            KitchenAddress: Aname,
+                            KitchenChef: Cname,
+                            Kitchenph: Pname,
+                            CustomerName: item.CustomerName,
+                            Customerph: item.phnumber,
+                            CustomerAddress: item.CurrentAddr,
+                            Total: item.totalAmount,
+                            deliverystatus: "inprogress",
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                          });
+                        }}
+                      ></Button>
+                    </>
+                  ) : (
+                    <>
+                      {item.orderStatus === "completed" ? (
+                        <>
+                          {item.deliverystatus === "accepted" ? (
+                            <Text>
+                              Rider is Assigned and will be there soon
+                            </Text>
+                          ) : (
+                            <Text>Rider will accept delivery request soon</Text>
+                          )}
+                        </>
+                      ) : (
+                        <Text>You Turned Down this Order</Text>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </View>
           </View>
         )}
-        keyExtractor={(item) => item.id}
       />
     </View>
   );

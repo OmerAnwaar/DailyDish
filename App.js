@@ -13,6 +13,7 @@ import CordinateReducer from "./store/reducers/cordinates";
 import authChefReducer from "../DailyDish/store/reducers/authChef";
 import chefProductsReducer from "../DailyDish/store/reducers/Chefproducts";
 import ignoreWarnings from "react-native-ignore-warnings";
+import riderReducer from '../DailyDish/store/reducers/authRider'
 
 import NavigationContainer from "./navigation/NavigationContainer";
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   orders: ordersReducer,
   auth: authReducer,
   authChef: authChefReducer,
+  authRider: riderReducer,
   cord: CordinateReducer,
 });
 
