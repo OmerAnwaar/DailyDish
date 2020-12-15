@@ -152,6 +152,45 @@ const RiderAuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
+              {isSignup == true ? (
+                <View>
+                  <Input
+                    id="cnic"
+                    label="CNIC (No spacing)"
+                    keyboardType="numeric"
+                    required
+                    minLength={13}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid CNIC."
+                    onInputChange={inputChangeHandler}
+                    initialValue=""
+                  />
+                  <Input
+                    id="ridername"
+                    label="Rider Name:"
+                    keyboardType="default"
+                    required
+                    minLength={5}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid Name."
+                    onInputChange={inputChangeHandler}
+                    initialValue=""
+                  />
+                  <Input
+                    id="phnumber"
+                    label="Phone Number (03XXXXXXXXX):"
+                    keyboardType="numeric"
+                    required
+                    autoCapitalize="none"
+                    errorText="Please enter a Valid Number."
+                    onInputChange={inputChangeHandler}
+                    minLength={11}
+                    initialValue=""
+                  />
+                </View>
+              ) : (
+                <></>
+              )}
 
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
@@ -219,9 +258,15 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: 30,
   },
   gradient: {
     justifyContent: "center",
+  },
+  logo: {
+    width: 160,
+    height: 150,
+    padding: 20,
   },
   authContainer: {
     width: "100%",
@@ -231,10 +276,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     marginHorizontal: 7.5,
     borderTopRightRadius: 20,
-  },
-  logo: {
-    width: "60%",
-    height: "40%",
   },
   buttonContainer: {
     marginTop: 10,
