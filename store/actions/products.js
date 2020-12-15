@@ -24,7 +24,7 @@ export const fetchProducts = () => {
       // if (!response.ok) {
       //   throw new Error("Something went wrong!");
       // }
-     
+
       const pArr = [];
       const getProducts = async () => {
         let productref = db.collection("products-view");
@@ -152,7 +152,7 @@ export const createProduct = (
     // );
 
     //const resData = await response.json();
-console.log("Ye hai id teri",userId)
+    console.log("Ye hai id teri", userId);
     let kitchenNameRef = db.collection("chefs").doc(userId);
     let kitchennameExtractor = await kitchenNameRef.get();
     const kName = kitchennameExtractor.data().KitchenName;

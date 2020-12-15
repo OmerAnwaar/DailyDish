@@ -19,6 +19,8 @@ import Colors from "../../constants/Colors";
 import * as authActions from "../../store/actions/auth";
 
 import * as Animatable from "react-native-animatable";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButtonAuth from "../../components/UI/HeaderButtonAuth";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -45,7 +47,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = (props) => {
+const RiderAuthScreen = (props) => {
   ignoreWarnings("Require cycle:");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -56,14 +58,10 @@ const AuthScreen = (props) => {
     inputValues: {
       email: "",
       password: "",
-      name: "",
-      phnumber: "",
     },
     inputValidities: {
       email: false,
       password: false,
-      name: false,
-      phnumber: false,
     },
     formIsValid: false,
   });
@@ -81,9 +79,7 @@ const AuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password,
-        formState.inputValues.name,
-        formState.inputValues.phnumber
+        formState.inputValues.password
       );
     } else {
       action = authActions.login(
@@ -95,7 +91,7 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      props.navigation.navigate("Shop");
+      props.navigation.navigate("Rider");
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -133,34 +129,6 @@ const AuthScreen = (props) => {
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
           <Card style={styles.authContainer}>
             <ScrollView>
-              {isSignup == true ? (
-                <View>
-                  <Input
-                    id="name"
-                    label="Full Name"
-                    keyboardType="default"
-                    required
-                    autoCapitalize="none"
-                    errorText="Please enter a Name."
-                    onInputChange={inputChangeHandler}
-                    minLength={5}
-                    initialValue=""
-                  />
-                  <Input
-                    id="phnumber"
-                    label="Phone Number (03XXXXXXXXX):"
-                    keyboardType="numeric"
-                    required
-                    autoCapitalize="none"
-                    errorText="Please enter a Name."
-                    onInputChange={inputChangeHandler}
-                    minLength={11}
-                    initialValue=""
-                  />
-                </View>
-              ) : (
-                <></>
-              )}
               <Input
                 id="email"
                 label="E-Mail"
@@ -175,7 +143,6 @@ const AuthScreen = (props) => {
               <Input
                 id="password"
                 label="Password"
-                // placeholder="password"
                 keyboardType="default"
                 secureTextEntry
                 required
@@ -185,22 +152,7 @@ const AuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
-              <View style={styles.rider}>
-                <Button
-                  title="Can You Cook?"
-                  color={Colors.primary}
-                  onPress={() => {
-                    props.navigation.navigate("ChefAuth");
-                  }}
-                />
-                <Button
-                  title="Can You ride?"
-                  color={Colors.primary}
-                  onPress={() => {
-                    props.navigation.navigate("RiderAuth");
-                  }}
-                />
-              </View>
+
               <View style={styles.button}>
                 <View style={styles.buttonContainer}>
                   {isLoading ? (
@@ -233,14 +185,31 @@ const AuthScreen = (props) => {
 
 const { height } = Dimensions.get("screen");
 
-AuthScreen.navigationOptions = {
-  headerTitle: "",
-  headerLeft: () => null,
-  headerStyle: {
-    backgroundColor: "#FF6347",
-    shadowColor: "transparent",
-  },
-  headerTintColor: "white",
+RiderAuthScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "Rider",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtonAuth}>
+        <Item
+          title="Cart"
+          iconName={
+            Platform.OS === "android"
+              ? "md-arrow-dropleft-circle"
+              : "ios-arrow-dropleft-circle"
+          }
+          color="white"
+          onPress={() => {
+            navData.navigation.navigate("Auth");
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerStyle: {
+      backgroundColor: "#FF6347",
+      shadowColor: "transparent",
+    },
+    headerTintColor: "white",
+  };
 };
 
 const styles = StyleSheet.create({
@@ -275,9 +244,7 @@ const styles = StyleSheet.create({
   },
   rider: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    paddingTop: 30,
   },
 });
 
-export default AuthScreen;
+export default RiderAuthScreen;

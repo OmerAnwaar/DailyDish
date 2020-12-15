@@ -3,10 +3,15 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import Icon from "../components/Icon";
 
-function CategoryPickerItem({ item, onPress }) {
+function CategoryPickerItem({ item, onPress, props }) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={() => {
+          props.navigation.navigate("CategorizedProducts");
+          console.log("category pe gya ya nai?", onPress);
+        }}
+      >
         <Icon
           backgroundColor={item.backgroundColor}
           name={item.icon}

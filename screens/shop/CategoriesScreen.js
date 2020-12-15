@@ -68,51 +68,83 @@ const CategoriesScreen = (props) => {
         label="FastFood"
         title="Fast Food"
         onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category:"Fast Food"
+          props.navigation.navigate("CatDisplay", {
+            category: "Fast Food",
           });
         }}
       ></Button>
-      <Button label="Desi" title="Desi"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Desi"
+      <Button
+        label="Desi"
+        title="Desi"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Desi",
           });
-        }}></Button>
-      <Button label="Chinese" title="Chinese"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Chinese"
+        }}
+      ></Button>
+      <Button
+        label="Chinese"
+        title="Chinese"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Chinese",
           });
-        }}></Button>
-      <Button label="SeaFood" title="Sea Food"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Sea Food"
+        }}
+      ></Button>
+      <Button
+        label="SeaFood"
+        title="Sea Food"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Sea Food",
           });
-        }}></Button>
-      <Button label="Continental" title="Continental"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Continental"
+        }}
+      ></Button>
+      <Button
+        label="Continental"
+        title="Continental"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Continental",
           });
-        }}></Button>
-      <Button label="Turkish" title="Turkish"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Turkish"
+        }}
+      ></Button>
+      <Button
+        label="Turkish"
+        title="Turkish"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Turkish",
           });
-        }}></Button>
-      <Button label="CakesBakery" title="Cakes and Bakery"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Cakes and Bakery"
+        }}
+      ></Button>
+      <Button
+        label="CakesBakery"
+        title="Cakes and Bakery"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Cakes and Bakery",
           });
-        }}></Button>
-      <Button label="Desserts" title="Desserts"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "Desserts"
+        }}
+      ></Button>
+      <Button
+        label="Desserts"
+        title="Desserts"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "Desserts",
           });
-        }}></Button>
-      <Button label="other" title="other"  onPress={() => {
-          props.navigation.navigate("CatDisplay",{
-            category: "other"
+        }}
+      ></Button>
+      <Button
+        label="other"
+        title="other"
+        onPress={() => {
+          props.navigation.navigate("CatDisplay", {
+            category: "other",
           });
-        }}></Button>
+        }}
+      ></Button>
     </View>
   );
 };
