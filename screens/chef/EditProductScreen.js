@@ -238,8 +238,13 @@ const EditProductScreen = (props) => {
               required
             />
           </View>
+          {console.log("checking======> ", formState.inputValues)}
+
           {editedProduct == null ? (
-            <ImagePicker  onSelectImage={selectImage}  onImageTaken={imageTakenHandler} />
+            <ImagePicker
+              onSelectImage={selectImage}
+              onImageTaken={imageTakenHandler}
+            />
           ) : (
             <></>
           )}
@@ -266,14 +271,13 @@ const EditProductScreen = (props) => {
                 placeholder="Category"
                 width="50%"
               />
-                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Current Price:{" "}
-            <Text style={{ color: "green" }}>{editedProduct.price}</Text>
-          </Text>
-
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                Current Price:{" "}
+                <Text style={{ color: "green" }}>{editedProduct.price}</Text>
+              </Text>
             </>
           )}
-        
+
           <Input
             id="price"
             label="Price"
@@ -310,7 +314,6 @@ const EditProductScreen = (props) => {
               This Platform is made for your benifit! Be careful in what you
               Submit.
             </Text>
-        
           </View>
         </View>
       </ScrollView>

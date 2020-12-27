@@ -420,20 +420,20 @@ const ChefShopNavigator = createDrawerNavigator(
       setTimeout(function () {
         CheckChef();
       }, 5000);
-      const currAddrChecker = async () => {
-        let refAdd = db.collection("chefs").doc(ReduxCurrentUser);
-        let Add = await refAdd.get();
-        console.log("Oh hellllo payen", Add.data());
-        let currAddSetter = Add.data().CurrentAddress
-        console.log("Ye curraddress mila hai", currAddSetter);
-        if (currAddSetter === "notset") {
-          Alert.alert("Set Your Address", "Please Set a current Address!");
-          props.navigation.navigate("Address")
-        }
-      };
-      setTimeout(function () {
-        currAddrChecker();
-      }, 6000);
+      // const currAddrChecker = async () => {
+      //   let refAdd = db.collection("chefs").doc(ReduxCurrentUser);
+      //   let Add = await refAdd.get();
+      //   console.log("Oh hellllo payen", Add.data());
+      //   let currAddSetter = Add.data().CurrentAddress
+      //   console.log("Ye curraddress mila hai", currAddSetter);
+      //   if (currAddSetter === "notset") {
+      //     Alert.alert("Set Your Address", "Please Set a current Address!");
+      //     props.navigation.navigate("Address")
+      //   }
+      // };
+      // setTimeout(function () {
+      //   currAddrChecker();
+      // }, 6000);
       const getUserName = async () => {
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();

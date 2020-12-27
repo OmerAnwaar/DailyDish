@@ -235,6 +235,7 @@ export const updateProduct = (id, title, description, price, category) => {
     const kitchenName = imageURL.data().KitchenName;
     const time = imageURL.data().timestamp;
     let ProductViewRef = db.collection("products-view").doc(id);
+    console.log("ye to chal raha hhai=============." , title)
     await ProductViewRef.update({
       description: description,
       title: title,
