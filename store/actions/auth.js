@@ -58,6 +58,8 @@ export const signup = (email, password, name, phnumber) => {
         phnumber: phnumber,
         Disable: false,
         reviewStatus: false,
+        expoToken:"not",
+        CurrentAddress:"notset",
         chefStatus: false,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });

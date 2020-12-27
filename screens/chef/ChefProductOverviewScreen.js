@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -26,13 +27,15 @@ const ProductsOverviewScreen = (props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState();
+  const [currAdd, setcurrAdd] = useState("notset");
   const [userName, setuserName] = useState("");
   const products = useSelector((state) => state.chefproducts.availableProducts);
   const filtered = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
-  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  //const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   console.log("filtered=================>", filtered);
-
+ 
   const loadProducts = useCallback(async () => {
     setError(null);
     setIsRefreshing(true);
@@ -47,7 +50,8 @@ const ProductsOverviewScreen = (props) => {
   useEffect(() => {
     const willFocusSub = props.navigation.addListener(
       "willFocus",
-      loadProducts
+      loadProducts,
+      
     );
 
     return () => {
@@ -58,6 +62,7 @@ const ProductsOverviewScreen = (props) => {
   useEffect(() => {
     setIsLoading(true);
     loadProducts().then(() => {
+      
       setIsLoading(false);
     });
   }, [dispatch, loadProducts]);
@@ -101,7 +106,23 @@ const ProductsOverviewScreen = (props) => {
   const filteredProducts = products.filter((products) => {
     return products.title.toLowerCase().includes(search.toLowerCase());
   });
-
+  // if (currAdd === "notset") {
+  //   return (
+  //     <>
+  //       <Text>Loading</Text>
+  //       {Alert.alert(
+  //         "Set Your Address",
+  //         "Before Proceeding Set your Address!",
+  //         [
+  //           {
+  //             text: "Set Address",
+  //             onPress: () =>  props.navigation.navigate("Address"),
+  //           },
+  //         ]
+  //       )}
+  //     </>
+  //   );
+  // }
   return (
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />

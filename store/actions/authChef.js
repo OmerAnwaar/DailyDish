@@ -58,6 +58,8 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         cnic: cnic,
         Disable: false,
         userAccount: true,
+        CurrentAddress: "notset",
+        expoToken:"not",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     await firebase
@@ -71,6 +73,8 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         Disable: false,
         reviewStatus: false,
         chefStatus: true,
+        CurrentAddress:"notset",
+        expoToken:"not",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
 

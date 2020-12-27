@@ -16,8 +16,10 @@ import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/Chefproducts";
 import ignoreWarnings from 'react-native-ignore-warnings';
+import {db} from "../../firebase/Firebase"
 
 const UserProductsScreen = (props) => {
+ 
   const userProducts = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
   ignoreWarnings('Each child in');

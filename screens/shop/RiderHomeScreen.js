@@ -5,6 +5,7 @@ import ItemHolder from "../../components/categories/ItemHolder";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import { useSelector, useDispatch } from "react-redux";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const RiderHomeScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authRider.userId);
@@ -33,7 +34,8 @@ const RiderHomeScreen = (props) => {
 
     const orederLive = db
       .collection("live-orders")
-      .where("deliverystatus", "==", "inprogress");
+      .orderBy("timestamp", "desc");
+    //.where("deliverystatus", "==", "inprogress")
 
     await orederLive.get().then((res) => {
       setliveOrder(
@@ -55,68 +57,69 @@ const RiderHomeScreen = (props) => {
     console.log("CHALLLLL JAAA BHAE", liveOrder);
   };
 
-  const recievedOrders = async () => {
-    const recievedOrderRef = db
-      .collection("orders")
-      .where("deliverystatus", "==", "live");
+  // const recievedOrders = async () => {
+  //   const recievedOrderRef = db
+  //     .collection("orders")
+  //     .where("deliverystatus", "==", "live");
 
-    await recievedOrderRef.get().then((res) => {
-      setorderRecieved(
-        res.docs.map((doc) => ({
-          id: doc.id,
-          CustomerName: doc.data().CustomerName,
-          phnumber: doc.data().phnumber,
-          CurrentAddr: doc.data().CurrentAddress,
-          item: doc.data().items,
-          totalAmount: doc.data().totalAmount,
-          timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
-          orderStatus: doc.data().orderStatus,
-          deliverystatus: doc.data().deliverystatus,
-        }))
-      );
-    });
+  //   await recievedOrderRef.get().then((res) => {
+  //     setorderRecieved(
+  //       res.docs.map((doc) => ({
+  //         id: doc.id,
+  //         CustomerName: doc.data().CustomerName,
+  //         phnumber: doc.data().phnumber,
+  //         CurrentAddr: doc.data().CurrentAddress,
+  //         item: doc.data().items,
+  //         totalAmount: doc.data().totalAmount,
+  //         timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
+  //         orderStatus: doc.data().orderStatus,
+  //         deliverystatus: doc.data().deliverystatus,
+  //       }))
+  //     );
+  //   });
 
-    // setorderRecieved(
-    //   recievedOrder.docs.map((doc) => ({
-    //     id: doc.id,
-    //     CustomerName: doc.data().CustomerName,
-    //     phnumber: doc.data().phnumber,
-    //     CurrentAddr: doc.data().CurrentAddr,
-    //     productTitle: doc.data().productTitle,
-    //     quantity: doc.data().quantity,
-    //     productPrice: doc.data().productPrice,
-    //     sum: doc.data().sum,
-    //     timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
-    //   }))
-    // );
-    console.log("hoja pae set ", orderRecieved);
-    // recievedOrder.docs.map((doc) => {
-    //   console.log("checking again again", doc.data());
-    // });
-  };
-  const unsubscribe = props.navigation.addListener("didFocus", () => {
-    liveOrderGetter();
-    recievedOrders();
-    console.log("focussed");
-  });
+  //   // setorderRecieved(
+  //   //   recievedOrder.docs.map((doc) => ({
+  //   //     id: doc.id,
+  //   //     CustomerName: doc.data().CustomerName,
+  //   //     phnumber: doc.data().phnumber,
+  //   //     CurrentAddr: doc.data().CurrentAddr,
+  //   //     productTitle: doc.data().productTitle,
+  //   //     quantity: doc.data().quantity,
+  //   //     productPrice: doc.data().productPrice,
+  //   //     sum: doc.data().sum,
+  //   //     timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
+  //   //   }))
+  //   // );
+  //   console.log("hoja pae set ", orderRecieved);
+  //   // recievedOrder.docs.map((doc) => {
+  //   //   console.log("checking again again", doc.data());
+  //   // });
+  // };
+  
+  // const unsubscribe = props.navigation.addListener("didFocus", () => {
+  //   liveOrderGetter();
+  //   //recievedOrders();
+  //   console.log("focussed");
+  // });
 
   useEffect(() => {
     liveOrderGetter();
-    recievedOrders();
+    //recievedOrders();
     return () => {
       liveOrderGetter();
-      recievedOrders();
+      //recievedOrders();
     };
   }, []);
 
-  if (orderRecieved.length == 0) {
+  if (liveOrder.length == 0) {
     return (
       <View>
         <Text>Refresh maybe!</Text>
         <Button
           label="refresh"
           title="refresh"
-          onPress={recievedOrders}
+          onPress={liveOrderGetter}
         ></Button>
       </View>
     );
@@ -124,26 +127,44 @@ const RiderHomeScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <Button label="refresh" title="refresh" onPress={recievedOrders}></Button>
+      <Text style={styles.RiderTitle}>
+        <Ionicons
+          name={Platform.OS === "android" ? "md-bicycle" : "ios-bicycle"}
+          size={28}
+        ></Ionicons>{" "}
+        Welcome Rider{" "}
+      </Text>
+      <Ionicons
+      style={styles.Refresh}
+      size={24}
+      name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+      onPress={liveOrderGetter}
+      ></Ionicons>
+     
 
       <FlatList
         data={liveOrder}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.container}>
-            <Text>Kitchen Name: {item.KitchenName}</Text>
-            <Text>Kitchen Phone Number: {item.Kitchenph}</Text>
-            <Text>Pick Up Address: {item.KitchenAddress}</Text>
-            <Text>Customer Name: {item.CustomerName}</Text>
-            <Text>Customer Address: {item.CustomerAddress}</Text>
-            <Text>Delivery Address: {item.CustomerAddress}</Text>
-            <Text>Total: {item.Total}</Text>
-            <Text> Avaialibe From: {item.timestamp}</Text>
+          <View>
+            {item.deliverystatus === "inprogress" ? (
+              <View style={styles.container}>
+                <Text>Kitchen Name: {item.KitchenName}</Text>
+                <Text>Kitchen Phone Number: {item.Kitchenph}</Text>
+                <Text>Pick Up Address: {item.KitchenAddress}</Text>
+                <Text>Customer Name: {item.CustomerName}</Text>
+                <Text>Customer Address: {item.CustomerAddress}</Text>
+                <Text>Delivery Address: {item.CustomerAddress}</Text>
+                <Text>Total: {item.Total}</Text>
+                <Text> Avaialibe From: {item.timestamp}</Text>
+              </View>
+            ) : (
+              <></>
+            )}
           </View>
         )}
       />
-      </View>
- 
+    </View>
   );
 };
 
@@ -169,13 +190,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  container:{
-    borderColor:"grey",
+  container: {
+    borderColor: "grey",
     borderWidth: 2,
     borderRadius: 20,
     padding: "3%",
-    margin: 10
- 
+    margin: 10,
+  },
+  RiderTitle: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold"
+  },
+  Refresh:{
+    textAlign:"right",
+    marginRight: "10%"
   }
 });
 
