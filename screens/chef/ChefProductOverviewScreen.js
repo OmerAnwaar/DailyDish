@@ -21,7 +21,7 @@ import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
 import UserName from "../user/UserName";
 import { db } from "../../firebase/Firebase";
-const ProductsOverviewScreen = (props) => {
+const ChefProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [search, setSearch] = useState("");
@@ -143,7 +143,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData) => {
+ChefProductsOverviewScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "All Products",
     headerLeft: () => (
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductsOverviewScreen;
+export default ChefProductsOverviewScreen;
