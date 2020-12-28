@@ -16,7 +16,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SET_PRODUCTS:
       return {
-      
         availableProducts: action.products,
         userProducts: action.userProducts,
       };
@@ -49,7 +48,7 @@ export default (state = initialState, action) => {
         action.productData.category,
         state.userProducts[productIndex].timestamp
       );
-      
+
       const updatedUserProducts = [...state.userProducts];
       updatedUserProducts[productIndex] = updatedProduct;
       const availableProductIndex = state.availableProducts.findIndex(

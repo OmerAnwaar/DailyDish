@@ -61,11 +61,11 @@ const ProductsOverviewScreen = (props) => {
     });
   }, [dispatch, loadProducts]);
 
-  const selectItemHandler = (id, title,ownerId) => {
+  const selectItemHandler = (id, title, ownerId) => {
     props.navigation.navigate("ProductDetail", {
       productId: id,
       productTitle: title,
-      ownerId: ownerId
+      ownerId: ownerId,
     });
   };
 
@@ -105,7 +105,7 @@ const ProductsOverviewScreen = (props) => {
   return (
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
-      <Text style={styles.title}>Latest Additions</Text>
+      {/* <Text style={styles.title}>Latest Additions</Text> */}
 
       <FlatList
         onRefresh={loadProducts}
@@ -119,14 +119,22 @@ const ProductsOverviewScreen = (props) => {
             price={itemData.item.price}
             kitchenName={itemData.item.kitchenName}
             onSelect={() => {
-              selectItemHandler(itemData.item.id, itemData.item.title, itemData.item.ownerId);
+              selectItemHandler(
+                itemData.item.id,
+                itemData.item.title,
+                itemData.item.ownerId
+              );
             }}
           >
             <Button
               color={Colors.primary}
               title="View Details"
               onPress={() => {
-                selectItemHandler(itemData.item.id, itemData.item.title,itemData.item.ownerId);
+                selectItemHandler(
+                  itemData.item.id,
+                  itemData.item.title,
+                  itemData.item.ownerId
+                );
               }}
             />
             <Button
