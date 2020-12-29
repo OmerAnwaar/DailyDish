@@ -4,16 +4,27 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import CartItem from "./CartItem";
 import Colors from "../../constants/Colors";
 import Card from "../UI/Card";
+import OrderHistoryItem from "./OrderHistoryItem";
 
 const OrderItem = (props) => {
   const [showDetails, setShowDetails] = useState(false);
+  let slicedArr = props.items;
+  slicedArr = slicedArr.slice(0, 1);
 
   return (
-    <Card style={styles.orderItem}>
+    <Card key={props.key} style={styles.orderItem}>
+      <View style={styles.summary}>
+        {slicedArr.map((cartItem) => (
+          <Text key={cartItem.ownerId} style={styles.kName}>
+            Kitchen Name: {cartItem.kitchenName}
+          </Text>
+        ))}
+      </View>
       <View style={styles.summary}>
         <Text style={styles.totalAmount}>Rs {props.amount}</Text>
         <Text style={styles.date}>{props.date}</Text>
       </View>
+
       <Button
         color={Colors.primary}
         title={showDetails ? "Hide Details" : "Show Details"}
@@ -25,13 +36,15 @@ const OrderItem = (props) => {
         <View style={styles.detailItems}>
           {props.items.map((cartItem) => (
             <>
-            <CartItem
-              key={cartItem.productId}
-              quantity={cartItem.quantity}
-              amount={cartItem.sum}
-              title={cartItem.productTitle}
-            />
-            {/* idhr info dalni aur */}
+              {/* <Text>Kitchen Name: {cartItem.kitchenName}</Text> */}
+              <OrderHistoryItem
+                key={cartItem.productId}
+                quantity={cartItem.quantity}
+                amount={cartItem.sum}
+                title={cartItem.productTitle}
+                kitchenName={cartItem.kitchenName}
+              />
+              {/* idhr info dalni aur */}
             </>
           ))}
         </View>
@@ -56,15 +69,20 @@ const styles = StyleSheet.create({
   },
   totalAmount: {
     fontFamily: "open-sans-bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   date: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "open-sans",
     color: "#888",
   },
   detailItems: {
     width: "100%",
+  },
+
+  kName: {
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });
 

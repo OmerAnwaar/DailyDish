@@ -6,20 +6,19 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
-  Button
-
+  Button,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
+import ignoreWarnings from "react-native-ignore-warnings";
 import HeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
 import * as ordersActions from "../../store/actions/orders";
 import Colors from "../../constants/Colors";
 import { db } from "../../firebase/Firebase";
 
-
 const OrdersScreen = (props) => {
+  ignoreWarnings("Each child in");
   const [isLoading, setIsLoading] = useState(false);
   const [OrderHistory, setOrderHistory] = useState([]);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
@@ -101,17 +100,29 @@ const OrdersScreen = (props) => {
   }
 
   return (
-    <FlatList
-      data={OrderHistory}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => (
-        <OrderItem
-          amount={itemData.item.amount}
-          date={itemData.item.date}
-          items={itemData.item.item}
-        />
-      )}
-    />
+    <View>
+      <Text style={styles.Title}>Completed Orders</Text>
+      <FlatList
+        data={OrderHistory}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => (
+          <>
+            {itemData.item.deliverystatus === "delivered" ? (
+              <OrderItem
+                amount={itemData.item.amount}
+                date={itemData.item.date}
+                items={itemData.item.item}
+                key={itemData.id}
+              />
+            ) : (
+              <>
+               
+              </>
+            )}
+          </>
+        )}
+      />
+    </View>
   );
 };
 
@@ -137,6 +148,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  Title: {
+    textAlign: "center",
+    padding: 10,
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
