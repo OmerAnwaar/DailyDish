@@ -5,6 +5,7 @@ const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
 
 const inputReducer = (state, action) => {
+  // console.log("hello jee", action.value)
   switch (action.type) {
     case INPUT_CHANGE:
       return {
@@ -55,6 +56,7 @@ const Input = props => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
+    // {console.log("okay checking", text)}
     dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
   };
 

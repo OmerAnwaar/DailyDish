@@ -57,6 +57,7 @@ export const signup = (email, password, name, phnumber) => {
         Disable: false,
         reviewStatus: false,
         chefStatus: false,
+        expoToken:"not",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
       await firebase
@@ -70,6 +71,8 @@ export const signup = (email, password, name, phnumber) => {
         Disable: false,
         reviewStatus: false,
         chefStatus: false,
+        CurrentAddress:"notset",
+        expoToken:"",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     dispatch(

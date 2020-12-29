@@ -18,7 +18,7 @@ const AppPicker = ({ items, placeholder }) => {
   // const AppPicker = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setselectedItem] = useState("not-choosen");
+  const [selectedItem, setselectedItem] = useState("other");
   const {CatProvide, setCatProvide} = useContext(theContext)
 
 

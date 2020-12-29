@@ -8,7 +8,7 @@ import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions/cordinates";
 import Input from "../components/UI/Input";
-import Addresses from "./UI/Addresses";
+import ChefAddresses from "./UI/ChefAddresses";
 
 import {
   View,
@@ -510,7 +510,7 @@ const LocationPicker = (props) => {
         )}
       </View>
 
-      <Addresses addresses={SavedAddress} />
+      <ChefAddresses addresses={SavedAddress} />
     </View>
   );
 };

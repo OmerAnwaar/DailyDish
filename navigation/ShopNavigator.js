@@ -493,7 +493,20 @@ const ChefShopNavigator = createDrawerNavigator(
       setTimeout(function () {
         CheckChef();
       }, 5000);
-
+      // const currAddrChecker = async () => {
+      //   let refAdd = db.collection("chefs").doc(ReduxCurrentUser);
+      //   let Add = await refAdd.get();
+      //   console.log("Oh hellllo payen", Add.data());
+      //   let currAddSetter = Add.data().CurrentAddress
+      //   console.log("Ye curraddress mila hai", currAddSetter);
+      //   if (currAddSetter === "notset") {
+      //     Alert.alert("Set Your Address", "Please Set a current Address!");
+      //     props.navigation.navigate("Address")
+      //   }
+      // };
+      // setTimeout(function () {
+      //   currAddrChecker();
+      // }, 6000);
       const getUserName = async () => {
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
@@ -546,7 +559,16 @@ const RiderNavigator = createDrawerNavigator(
       activeTintColor: Colors.primary,
     },
     contentComponent: (props) => {
+      const [userName, setuserName] = useState("");
       const dispatch = useDispatch();
+      const db = firebase.firestore();
+      const ReduxCurrentUser = useSelector((state) => state.authRider.userId);
+      const getUserName = async () => {
+        let userNameRef = db.collection("riders").doc(ReduxCurrentUser);
+        let userNameGetter = await userNameRef.get();
+        setuserName(userNameGetter.data().UserName);
+      };
+      getUserName();
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
           <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -556,7 +578,7 @@ const RiderNavigator = createDrawerNavigator(
                 size={25}
                 color={Colors.primary}
               />
-              {/* <Text style={styles.usertxt}>Welcome {userName}</Text> */}
+              <Text style={styles.usertxt}>Welcome {userName}</Text>
               <UserName />
             </View>
             <DrawerNavigatorItems {...props} />
@@ -619,6 +641,7 @@ const MainNavigator = createSwitchNavigator({
   SentOrders: SentOrdersNavigator,
   RiderAuth: RiderAuthNavigator,
   Rider: RiderNavigator,
+  chefAddress: ChefLocationNavigator,
 });
 
 const styles = StyleSheet.create({

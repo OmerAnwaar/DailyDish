@@ -6,6 +6,8 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Button
+
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -16,10 +18,34 @@ import * as ordersActions from "../../store/actions/orders";
 import Colors from "../../constants/Colors";
 import { db } from "../../firebase/Firebase";
 
+
 const OrdersScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [OrderHistory, setOrderHistory] = useState([]);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  const orderGetter = async () => {
+    let orderRef = db.collection("orders");
+    await orderRef.get().then((res) => {
+      setOrderHistory(
+        res.docs.map((doc) => ({
+          id: doc.id,
+          CustomerName: doc.data().CustomerName,
+          phnumber: doc.data().phnumber,
+          CurrentAddr: doc.data().CurrentAddress,
+          item: doc.data().items,
+          amount: doc.data().totalAmount,
+          date: doc.data().timestamp.toDate().toString().slice(0, 21),
+          orderStatus: doc.data().orderStatus,
+          deliverystatus: doc.data().deliverystatus,
+        }))
+      );
+      // res.docs.map((doc) => {
+      //   console.log(doc.data());
+      // });
+    });
+    console.log("chal paya", OrderHistory);
+  };
+
   // const orderHistoryGetter = async () => {
   //   let orderHisRef = db
   //     .collection("app-users")
@@ -47,11 +73,15 @@ const OrdersScreen = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsLoading(true);
-    dispatch(ordersActions.fetchOrders()).then(() => {
-      setIsLoading(false);
-    });
-  }, [dispatch]);
+    orderGetter();
+    return () => {
+      orderGetter();
+    };
+  }, []);
+  const unsubscribe = props.navigation.addListener("didFocus", () => {
+    orderGetter();
+    console.log("focussed");
+  });
 
   if (isLoading) {
     return (
@@ -61,23 +91,24 @@ const OrdersScreen = (props) => {
     );
   }
 
-  if (orders.length === 0) {
+  if (OrderHistory.length === 0) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>No Orders Found, maybe start ordering some products!</Text>
+        <Button label="refresh" title="refresh" onPress={orderGetter}></Button>
       </View>
     );
   }
 
   return (
     <FlatList
-      data={orders}
+      data={OrderHistory}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <OrderItem
-          amount={itemData.item.totalAmount}
-          date={itemData.item.readableDate}
-          items={itemData.item.items}
+          amount={itemData.item.amount}
+          date={itemData.item.date}
+          items={itemData.item.item}
         />
       )}
     />
