@@ -28,7 +28,7 @@ LocationScreen.navigationOptions = (navData) => {
           title="Menu"
           iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
           onPress={() => {
-            Drawer();
+            navData.navigation.toggleDrawer();
           }}
         />
       </HeaderButtons>
