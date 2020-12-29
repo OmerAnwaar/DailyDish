@@ -309,7 +309,7 @@ ChefAuthScreen.navigationOptions = (navData) => {
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtonAuth}>
         <Item
-          title="Cart"
+          title="back"
           iconName={
             Platform.OS === "android"
               ? "md-arrow-dropleft-circle"

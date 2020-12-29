@@ -8,6 +8,7 @@ import OrderItem from "../../components/shop/OrderItem";
 import ItemHolder from "../../components/categories/ItemHolder";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import Colors from "../../constants/Colors";
 const ReceievedOrdersScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [recieved, setrecieved] = useState([]);
@@ -96,37 +97,63 @@ const ReceievedOrdersScreen = (props) => {
     <View>
       <Button label="refresh" title="refresh" onPress={recievedOrders}></Button>
       <FlatList
+        contentContainerStyle={{ paddingBottom: 50 }}
         data={orderRecieved}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.container}>
-            <Text>Customer Name: {item.CustomerName}</Text>
-            <Text>Customer Phone Number: {item.phnumber}</Text>
-            <Text>Customer Address: {item.CurrentAddr}</Text>
-            <Text> Placed On: {item.timestamp}</Text>
+            <View style={styles.contain}>
+              <Text style={{ fontWeight: "bold" }}>Customer Name: </Text>
+              <Text>{item.CustomerName}</Text>
+            </View>
+            <View style={styles.contain}>
+              <Text style={{ fontWeight: "bold" }}>
+                Customer Phone Number:{" "}
+              </Text>
+              <Text>{item.phnumber}</Text>
+            </View>
+            <View style={styles.containAddress}>
+              <Text style={{ fontWeight: "bold" }}>Customer Address: </Text>
+              <Text>{item.CurrentAddr}</Text>
+            </View>
+            <View style={styles.contain}>
+              <Text style={{ fontWeight: "bold" }}>Placed On: </Text>
+              <Text> {item.timestamp}</Text>
+            </View>
             <ItemHolder data={item.item} />
-            <Text>Total: {item.totalAmount}</Text>
+            <View style={styles.contain}>
+              <Text style={{ fontWeight: "bold" }}>Total: </Text>
+              <Text>{item.totalAmount}</Text>
+            </View>
             <View>
               {item.orderStatus === "requested" ? (
                 <>
-                  <Button
-                    label="accepting-order"
-                    title="Accept Order"
-                    onPress={() => {
-                      db.collection("orders").doc(item.id).update({
-                        orderStatus: "accepted",
-                      });
-                    }}
-                  ></Button>
-                  <Button
-                    label="decline-order"
-                    title="Decline Order"
-                    onPress={() => {
-                      db.collection("orders").doc(item.id).update({
-                        orderStatus: "declined",
-                      });
-                    }}
-                  ></Button>
+                  <View style={styles.selectButtons}>
+                    {/* <View style={styles.AcceptStyle}> */}
+                    <Button
+                      style={styles.Buttons}
+                      label="accepting-order"
+                      title="Accept Order"
+                      onPress={() => {
+                        db.collection("orders").doc(item.id).update({
+                          orderStatus: "accepted",
+                        });
+                      }}
+                    ></Button>
+                    {/* </View> */}
+                    {/* <View style={styles.DeclineStyle}> */}
+                    <Button
+                      label="decline-order"
+                      title="Decline Order"
+                      color="red"
+                      onPress={() => {
+                        db.collection("orders").doc(item.id).update({
+                          orderStatus: "declined",
+                        });
+                      }}
+                    ></Button>
+                    {/* </View> */}
+                  </View>
                 </>
               ) : (
                 <>
@@ -165,11 +192,15 @@ const ReceievedOrdersScreen = (props) => {
                               Rider is Assigned and will be there soon
                             </Text>
                           ) : (
-                            <Text>Rider will accept delivery request soon</Text>
+                            <Text style={styles.rider}>
+                              Rider will accept delivery request soon
+                            </Text>
                           )}
                         </>
                       ) : (
-                        <Text>You Turned Down this Order</Text>
+                        <Text style={styles.turnedDown}>
+                          You Turned Down this Order
+                        </Text>
                       )}
                     </>
                   )}
@@ -205,16 +236,59 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingBottom: 10,
+    marginBottom: 20,
   },
-  text: {
-    textAlign: "center",
+  contain: {
+    marginVertical: 1,
+    flexDirection: "row",
   },
   container: {
     padding: "2%",
     margin: "2%",
     borderColor: "grey",
-    borderWidth: 3,
+    // borderWidth: 0.5,
     borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5,
+    backgroundColor: "white",
+  },
+  selectButtons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  // AcceptStyle: {
+  //   backgroundColor: "#4f9bff",
+  //   borderRadius: 50,
+  //   borderColor: "black",
+  //   height: 60,
+  //   width: 60,
+  // },
+  // DeclineStyle: {
+  //   backgroundColor: "red",
+  //   borderRadius: 50,
+  //   borderColor: "black",
+  //   width: 60,
+  //   height: 60,
+  // },
+  containAddress: {
+    marginVertical: 1,
+  },
+  rider: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginVertical: 3,
+    color: Colors.primary,
+  },
+  turnedDown: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginVertical: 3,
+    color: "red",
   },
 });
 

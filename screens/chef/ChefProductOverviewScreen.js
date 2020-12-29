@@ -35,7 +35,7 @@ const ChefProductsOverviewScreen = (props) => {
   //const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   console.log("filtered=================>", filtered);
- 
+
   const loadProducts = useCallback(async () => {
     setError(null);
     setIsRefreshing(true);
@@ -50,8 +50,7 @@ const ChefProductsOverviewScreen = (props) => {
   useEffect(() => {
     const willFocusSub = props.navigation.addListener(
       "willFocus",
-      loadProducts,
-      
+      loadProducts
     );
 
     return () => {
@@ -62,7 +61,6 @@ const ChefProductsOverviewScreen = (props) => {
   useEffect(() => {
     setIsLoading(true);
     loadProducts().then(() => {
-      
       setIsLoading(false);
     });
   }, [dispatch, loadProducts]);
@@ -126,7 +124,7 @@ const ChefProductsOverviewScreen = (props) => {
   return (
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
-      <Text style={styles.title}>Latest Additions</Text>
+      {/* <Text style={styles.title}>Latest Additions</Text> */}
 
       <FlatList
         onRefresh={loadProducts}

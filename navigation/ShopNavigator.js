@@ -9,7 +9,7 @@ import {
 } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
-// import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
 import {
   createDrawerNavigator,
@@ -529,11 +529,11 @@ const ChefShopNavigator = createDrawerNavigator(
             </View>
             <DrawerNavigatorItems {...props} />
 
-            <View style={styles.button}>
+            <View style={styles.buttonChef}>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color={Platform.OS === "android" ? "white" : "white"}
+                  color="white"
                   onPress={() => {
                     dispatch(authActions.logout());
                     props.navigation.navigate("Auth");
@@ -645,14 +645,11 @@ const MainNavigator = createSwitchNavigator({
 });
 
 const styles = StyleSheet.create({
-  button: {
-    paddingTop: 250,
-  },
   buttonUser: {
     paddingTop: 300,
   },
-  button: {
-    paddingTop: 250,
+  buttonChef: {
+    paddingTop: 350,
   },
   chef: {
     borderColor: Colors.primary,
