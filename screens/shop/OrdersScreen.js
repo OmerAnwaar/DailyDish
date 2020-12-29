@@ -101,7 +101,7 @@ const OrdersScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>Completed Orders</Text>
+      <Text style={styles.Title}>Completed Orders.</Text>
       <FlatList
         data={OrderHistory}
         keyExtractor={(item) => item.id}
