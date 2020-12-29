@@ -8,10 +8,14 @@ import {
   withOrientation,
 } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from "react-navigation-tabs";
+// import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+
 import {
   createDrawerNavigator,
   DrawerNavigatorItems,
 } from "react-navigation-drawer";
+
 import {
   Platform,
   SafeAreaView,
@@ -22,40 +26,45 @@ import {
   Text,
   Alert,
 } from "react-native";
+
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import ignoreWarnings from "react-native-ignore-warnings";
-import CategoryDisplay from "../screens/shop/CategoryDisplay";
-import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
-import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
-import CartScreen from "../screens/shop/CartScreen";
+
 import SplashScreen from "../screens/SplashScreen";
-import OrdersScreen from "../screens/shop/OrdersScreen";
-import UserProductsScreen from "../screens/user/UserProductsScreen";
-import EditProductScreen from "../screens/chef/EditProductScreen";
-import ChefProfileScreen from "../screens/chef/ChefProfileScreen";
-import ReceivedOrdersScreen from "../screens/chef/ReceivedOrdersScreen";
-import UserProfileScreen from "../screens/user/UserProfileScreen";
-import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
-import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
-import LocationScreen from "../screens/user/LocationScreen";
-import ChefProductOverviewScreen from "../screens/chef/ChefProductOverviewScreen";
-import Colors from "../constants/Colors";
-import AuthScreen from "../screens/user/AuthScreen";
-import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import StartupScreen from "../screens/StartupScreen";
+
+import CartScreen from "../screens/shop/CartScreen";
+import OrdersScreen from "../screens/shop/OrdersScreen";
+import CategoryDisplay from "../screens/shop/CategoryDisplay";
 import RiderAuthScreen from "../screens/shop/RiderAuthScreen";
 import RiderHomeScreen from "../screens/shop/RiderHomeScreen";
 import RiderOrderScreen from "../screens/shop/RiderOrderScreen";
+import SentOrdersScreen from "../screens/shop/SentOrdersScreen";
+import CategoriesScreen from "../screens/shop/CategoriesScreen";
+import AllProductsScreen from "../screens/shop/AllProductsScreen";
 import RiderProfileScreen from "../screens/shop/RiderProfileScreen";
+import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
+import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
+import CategorizedProductsScreen from "../screens/shop/CategorizedProductsScreen";
 
-import * as authActions from "../store/actions/auth";
-import * as chefauth from "../store/actions/authChef";
+import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
+import EditProductScreen from "../screens/chef/EditProductScreen";
+import ChefProfileScreen from "../screens/chef/ChefProfileScreen";
+import ChefLocationScreen from "../screens/chef/ChefLocationScreen";
+import ReceivedOrdersScreen from "../screens/chef/ReceivedOrdersScreen";
+import ChefProductOverviewScreen from "../screens/chef/ChefProductOverviewScreen";
+
+import AuthScreen from "../screens/user/AuthScreen";
+import LocationScreen from "../screens/user/LocationScreen";
+import FavoritesScreen from "../screens/user/FavoritesScreen";
+import UserProfileScreen from "../screens/user/UserProfileScreen";
+import UserProductsScreen from "../screens/user/UserProductsScreen";
+
+import Colors from "../constants/Colors";
 import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
-import AllProductsScreen from "../screens/shop/AllProductsScreen";
-import CategoriesScreen from "../screens/shop/CategoriesScreen";
-import CategorizedProductsScreen from "../screens/shop/CategorizedProductsScreen";
-import { add } from "react-native-reanimated";
+import * as authActions from "../store/actions/auth";
+import * as chefauth from "../store/actions/authChef";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -79,15 +88,6 @@ const ProductsNavigator = createStackNavigator(
     Cart: CartScreen,
   },
   {
-    navigationOptions: {
-      drawerIcon: (drawerConfig) => (
-        <Ionicons
-          name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
-          size={23}
-          color={drawerConfig.tintColor}
-        />
-      ),
-    },
     defaultNavigationOptions: defaultNavOptions,
   }
 );
@@ -322,9 +322,82 @@ const RiderOrdersNavigator = createStackNavigator(
   }
 );
 
+const FavNavigator = createStackNavigator(
+  {
+    Favorites: FavoritesScreen,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const tabScreenConfig = {
+  Products: {
+    // screen: ShopNavigator,
+    screen: ProductsNavigator,
+    navigationOptions: {
+      tabBarIcon: (tabInfo) => {
+        return (
+          <Ionicons name="ios-restaurant" size={25} color={tabInfo.tintColor} />
+        );
+      },
+      tabBarColor: Colors.primary,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Meals</Text>
+        ) : (
+          "Meals"
+        ),
+    },
+  },
+  Favorites: {
+    screen: FavNavigator,
+    navigationOptions: {
+      tabBarIcon: (tabInfo) => {
+        return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />;
+      },
+      tabBarColor: Colors.accent,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Favorites</Text>
+        ) : (
+          "Favorites"
+        ),
+    },
+  },
+};
+
+const MealsFavTabNavigator =
+  Platform.OS === "android"
+    ? createMaterialBottomTabNavigator(tabScreenConfig, {
+        activeTintColor: "white",
+        shifting: true,
+        barStyle: {
+          backgroundColor: Colors.primary,
+        },
+      })
+    : createBottomTabNavigator(tabScreenConfig, {
+        tabBarOptions: {
+          labelStyle: {
+            fontFamily: "open-sans",
+          },
+          activeTintColor: Colors.primary,
+        },
+        navigationOptions: {
+          drawerIcon: (drawerConfig) => (
+            <Ionicons
+              name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+              size={23}
+              color={drawerConfig.tintColor}
+            />
+          ),
+        },
+      });
+
 const ShopNavigator = createDrawerNavigator(
   {
-    Products: ProductsNavigator,
+    Products: MealsFavTabNavigator,
+    // Products: ProductsNavigator,
     Profile: UserProfileNavigator,
     Orders: OrdersNavigator,
     Address: LocationNavigator,
@@ -365,7 +438,7 @@ const ShopNavigator = createDrawerNavigator(
             </View>
             <DrawerNavigatorItems {...props} />
 
-            <View style={styles.button}>
+            <View style={styles.buttonUser}>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
@@ -572,6 +645,12 @@ const MainNavigator = createSwitchNavigator({
 });
 
 const styles = StyleSheet.create({
+  button: {
+    paddingTop: 250,
+  },
+  buttonUser: {
+    paddingTop: 300,
+  },
   button: {
     paddingTop: 250,
   },

@@ -5,9 +5,9 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 // import {Constants} from 'expo'
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import LocationPicker from "../../components/LocationPicker";
-import Addresses from '../../components/UI/Addresses'
+import Addresses from "../../components/UI/Addresses";
 
 const LocationScreen = () => {
   return (
@@ -15,7 +15,6 @@ const LocationScreen = () => {
       <ScrollView style={styles.scrollView}>
         <LocationPicker />
       </ScrollView>
-      
     </SafeAreaView>
   );
 };
@@ -29,7 +28,7 @@ LocationScreen.navigationOptions = (navData) => {
           title="Menu"
           iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            Drawer();
           }}
         />
       </HeaderButtons>
@@ -40,10 +39,8 @@ LocationScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   scrollView: {
-    
     marginHorizontal: 5,
   },
 });

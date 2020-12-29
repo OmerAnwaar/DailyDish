@@ -21,7 +21,7 @@ const ProductDetailScreen = (props) => {
   const dispatch = useDispatch();
   const selectItemHandler = (ownerId) => {
     props.navigation.navigate("AllProd", {
-      ownerId: ownerId
+      ownerId: ownerId,
     });
   };
   return (
@@ -39,7 +39,7 @@ const ProductDetailScreen = (props) => {
           color={Colors.primary}
           title={selectedProduct.kitchenName}
           onPress={() => {
-            selectItemHandler(selectedProduct.ownerId)
+            selectItemHandler(selectedProduct.ownerId);
           }}
         />
       </View>
@@ -80,14 +80,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 20,
   },
-  desTitle:{
+  desTitle: {
     fontFamily: "open-sans-bold",
     fontSize: 16,
     textAlign: "center",
     marginHorizontal: 20,
-    paddingBottom: "2%"
-    
-  }
+    paddingBottom: "2%",
+  },
 });
 
 export default ProductDetailScreen;
