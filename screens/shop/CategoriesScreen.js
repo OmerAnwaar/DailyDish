@@ -73,7 +73,7 @@ const CategoriesScreen = (props) => {
           <TouchableCmp
             onPress={() => {
               props.navigation.navigate("CatDisplay", {
-                category: "sea food",
+                category: "Sea food",
               });
             }}
           >
@@ -86,7 +86,7 @@ const CategoriesScreen = (props) => {
           <TouchableCmp
             onPress={() => {
               props.navigation.navigate("CatDisplay", {
-                category: "continental",
+                category: "Continental",
               });
             }}
           >
@@ -150,7 +150,7 @@ const CategoriesScreen = (props) => {
           <TouchableCmp
             onPress={() => {
               props.navigation.navigate("CatDisplay", {
-                category: "other",
+                category: "Other",
               });
             }}
           >
