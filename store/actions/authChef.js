@@ -70,6 +70,8 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         UserName: name,
         UserEmail: email,
         phnumber: phnumber,
+        like: 0,
+        dislike:0,
         Disable: false,
         reviewStatus: false,
         chefStatus: true,

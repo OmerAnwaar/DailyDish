@@ -15,14 +15,26 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/Chefproducts";
-import ignoreWarnings from 'react-native-ignore-warnings';
-import {db} from "../../firebase/Firebase"
+import ignoreWarnings from "react-native-ignore-warnings";
+import { db } from "../../firebase/Firebase";
 
 const UserProductsScreen = (props) => {
- 
+  const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
+  const [like, setlike] = useState(0);
+  const [dislike, setdislike] = useState(0);
+  const rategetter = async () => {
+    let rateRef = db.collection("chefs").doc(ReduxCurrentUser);
+    await rateRef.get().then((res) => {
+      setlike(res.data().like);
+      setdislike(res.data().dislike);
+    });
+  };
+  useEffect(() => {
+    rategetter();
+  }, []);
   const userProducts = useSelector((state) => state.chefproducts.userProducts);
   const dispatch = useDispatch();
-  ignoreWarnings('Each child in');
+  ignoreWarnings("Each child in");
   const editProductHandler = (id) => {
     props.navigation.navigate("EditProduct", { productId: id });
   };
@@ -60,10 +72,36 @@ const UserProductsScreen = (props) => {
             {docs.kitchenName}
           </Text>
         ))}
-        <Ionicons style={styles.refresh} name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-              size={25} onPress={()=>{
-                dispatch(productsActions.fetchProducts())
-              }} ></Ionicons>
+        <Ionicons
+          style={styles.refresh}
+          name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+          size={25}
+          onPress={() => {
+            dispatch(productsActions.fetchProducts());
+            rategetter()
+          }}
+        ></Ionicons>
+
+        <View style={styles.like}>
+          <Ionicons
+            color="#f1c40f"
+            name={Platform.OS === "android" ? "md-happy" : "ios-happy"}
+            size={26}
+          >
+            {" "}
+            {like}
+          </Ionicons>
+        </View>
+        <View style={styles.dislike}>
+          <Ionicons
+            color="red"
+            name={Platform.OS === "android" ? "md-sad" : "ios-sad"}
+            size={26}
+          >
+            {" "}
+            {dislike}
+          </Ionicons>
+        </View>
       </View>
       <FlatList
         data={userProducts}
@@ -76,6 +114,7 @@ const UserProductsScreen = (props) => {
             timestamp={itemData.item.timestamp}
             price={itemData.item.price}
             productID={itemData.item.id}
+            ownerId={itemData.item.ownerId}
             onSelect={() => {
               editProductHandler(itemData.item.id);
             }}
@@ -138,9 +177,23 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
   },
-  refresh:{
-    alignSelf: 'flex-end'
-  }
+  refresh: {
+    alignSelf: "flex-end",
+  },
+  like: {
+    position: "absolute",
+    right: "65%",
+    bottom: "20%",
+
+    borderRadius: 10,
+  },
+  dislike: {
+    position: "absolute",
+    right: "38%",
+    bottom: "20%",
+
+    borderRadius: 10,
+  },
 });
 
 export default UserProductsScreen;

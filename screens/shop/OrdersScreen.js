@@ -33,6 +33,7 @@ const OrdersScreen = (props) => {
           phnumber: doc.data().phnumber,
           CurrentAddr: doc.data().CurrentAddress,
           item: doc.data().items,
+          ownerId: doc.data().ownerId,
           amount: doc.data().totalAmount,
           date: doc.data().timestamp.toDate().toString().slice(0, 21),
           orderStatus: doc.data().orderStatus,
@@ -43,7 +44,7 @@ const OrdersScreen = (props) => {
       //   console.log(doc.data());
       // });
     });
-    console.log("chal paya", OrderHistory);
+    // console.log("chal paya", OrderHistory);
   };
 
   // const orderHistoryGetter = async () => {
@@ -74,9 +75,7 @@ const OrdersScreen = (props) => {
 
   useEffect(() => {
     orderGetter();
-    return () => {
-      orderGetter();
-    };
+  
   }, []);
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     orderGetter();
@@ -110,10 +109,12 @@ const OrdersScreen = (props) => {
           size={20}
         ></Ionicons>
       </Text>
+      <Text style={styles.info}>Tell us how was your experience with these Kitchen? </Text>
+      
 
       <FlatList
         data={OrderHistory}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.item.id}
         renderItem={(itemData) => (
           <>
             {itemData.item.deliverystatus === "delivered" ? (
@@ -121,7 +122,9 @@ const OrdersScreen = (props) => {
                 amount={itemData.item.amount}
                 date={itemData.item.date}
                 items={itemData.item.item}
-                key={itemData.id}
+                id={itemData.item.id}
+                key={itemData.item.id}
+                ownerId= {itemData.item.ownerId}
               />
             ) : (
               <></>
@@ -162,6 +165,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  info:{
+    textAlign: "center"
+  }
 });
 
 export default OrdersScreen;

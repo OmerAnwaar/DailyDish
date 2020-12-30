@@ -180,8 +180,6 @@ export const createProduct = (
       imageUrl: URL,
       ownerId: useChef,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      like: 0,
-      dislike:0,
       title: title,
       price: price,
     });

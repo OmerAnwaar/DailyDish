@@ -138,6 +138,7 @@ const ChefProductsOverviewScreen = (props) => {
             price={itemData.item.price}
             kitchenName={itemData.item.kitchenName}
             productID={itemData.item.id}
+            ownerId= {itemData.item.ownerId}
             onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}

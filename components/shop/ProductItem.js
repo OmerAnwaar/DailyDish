@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,25 +12,25 @@ import Colors from "../../constants/Colors";
 
 import { color } from "react-native-reanimated";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import {db} from '../../firebase/Firebase'
+import { db } from "../../firebase/Firebase";
 
 import Card from "../UI/Card";
 
 const ProductItem = (props) => {
-  const [like, setlike] = useState(0)
-  const [dislike, setdislike] = useState(0)
+  const [like, setlike] = useState(0);
+  const [dislike, setdislike] = useState(0);
 
-  const ratingGetter=async()=>{
-    let rateGetterRef = db.collection("products-view").doc(props.productID)
-   const rater=  await rateGetterRef.get()
-   setlike(rater.data().like)
-   setdislike(rater.data().dislike)
-  }
-useEffect(() => {
-  ratingGetter();
-}, [])
+  const ratingGetter = async () => {
+    let rateGetterRef = db.collection("chefs").doc(props.ownerId);
+    const rater = await rateGetterRef.get();
+    setlike(rater.data().like);
+    setdislike(rater.data().dislike);
+  };
 
-  
+  useEffect(() => {
+    ratingGetter();
+  }, []);
+
   let TouchableCmp = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -47,18 +47,19 @@ useEffect(() => {
             </View>
             <View style={styles.like}>
               <Ionicons
-              color="green"
+                color="green"
                 name={
                   Platform.OS === "android" ? "md-thumbs-up" : "ios-thumbs-up"
                 }
                 size={18}
               >
-                {" "}{like}
+                {" "}
+                {like}
               </Ionicons>
             </View>
             <View style={styles.dislike}>
               <Ionicons
-              color="red"
+                color="red"
                 name={
                   Platform.OS === "android"
                     ? "md-thumbs-down"
@@ -66,7 +67,8 @@ useEffect(() => {
                 }
                 size={18}
               >
-                {" "}{dislike}
+                {" "}
+                {dislike}
               </Ionicons>
             </View>
             <View style={styles.details}>
@@ -146,15 +148,15 @@ const styles = StyleSheet.create({
   },
   like: {
     position: "absolute",
-    right: "30%",
-    bottom: "27%",
+    right: "35%",
+    bottom: "20%",
 
     borderRadius: 10,
   },
   dislike: {
     position: "absolute",
-    right: "13%",
-    bottom: "27%",
+    right: "20%",
+    bottom: "20%",
 
     borderRadius: 10,
   },

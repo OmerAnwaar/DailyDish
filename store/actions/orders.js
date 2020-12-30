@@ -83,6 +83,7 @@ cartItems.map(doc=>{
     
     const presetterRef = await db.collection("orders").add({
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        kitchenRated: false,
         orderStatus: "requested",
         deliverystatus: "requested",
         CurrentAddress: CurrAdress,
