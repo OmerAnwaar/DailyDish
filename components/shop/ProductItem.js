@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import {
   View,
   Text,
@@ -8,11 +8,26 @@ import {
   TouchableNativeFeedback,
   Platform,
 } from "react-native";
+import Colors from "../../constants/Colors";
+
 import { color } from "react-native-reanimated";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import {db} from '../../firebase/Firebase'
 
 import Card from "../UI/Card";
 
 const ProductItem = (props) => {
+  const [like, setlike] = useState(0)
+  const [dislike, setdislike] = useState(0)
+
+  const ratingGetter=async()=>{
+    let rateGetterRef = db.collection("products-view").doc(props.productID)
+   const rater=  await rateGetterRef.get()
+   setlike(rater.data().like)
+   setdislike(rater.data().dislike)
+  }
+ratingGetter();
+  
   let TouchableCmp = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -27,12 +42,39 @@ const ProductItem = (props) => {
             <View style={styles.imageContainer}>
               <Image style={styles.image} source={{ uri: props.image }} />
             </View>
+            <View style={styles.like}>
+              <Ionicons
+              color="green"
+                name={
+                  Platform.OS === "android" ? "md-thumbs-up" : "ios-thumbs-up"
+                }
+                size={18}
+              >
+                {" "}{like}
+              </Ionicons>
+            </View>
+            <View style={styles.dislike}>
+              <Ionicons
+              color="red"
+                name={
+                  Platform.OS === "android"
+                    ? "md-thumbs-down"
+                    : "ios-thumbs-down"
+                }
+                size={18}
+              >
+                {" "}{dislike}
+              </Ionicons>
+            </View>
             <View style={styles.details}>
-              <Text style={styles.title}>{props.title}</Text>
-              <Text style={styles.kitchen}>{props.kitchenName}</Text>
+              <Text style={styles.title}>{props.title} </Text>
+
+              <Text style={styles.kitchen}>{props.kitchenName} </Text>
+
               <Text style={styles.time}>{props.timestamp}</Text>
               <Text style={styles.price}>Rs {props.price}</Text>
             </View>
+
             <View style={styles.actions}>{props.children}</View>
           </View>
         </TouchableCmp>
@@ -44,6 +86,7 @@ const ProductItem = (props) => {
 const styles = StyleSheet.create({
   product: {
     height: 300,
+    width: "92%",
     margin: 20,
     borderRadius: 15,
   },
@@ -63,7 +106,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   details: {
-    alignItems: "center",
     height: "17%",
     padding: 10,
   },
@@ -77,7 +119,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#888",
     marginVertical: 4,
-    bottom: "35%"
+    bottom: "35%",
+    textAlign: "center",
   },
   actions: {
     flexDirection: "row",
@@ -90,12 +133,28 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     fontFamily: "open-sans-bold",
     fontSize: 16,
+    right: "2%",
     color: "#95a5a6",
+    marginLeft: "2%",
   },
-  time:{
+  time: {
     paddingBottom: "2%",
-    bottom: "25%"
-  }
+    bottom: "25%",
+  },
+  like: {
+    position: "absolute",
+    right: "30%",
+    bottom: "27%",
+
+    borderRadius: 10,
+  },
+  dislike: {
+    position: "absolute",
+    right: "13%",
+    bottom: "27%",
+
+    borderRadius: 10,
+  },
 });
 
 export default ProductItem;

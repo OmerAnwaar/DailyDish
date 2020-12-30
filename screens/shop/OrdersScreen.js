@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Button,
 } from "react-native";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import ignoreWarnings from "react-native-ignore-warnings";
@@ -101,7 +102,15 @@ const OrdersScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>Completed Orders.</Text>
+      <Text style={styles.Title}>
+        Completed Orders.{" "}
+        <Ionicons
+          onPress={orderGetter}
+          name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+          size={20}
+        ></Ionicons>
+      </Text>
+
       <FlatList
         data={OrderHistory}
         keyExtractor={(item) => item.id}
@@ -115,9 +124,7 @@ const OrdersScreen = (props) => {
                 key={itemData.id}
               />
             ) : (
-              <>
-               
-              </>
+              <></>
             )}
           </>
         )}

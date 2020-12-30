@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 import Colors from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
@@ -24,6 +25,7 @@ const ProductDetailScreen = (props) => {
       ownerId: ownerId,
     });
   };
+  const likeButton = () => {};
   return (
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
@@ -35,6 +37,7 @@ const ProductDetailScreen = (props) => {
             dispatch(cartActions.addToCart(selectedProduct));
           }}
         />
+
         <Button
           color={Colors.primary}
           title={selectedProduct.kitchenName}
@@ -42,12 +45,16 @@ const ProductDetailScreen = (props) => {
             selectItemHandler(selectedProduct.ownerId);
           }}
         />
+        <Button color={Colors.primary} title="Add to Favourites" />
       </View>
+      
+      <View style={styles.container}>
       <Text style={styles.price}>
-        Rs {Number.parseInt(selectedProduct.price).toFixed(2)}
+        Rs {Number.parseInt(selectedProduct.price).toFixed(2)}/-
       </Text>
-      <Text style={styles.desTitle}>Description: </Text>
-      <Text style={styles.description}>{selectedProduct.description}</Text>
+        <Text style={styles.desTitle}>Description: </Text>
+        <Text style={styles.description}>{selectedProduct.description}</Text>
+      </View>
     </ScrollView>
   );
 };
@@ -86,6 +93,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 20,
     paddingBottom: "2%",
+  },
+  heart: {},
+  container: {
+    height: "30%",
+    padding: "2%",
+    margin: "2%",
+    borderColor: "grey",
+    // borderWidth: 0.5,
+    borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5,
+    backgroundColor: "white",
+    justifyContent: "center"
   },
 });
 
