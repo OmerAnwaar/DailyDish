@@ -75,6 +75,7 @@ const UserProductsScreen = (props) => {
             title={itemData.item.title}
             timestamp={itemData.item.timestamp}
             price={itemData.item.price}
+            productID={itemData.item.id}
             onSelect={() => {
               editProductHandler(itemData.item.id);
             }}

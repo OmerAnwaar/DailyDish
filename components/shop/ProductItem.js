@@ -26,7 +26,10 @@ const ProductItem = (props) => {
    setlike(rater.data().like)
    setdislike(rater.data().dislike)
   }
-ratingGetter();
+useEffect(() => {
+  ratingGetter();
+}, [])
+
   
   let TouchableCmp = TouchableOpacity;
 
