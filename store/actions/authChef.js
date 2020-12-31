@@ -59,7 +59,6 @@ export const signup = (email, password, name, phnumber, kitchenname, cnic) => {
         Disable: false,
         userAccount: true,
         CurrentAddress: "notset",
-        expoToken:"not",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
     await firebase
