@@ -6,6 +6,16 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import { useSelector, useDispatch } from "react-redux";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 
 const RiderHomeScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.authRider.userId);
@@ -13,6 +23,60 @@ const RiderHomeScreen = (props) => {
   const [orderRecieved, setorderRecieved] = useState([]);
   const [liveOrder, setliveOrder] = useState([]);
   const [id, setid] = useState("");
+  // const testNotification = async () => {
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "hello",
+  //       body: "testing",
+  //     },
+  //     trigger: {
+  //       seconds: 2,
+  //     },
+  //   });
+  // };
+
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("You need to give access in order to recieve notification!");
+        return;
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    await db.collection("riders").doc(ReduxCurrentUser).update({
+      expoToken: token,
+    });
+
+    // if (Platform.OS === 'android') {
+    //   Notifications.setNotificationChannelAsync('default', {
+    //   name: 'default',
+    //   importance: Notifications.AndroidImportance.MAX,
+    //   vibrationPattern: [0, 250, 250, 250],
+    //   lightColor: '#FF231F7C',
+    //   });
+    // }
+
+    return token;
+  };
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
+
   const liveOrderGetter = async () => {
     // const orderInfoRef = db.collection("live-orders");
     // await orderInfoRef.get().then((res) => {
@@ -96,7 +160,7 @@ const RiderHomeScreen = (props) => {
   //   //   console.log("checking again again", doc.data());
   //   // });
   // };
-  
+
   // const unsubscribe = props.navigation.addListener("didFocus", () => {
   //   liveOrderGetter();
   //   //recievedOrders();
@@ -127,6 +191,7 @@ const RiderHomeScreen = (props) => {
 
   return (
     <View style={styles.screen}>
+      {/* <Button title="Testing" onPress={testNotification} /> */}
       <Text style={styles.RiderTitle}>
         <Ionicons
           name={Platform.OS === "android" ? "md-bicycle" : "ios-bicycle"}
@@ -135,12 +200,11 @@ const RiderHomeScreen = (props) => {
         Welcome Rider{" "}
       </Text>
       <Ionicons
-      style={styles.Refresh}
-      size={24}
-      name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-      onPress={liveOrderGetter}
+        style={styles.Refresh}
+        size={24}
+        name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+        onPress={liveOrderGetter}
       ></Ionicons>
-     
 
       <FlatList
         data={liveOrder}
@@ -191,21 +255,28 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    padding: "2%",
+    margin: "2%",
     borderColor: "grey",
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: "3%",
-    margin: 10,
+    // borderWidth: 0.5,
+    borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5,
+    backgroundColor: "white",
   },
   RiderTitle: {
     textAlign: "center",
     fontSize: 24,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-  Refresh:{
-    textAlign:"right",
-    marginRight: "10%"
-  }
+  Refresh: {
+    textAlign: "right",
+    marginRight: "10%",
+  },
 });
 
 export default RiderHomeScreen;

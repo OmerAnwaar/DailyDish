@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,17 +16,20 @@ import CartItem from "../../components/shop/CartItem";
 import Card from "../../components/UI/Card";
 import * as cartActions from "../../store/actions/cart";
 import * as ordersActions from "../../store/actions/orders";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 
 const CartScreen = (props) => {
   const db = firebase.firestore();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [isLoading, setIsLoading] = useState(false);
   const [inCartObj, setinCartObj] = useState({});
+  const [ExpoToken, setExpoToken] = useState("");
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const ProductOwner = useSelector((state) => state.cart.ownerId);
   let ProductId;
   console.log("ownerid=", ProductOwner);
-  //
 
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
@@ -48,12 +51,42 @@ const CartScreen = (props) => {
     );
   });
   console.log("product id=", ProductId);
+  const getEtoken = async () => {
+    let tokenRef = db.collection("chefs").doc(ProductOwner);
+    await tokenRef.get().then((res) => {
+      setExpoToken(res.data().expoToken);
+    });
+  };
+  useEffect(() => {
+    getEtoken();
+  }, []);
+  console.log("token brought", ExpoToken);
+  const sendPushNotification = () => {
+    let response = fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: ExpoToken,
+        sound: "default",
+        title: "New Order",
+        body: "You have recieved a new order!",
+      }),
+    });
+  };
   const dispatch = useDispatch();
   // cartItems ={[ProductId]: transformedCartItems}
   const sendOrderHandler = async () => {
     setIsLoading(true);
     dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
-    setTimeout(function(){  props.navigation.navigate("SentOrders"); }, 4000);
+    setTimeout(function () {
+      props.navigation.navigate("SentOrders");
+    }, 4000);
+    setTimeout(() => {
+      sendPushNotification();
+    }, 2000);
    
     setIsLoading(false);
   };

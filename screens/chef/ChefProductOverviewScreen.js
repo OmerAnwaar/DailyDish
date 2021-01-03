@@ -9,7 +9,9 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 import { useSelector, useDispatch } from "react-redux";
 // import { SearchBar } from "react-native-elements";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -22,6 +24,14 @@ import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
 import UserName from "../user/UserName";
 import { db } from "../../firebase/Firebase";
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
+
 const ChefProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -35,6 +45,59 @@ const ChefProductsOverviewScreen = (props) => {
   //const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   console.log("filtered=================>", filtered);
+  //   const testNotification = async () => {
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "hello",
+  //       body: "testing",
+  //     },
+  //     trigger: {
+  //       seconds: 2,
+  //     },
+  //   });
+  // };
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("You need to give access in order to recieve notification!");
+        return;
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    await db.collection("chefs").doc(ReduxCurrentUser).update({
+      expoToken: token,
+    });
+
+    // if (Platform.OS === 'android') {
+    //   Notifications.setNotificationChannelAsync('default', {
+    //   name: 'default',
+    //   importance: Notifications.AndroidImportance.MAX,
+    //   vibrationPattern: [0, 250, 250, 250],
+    //   lightColor: '#FF231F7C',
+    //   });
+    // }
+
+    return token;
+  };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   const loadProducts = useCallback(async () => {
     setError(null);
@@ -125,6 +188,7 @@ const ChefProductsOverviewScreen = (props) => {
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
       {/* <Text style={styles.title}>Latest Additions</Text> */}
+         {/* <Button title="Testing"  onPress={testNotification} /> */}
 
       <FlatList
         onRefresh={loadProducts}
@@ -138,7 +202,7 @@ const ChefProductsOverviewScreen = (props) => {
             price={itemData.item.price}
             kitchenName={itemData.item.kitchenName}
             productID={itemData.item.id}
-            ownerId= {itemData.item.ownerId}
+            ownerId={itemData.item.ownerId}
             onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}
