@@ -9,10 +9,10 @@ import {
   StyleSheet,
 } from "react-native";
 
+// import { Notifications } from 'expo-notifications';
 import { useSelector, useDispatch } from "react-redux";
 // import { SearchBar } from "react-native-elements";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
 import * as cartActions from "../../store/actions/cart";
@@ -20,6 +20,17 @@ import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
 import SearchBar from "../../components/UI/SearchBar";
 import UserName from "../user/UserName";
+import { db } from "../../firebase/Firebase";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 
 const ProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +38,65 @@ const ProductsOverviewScreen = (props) => {
   const [search, setSearch] = useState("");
   const [error, setError] = useState();
   const [userName, setuserName] = useState("");
+  // const [token, settoken] = useState("");
   const products = useSelector((state) => state.products.availableProducts);
   const filtered = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  // const testNotification = async () => {
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "hello",
+  //       body: "testing",
+  //     },
+  //     trigger: {
+  //       seconds: 2,
+  //     },
+  //   });
+  // };
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("You need to give access in order to recieve notification!");
+        return;
+      }
+    
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    await db.collection("app-users").doc(ReduxCurrentUser).update({
+      expoToken: token,
+    });
+
+    // if (Platform.OS === 'android') {
+    //   Notifications.setNotificationChannelAsync('default', {
+    //   name: 'default',
+    //   importance: Notifications.AndroidImportance.MAX,
+    //   vibrationPattern: [0, 250, 250, 250],
+    //   lightColor: '#FF231F7C',
+    //   });
+    // }
+
+    return token;
+  };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   const loadProducts = useCallback(async () => {
     setError(null);
@@ -106,6 +172,7 @@ const ProductsOverviewScreen = (props) => {
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
       {/* <Text style={styles.title}>Latest Additions</Text> */}
+      {/* <Button title="Testing"  onPress={testNotification} /> */}
 
       <FlatList
         onRefresh={loadProducts}
@@ -118,7 +185,7 @@ const ProductsOverviewScreen = (props) => {
             title={itemData.item.title}
             price={itemData.item.price}
             kitchenName={itemData.item.kitchenName}
-            ownerId= {itemData.item.ownerId}
+            ownerId={itemData.item.ownerId}
             productID={itemData.item.id}
             onSelect={() => {
               selectItemHandler(
