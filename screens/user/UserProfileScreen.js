@@ -87,11 +87,11 @@ const UserProfileScreen = (props) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View>
                 <Text style={styles.info}>
-                  <Ionicons
+                  {/* <Ionicons
                     name={Platform.OS === "android" ? "md-save" : "ios-save"}
                     size={28}
-                  ></Ionicons>{" "}
-                  YOUR PROFILE
+                  ></Ionicons>{" "} */}
+                  CONTACT INFORMATION
                 </Text>
                 <Text style={styles.data}>
                   <Ionicons
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 20,
     justifyContent: "space-around",
-    textAlign:"center"
+    textAlign: "center",
   },
   reviewTitle: {
     paddingTop: "2%",

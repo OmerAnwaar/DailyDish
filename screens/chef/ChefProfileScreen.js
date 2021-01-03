@@ -88,11 +88,11 @@ const ChefProfileScreen = (props) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View>
                 <Text style={styles.info}>
-                  <Ionicons
+                  {/* <Ionicons
                     name={Platform.OS === "android" ? "md-save" : "ios-save"}
                     size={28}
-                  ></Ionicons>{" "}
-                  YOUR PROFILE
+                  ></Ionicons>{" "} */}
+                  CONTACT INFORMATION
                 </Text>
                 <Text style={styles.data}>
                   <Ionicons
