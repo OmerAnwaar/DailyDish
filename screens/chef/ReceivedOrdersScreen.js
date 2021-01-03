@@ -7,6 +7,7 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
 import ItemHolder from "../../components/categories/ItemHolder";
 import * as firebase from "firebase";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import "firebase/firestore";
 import Colors from "../../constants/Colors";
 const ReceievedOrdersScreen = (props) => {
@@ -31,7 +32,7 @@ const ReceievedOrdersScreen = (props) => {
   const recievedOrders = async () => {
     const recievedOrderRef = db
       .collection("orders")
-      .where("ownerId", "==", ReduxCurrentUser);
+      .orderBy("timestamp", "desc");
     await recievedOrderRef.get().then((res) => {
       setorderRecieved(
         res.docs.map((doc) => ({
@@ -44,6 +45,7 @@ const ReceievedOrdersScreen = (props) => {
           timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
           orderStatus: doc.data().orderStatus,
           deliverystatus: doc.data().deliverystatus,
+          ownerId: doc.data().ownerId,
         }))
       );
     });
@@ -95,119 +97,133 @@ const ReceievedOrdersScreen = (props) => {
   }
   return (
     <View>
-      <Button label="refresh" title="refresh" onPress={recievedOrders}></Button>
+      {/* <Button label="refresh" title="refresh" onPress={recievedOrders}></Button> */}
+      <Ionicons
+        onPress={recievedOrders}
+        style={styles.Reload}
+        name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
+        size={25}
+      >
+        {" "}Refresh
+      </Ionicons>
       <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
         data={orderRecieved}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.container}>
-            <View style={styles.contain}>
-              <Text style={{ fontWeight: "bold" }}>Customer Name: </Text>
-              <Text>{item.CustomerName}</Text>
-            </View>
-            <View style={styles.contain}>
-              <Text style={{ fontWeight: "bold" }}>
-                Customer Phone Number:{" "}
-              </Text>
-              <Text>{item.phnumber}</Text>
-            </View>
-            <View style={styles.containAddress}>
-              <Text style={{ fontWeight: "bold" }}>Customer Address: </Text>
-              <Text>{item.CurrentAddr}</Text>
-            </View>
-            <View style={styles.contain}>
-              <Text style={{ fontWeight: "bold" }}>Placed On: </Text>
-              <Text> {item.timestamp}</Text>
-            </View>
-            <ItemHolder data={item.item} />
-            <View style={styles.contain}>
-              <Text style={{ fontWeight: "bold" }}>Total: </Text>
-              <Text>{item.totalAmount}</Text>
-            </View>
-            <View>
-              {item.orderStatus === "requested" ? (
-                <>
-                  <View style={styles.selectButtons}>
-                    {/* <View style={styles.AcceptStyle}> */}
-                    <Button
-                      style={styles.Buttons}
-                      label="accepting-order"
-                      title="Accept Order"
-                      onPress={() => {
-                        db.collection("orders").doc(item.id).update({
-                          orderStatus: "accepted",
-                        });
-                      }}
-                    ></Button>
-                    {/* </View> */}
-                    {/* <View style={styles.DeclineStyle}> */}
-                    <Button
-                      label="decline-order"
-                      title="Decline Order"
-                      color="red"
-                      onPress={() => {
-                        db.collection("orders").doc(item.id).update({
-                          orderStatus: "declined",
-                        });
-                      }}
-                    ></Button>
-                    {/* </View> */}
-                  </View>
-                </>
-              ) : (
-                <>
-                  {item.orderStatus === "accepted" ? (
+          <>
+            {item.ownerId === ReduxCurrentUser ? (
+              <View style={styles.container}>
+                <View style={styles.contain}>
+                  <Text style={{ fontWeight: "bold" }}>Customer Name: </Text>
+                  <Text>{item.CustomerName}</Text>
+                </View>
+                <View style={styles.contain}>
+                  <Text style={{ fontWeight: "bold" }}>
+                    Customer Phone Number:{" "}
+                  </Text>
+                  <Text>{item.phnumber}</Text>
+                </View>
+                <View style={styles.containAddress}>
+                  <Text style={{ fontWeight: "bold" }}>Customer Address: </Text>
+                  <Text>{item.CurrentAddr}</Text>
+                </View>
+                <View style={styles.contain}>
+                  <Text style={{ fontWeight: "bold" }}>Placed On: </Text>
+                  <Text> {item.timestamp}</Text>
+                </View>
+                <ItemHolder data={item.item} />
+                <View style={styles.contain}>
+                  <Text style={{ fontWeight: "bold" }}>Total: </Text>
+                  <Text>{item.totalAmount}</Text>
+                </View>
+                <View>
+                  {item.orderStatus === "requested" ? (
                     <>
-                      <Button
-                        label="req-delivery"
-                        title="Request Delivery"
-                        onPress={() => {
-                          db.collection("orders").doc(item.id).update({
-                            orderStatus: "completed",
-                            deliverystatus: "live",
-                          });
-                          db.collection("live-orders").add({
-                            orderId: item.id,
-                            KitchenName: Kname,
-                            KitchenAddress: Aname,
-                            KitchenChef: Cname,
-                            Kitchenph: Pname,
-                            CustomerName: item.CustomerName,
-                            Customerph: item.phnumber,
-                            CustomerAddress: item.CurrentAddr,
-                            Total: item.totalAmount,
-                            deliverystatus: "inprogress",
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                          });
-                        }}
-                      ></Button>
+                      <View style={styles.selectButtons}>
+                        {/* <View style={styles.AcceptStyle}> */}
+                        <Button
+                          style={styles.Buttons}
+                          label="accepting-order"
+                          title="Accept Order"
+                          onPress={() => {
+                            db.collection("orders").doc(item.id).update({
+                              orderStatus: "accepted",
+                            });
+                          }}
+                        ></Button>
+                        {/* </View> */}
+                        {/* <View style={styles.DeclineStyle}> */}
+                        <Button
+                          label="decline-order"
+                          title="Decline Order"
+                          color="red"
+                          onPress={() => {
+                            db.collection("orders").doc(item.id).update({
+                              orderStatus: "declined",
+                            });
+                          }}
+                        ></Button>
+                        {/* </View> */}
+                      </View>
                     </>
                   ) : (
                     <>
-                      {item.orderStatus === "completed" ? (
+                      {item.orderStatus === "accepted" ? (
                         <>
-                          {item.deliverystatus === "accepted" ? (
-                            <Text>
-                              Rider is Assigned and will be there soon
-                            </Text>
+                          <Button
+                            label="req-delivery"
+                            title="Request Delivery"
+                            onPress={() => {
+                              db.collection("orders").doc(item.id).update({
+                                orderStatus: "completed",
+                                deliverystatus: "live",
+                              });
+                              db.collection("live-orders").add({
+                                orderId: item.id,
+                                KitchenName: Kname,
+                                KitchenAddress: Aname,
+                                KitchenChef: Cname,
+                                Kitchenph: Pname,
+                                CustomerName: item.CustomerName,
+                                Customerph: item.phnumber,
+                                CustomerAddress: item.CurrentAddr,
+                                Total: item.totalAmount,
+                                deliverystatus: "inprogress",
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                              });
+                            }}
+                          ></Button>
+                        </>
+                      ) : (
+                        <>
+                          {item.orderStatus === "completed" ? (
+                            <>
+                              {item.deliverystatus === "accepted" ? (
+                                <Text>
+                                  Rider is Assigned and will be there soon
+                                </Text>
+                              ) : (
+                                <Text style={styles.rider}>
+                                  Rider will accept delivery request soon
+                                </Text>
+                              )}
+                            </>
                           ) : (
-                            <Text style={styles.rider}>
-                              Rider will accept delivery request soon
+                            <Text style={styles.turnedDown}>
+                              You Turned Down this Order
                             </Text>
                           )}
                         </>
-                      ) : (
-                        <Text style={styles.turnedDown}>
-                          You Turned Down this Order
-                        </Text>
                       )}
                     </>
                   )}
-                </>
-              )}
-            </View>
-          </View>
+                </View>
+              </View>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       />
     </View>
@@ -289,6 +305,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 3,
     color: "red",
+  },
+  Reload: {
+    textAlign: "center",
   },
 });
 
