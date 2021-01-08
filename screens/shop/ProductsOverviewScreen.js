@@ -71,9 +71,8 @@ const ProductsOverviewScreen = (props) => {
         alert("You need to give access in order to recieve notification!");
         return;
       }
-    
+
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -195,17 +194,6 @@ const ProductsOverviewScreen = (props) => {
               );
             }}
           >
-            <Button
-              color={Colors.primary}
-              title="View Details"
-              onPress={() => {
-                selectItemHandler(
-                  itemData.item.id,
-                  itemData.item.title,
-                  itemData.item.ownerId
-                );
-              }}
-            />
             <Button
               color={Colors.primary}
               title="To Cart"

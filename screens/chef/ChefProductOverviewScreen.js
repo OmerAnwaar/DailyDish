@@ -188,7 +188,7 @@ const ChefProductsOverviewScreen = (props) => {
     <>
       <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
       {/* <Text style={styles.title}>Latest Additions</Text> */}
-         {/* <Button title="Testing"  onPress={testNotification} /> */}
+      {/* <Button title="Testing"  onPress={testNotification} /> */}
 
       <FlatList
         onRefresh={loadProducts}
@@ -207,13 +207,13 @@ const ChefProductsOverviewScreen = (props) => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}
           >
-            <Button
+            {/* <Button
               color={Colors.primary}
               title="View Details"
               onPress={() => {
                 selectItemHandler(itemData.item.id, itemData.item.title);
               }}
-            />
+            /> */}
             {/* <Button
               color={Colors.primary}
               title="To Cart"

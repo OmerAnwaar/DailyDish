@@ -361,7 +361,7 @@ const LocationPicker = (props) => {
         <View style={styles.btnView}>
           <Button
             title="Generate Address!"
-            color={Platform.OS === "android" ? "white" : Colors.primary}
+            color={Colors.primary}
             onPress={genAddress}
             style={styles.button}
           ></Button>

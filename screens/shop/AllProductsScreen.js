@@ -19,6 +19,8 @@ const AllProductsScreen = (props) => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.availableProducts);
   const ownerId = props.navigation.getParam("ownerId");
+  // const kitchenName = props.navigation.getParam("kitchenName");
+
   const selectItemHandler = (id, title, ownerId) => {
     props.navigation.navigate("ProductDetail", {
       productId: id,
@@ -44,21 +46,11 @@ const AllProductsScreen = (props) => {
               selectItemHandler(
                 itemData.item.id,
                 itemData.item.title,
-                itemData.item.ownerId
+                itemData.item.ownerId,
+                itemData.item.kitchenName
               );
             }}
           >
-            <Button
-              color={Colors.primary}
-              title="View Details"
-              onPress={() => {
-                selectItemHandler(
-                  itemData.item.id,
-                  itemData.item.title,
-                  itemData.item.ownerId
-                );
-              }}
-            />
             <Button
               color={Colors.primary}
               title="To Cart"
@@ -74,7 +66,7 @@ const AllProductsScreen = (props) => {
 };
 AllProductsScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Your Orders",
+    headerTitle: navData.navigation.getParam("kitchenName"),
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -93,36 +85,36 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  hello: {
-    justifyContent: "center",
-    textAlign: "center",
-    paddingTop: 30,
-  },
-  saad: {
-    textAlign: "center",
-    paddingTop: 300,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  flatList: {
-    paddingLeft: 15,
-    marginTop: 15,
-    paddingBottom: 15,
-    fontSize: 20,
-    borderBottomColor: "#26a69a",
-    borderBottomWidth: 1,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold",
-    justifyContent: "center",
-    marginTop: "2%",
-    color: "#95a5a6",
-  },
+  // hello: {
+  //   justifyContent: "center",
+  //   textAlign: "center",
+  //   paddingTop: 30,
+  // },
+  // saad: {
+  //   textAlign: "center",
+  //   paddingTop: 300,
+  // },
+  // centered: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // flatList: {
+  //   paddingLeft: 15,
+  //   marginTop: 15,
+  //   paddingBottom: 15,
+  //   fontSize: 20,
+  //   borderBottomColor: "#26a69a",
+  //   borderBottomWidth: 1,
+  // },
+  // title: {
+  //   textAlign: "center",
+  //   fontSize: 20,
+  //   fontWeight: "bold",
+  //   justifyContent: "center",
+  //   marginTop: "2%",
+  //   color: "#95a5a6",
+  // },
 });
 
 export default AllProductsScreen;

@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Button,
+  Platform,
   TouchableOpacity,
   TouchableNativeFeedback,
 } from "react-native";
@@ -12,7 +13,7 @@ import Picker from "../../components/picker";
 import CategoryPickerItem from "../../components/CategoryPickerItem";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
-import { Ionicons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const CategoriesScreen = (props) => {
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
   },
   line1: {
     marginVertical: 20,

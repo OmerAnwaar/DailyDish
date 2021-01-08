@@ -16,13 +16,15 @@ import * as cartActions from "../../store/actions/cart";
 const ProductDetailScreen = (props) => {
   const productId = props.navigation.getParam("productId");
   const ownerId = props.navigation.getParam("ownerId");
+  const kitchenName = props.navigation.getParam("kitchenName");
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
   const dispatch = useDispatch();
-  const selectItemHandler = (ownerId) => {
+  const selectItemHandler = (ownerId, kitchenName) => {
     props.navigation.navigate("AllProd", {
       ownerId: ownerId,
+      kitchenName: selectedProduct.kitchenName,
     });
   };
   const likeButton = () => {};
@@ -42,16 +44,19 @@ const ProductDetailScreen = (props) => {
           color={Colors.primary}
           title={selectedProduct.kitchenName}
           onPress={() => {
-            selectItemHandler(selectedProduct.ownerId);
+            selectItemHandler(
+              selectedProduct.ownerId
+              // selectedProduct.kitchenName
+            );
           }}
         />
         <Button color={Colors.primary} title="Add to Favourites" />
       </View>
-      
+
       <View style={styles.container}>
-      <Text style={styles.price}>
-        Rs {Number.parseInt(selectedProduct.price).toFixed(2)}/-
-      </Text>
+        <Text style={styles.price}>
+          Rs {Number.parseInt(selectedProduct.price).toFixed(2)}/-
+        </Text>
         <Text style={styles.desTitle}>Description: </Text>
         <Text style={styles.description}>{selectedProduct.description}</Text>
       </View>
@@ -99,17 +104,7 @@ const styles = StyleSheet.create({
     height: "30%",
     padding: "2%",
     margin: "2%",
-    borderColor: "grey",
-    // borderWidth: 0.5,
-    borderRadius: 10,
-    backgroundColor: "white",
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    backgroundColor: "white",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
 
