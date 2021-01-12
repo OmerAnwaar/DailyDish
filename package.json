@@ -16,10 +16,12 @@
     "expo-image-picker": "~8.3.0",
     "expo-linear-gradient": "~8.2.1",
     "expo-location": "~8.2.1",
+    "expo-notifications": "~0.3.3",
     "expo-permissions": "~9.0.1",
     "firebase": "7.9.0",
     "fonts": "0.0.2",
     "formik": "^2.2.5",
+    "geolib": "^3.3.1",
     "moment": "^2.26.0",
     "react": "16.11.0",
     "react-dom": "16.11.0",
@@ -45,8 +47,7 @@
     "react-navigation-tabs": "^2.10.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "expo-notifications": "~0.3.3"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

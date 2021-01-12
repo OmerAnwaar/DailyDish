@@ -87,6 +87,7 @@ cartItems.map(doc=>{
         orderStatus: "requested",
         deliverystatus: "requested",
         CurrentAddress: CurrAdress,
+        CustomerId: userId,
         phnumber: phnumber,
         CustomerName: UserName,
         totalAmount: totalAmount,

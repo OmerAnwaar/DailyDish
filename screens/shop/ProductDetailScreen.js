@@ -6,14 +6,19 @@ import {
   Image,
   Button,
   StyleSheet,
+  Alert,
 } from "react-native";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
 import Colors from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
+import { db } from "../../firebase/Firebase";
 
 const ProductDetailScreen = (props) => {
+  const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const productId = props.navigation.getParam("productId");
   const ownerId = props.navigation.getParam("ownerId");
   const selectedProduct = useSelector((state) =>
@@ -25,7 +30,25 @@ const ProductDetailScreen = (props) => {
       ownerId: ownerId,
     });
   };
-  const likeButton = () => {};
+  const favouriteAction = () => {
+    console.log("current user", ReduxCurrentUser);
+    console.log("id", selectedProduct.id);
+
+    db.collection("app-users")
+      .doc(ReduxCurrentUser)
+      .collection("favourite")
+      .doc(selectedProduct.id)
+      .set({
+        KitchenName: selectedProduct.kitchenName,
+        ownerId: selectedProduct.ownerId,
+        description: selectedProduct.description,
+        imageUrl: selectedProduct.imageUrl,
+        price: selectedProduct.price,
+        title: selectedProduct.title,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    Alert.alert("Added to Favourites!");
+  };
   return (
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
@@ -45,13 +68,17 @@ const ProductDetailScreen = (props) => {
             selectItemHandler(selectedProduct.ownerId);
           }}
         />
-        <Button color={Colors.primary} title="Add to Favourites" />
+        <Button
+          color={Colors.primary}
+          title="Add to Favourites"
+          onPress={favouriteAction}
+        />
       </View>
-      
+
       <View style={styles.container}>
-      <Text style={styles.price}>
-        Rs {Number.parseInt(selectedProduct.price).toFixed(2)}/-
-      </Text>
+        <Text style={styles.price}>
+          Rs {Number.parseInt(selectedProduct.price).toFixed(2)}/-
+        </Text>
         <Text style={styles.desTitle}>Description: </Text>
         <Text style={styles.description}>{selectedProduct.description}</Text>
       </View>
@@ -109,7 +136,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     backgroundColor: "white",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
 
