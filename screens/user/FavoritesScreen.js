@@ -82,7 +82,7 @@ const FavoritesScreen = (props) => {
           <Text>No favorite meals found. Start adding some!  </Text>
         </View>
       ) : (
-        <View>
+        <View style={styles.container}>
           <View >
             <Text style={styles.title}>Your Favourite Food!</Text>
           </View>
@@ -150,6 +150,9 @@ FavoritesScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
+  container:{
+marginBottom: "19%"
+  },
   content: {
     flex: 1,
     justifyContent: "center",
