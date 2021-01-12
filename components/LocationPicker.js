@@ -17,6 +17,7 @@ import {
   ActivityIndicator,
   Alert,
   StyleSheet,
+  Platform,
   Modal,
 } from "react-native";
 import Colors from "../constants/Colors";
@@ -320,7 +321,7 @@ const LocationPicker = (props) => {
           <Button
             title="Locate Me on Map"
             onPress={getAddressHandler}
-            color={Platform.OS === "android" ? "white" : Colors.primary}
+            color={Colors.primary}
             style={styles.button}
           ></Button>
         </View>
@@ -360,7 +361,7 @@ const LocationPicker = (props) => {
         <View style={styles.btnView}>
           <Button
             title="Generate Address!"
-            color={Platform.OS === "android" ? "white" : Colors.primary}
+            color={Colors.primary}
             onPress={genAddress}
             style={styles.button}
           ></Button>
@@ -382,17 +383,17 @@ const LocationPicker = (props) => {
                   >
                     Auto Located Address: 🏘️
                   </Text>
-
                   <Text style={styles.textClr}> {address}</Text>
                 </View>
-                <Button
-                  title="Save Address?"
-                  color={Platform.OS === "android" ? "white" : Colors.primary}
-                  onPress={addSave}
-                  style={styles.button}
-                  disabled={loading}
-                ></Button>
-
+                <View style={styles.buttonBack}>
+                  <Button
+                    title="Save Address?"
+                    color={Colors.primary}
+                    onPress={addSave}
+                    style={styles.button}
+                    disabled={loading}
+                  ></Button>
+                </View>
                 <Modal
                   animationType={"slide"}
                   transparent={true}
@@ -408,7 +409,6 @@ const LocationPicker = (props) => {
                       <Input
                         id="houseNumber"
                         label="House Number:"
-                        // placeholder="password"
                         keyboardType="numeric"
                         required
                         minLength={1}
@@ -420,7 +420,6 @@ const LocationPicker = (props) => {
                       <Input
                         id="street"
                         label="Street Number:"
-                        // placeholder="password"
                         keyboardType="numeric"
                         required
                         minLength={1}
@@ -432,7 +431,6 @@ const LocationPicker = (props) => {
                       <Input
                         id="block"
                         label="Block:"
-                        // placeholder="password"
                         keyboardType="default"
                         required
                         minLength={1}
@@ -445,7 +443,6 @@ const LocationPicker = (props) => {
                       <Input
                         id="area"
                         label="Area:"
-                        // placeholder="password"
                         keyboardType="default"
                         required
                         minLength={5}
@@ -458,7 +455,7 @@ const LocationPicker = (props) => {
                     <View>
                       {manualSetter == true ? (
                         <Text
-                          style={{ color: "green", padding: 10, fontSize: 20 }}
+                          style={{ color: "White", padding: 10, fontSize: 20 }}
                         >
                           {" "}
                           Saved and Set to Current Address!
@@ -471,31 +468,38 @@ const LocationPicker = (props) => {
                       <Button
                         disabled={loading}
                         style={styles.button}
-                        color={Platform.OS === "android" ? "white" : Colors.primary}
+                        color={
+                          Platform.OS === "android" ? Colors.primary : "white"
+                        }
                         title=" Save Address"
                         onPress={ManualAddressSaver}
                       />
-
-                      <Button
-                        style={styles.button}
-                        color={Platform.OS === "android" ? "white" : Colors.primary}
-                        title=" < Go Back"
-                        onPress={() => {
-                          setModalView(false);
-                        }}
-                      />
+                      <View style={styles.buttonBack}>
+                        <Button
+                          style={styles.button}
+                          color={
+                            Platform.OS === "android" ? Colors.primary : "white"
+                          }
+                          title=" < Go Back"
+                          onPress={() => {
+                            setModalView(false);
+                          }}
+                        />
+                      </View>
                     </View>
                   </View>
                 </Modal>
                 {/*Button will change state to true and view will re-render*/}
-                <Button
-                  style={styles.button}
-                  color={Platform.OS === "android" ? "white" : Colors.primary}
-                  title="Not Your Address? 😢 "
-                  onPress={() => {
-                    setModalView(true);
-                  }}
-                />
+                <View style={styles.buttonBack}>
+                  <Button
+                    style={styles.button}
+                    color={Colors.primary}
+                    title="Not Your Address? 😢 "
+                    onPress={() => {
+                      setModalView(true);
+                    }}
+                  />
+                </View>
               </View>
             )}
             {/* <Text>Your address: {address}</Text> */}
@@ -581,7 +585,7 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#dfe6e9",
+    backgroundColor: Colors.primary,
     opacity: 2,
     height: "80%",
     width: "85%",
@@ -589,7 +593,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     marginTop: 100,
-    marginLeft: 35,
+    marginLeft: 30,
   },
   text: {
     color: "#3f2949",
@@ -597,13 +601,17 @@ const styles = StyleSheet.create({
   },
   modalCloseBtn: {
     top: 50,
+    // marginBottom: 5,
   },
   inputHanler: {
     width: "90%",
-    height: 300,
+    height: 335,
     padding: 8,
     backgroundColor: "white",
     borderRadius: 10,
+  },
+  buttonBack: {
+    marginVertical: 5,
   },
 });
 

@@ -21,13 +21,15 @@ const ProductDetailScreen = (props) => {
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const productId = props.navigation.getParam("productId");
   const ownerId = props.navigation.getParam("ownerId");
+  const kitchenName = props.navigation.getParam("kitchenName");
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
   const dispatch = useDispatch();
-  const selectItemHandler = (ownerId) => {
+  const selectItemHandler = (ownerId, kitchenName) => {
     props.navigation.navigate("AllProd", {
       ownerId: ownerId,
+      kitchenName: selectedProduct.kitchenName,
     });
   };
   const favouriteAction = () => {
@@ -65,7 +67,10 @@ const ProductDetailScreen = (props) => {
           color={Colors.primary}
           title={selectedProduct.kitchenName}
           onPress={() => {
-            selectItemHandler(selectedProduct.ownerId);
+            selectItemHandler(
+              selectedProduct.ownerId
+              // selectedProduct.kitchenName
+            );
           }}
         />
         <Button

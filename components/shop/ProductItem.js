@@ -51,7 +51,7 @@ const ProductItem = (props) => {
                 name={
                   Platform.OS === "android" ? "md-thumbs-up" : "ios-thumbs-up"
                 }
-                size={18}
+                size={14}
               >
                 {" "}
                 {like}
@@ -65,21 +65,18 @@ const ProductItem = (props) => {
                     ? "md-thumbs-down"
                     : "ios-thumbs-down"
                 }
-                size={18}
+                size={14}
               >
                 {" "}
                 {dislike}
               </Ionicons>
             </View>
             <View style={styles.details}>
-              <Text style={styles.title}>{props.title} </Text>
-
-              <Text style={styles.kitchen}>{props.kitchenName} </Text>
-
-              <Text style={styles.time}>{props.timestamp}</Text>
+              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.kitchen}>{props.kitchenName}</Text>
+              {/* <Text style={styles.time}>{props.timestamp}</Text> */}
               <Text style={styles.price}>Rs {props.price}</Text>
             </View>
-
             <View style={styles.actions}>{props.children}</View>
           </View>
         </TouchableCmp>
@@ -90,9 +87,11 @@ const ProductItem = (props) => {
 
 const styles = StyleSheet.create({
   product: {
-    height: 320,
-    width: "92%",
-    margin: 20,
+    height: 260,
+    width: "90%",
+    // margin: 10,
+    marginHorizontal: 20,
+    marginVertical: 10,
     borderRadius: 15,
   },
   touchable: {
@@ -111,28 +110,25 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   details: {
-    height: "17%",
+    height: "16.5%",
     padding: 10,
   },
   title: {
     fontFamily: "open-sans-bold",
     fontSize: 18,
-    marginVertical: 2,
+    // marginVertical: 2,
+    paddingLeft: 10,
   },
   price: {
-    fontFamily: "open-sans",
-    fontSize: 15,
-    color: "#888",
-    marginVertical: 4,
-    bottom: "35%",
-    textAlign: "center",
-  },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "23%",
-    paddingHorizontal: 20,
+    fontFamily: "open-sans-bold",
+    fontSize: 21,
+    color: Colors.primary,
+    // paddingBottom: 19,
+    paddingLeft: 10,
+    paddingTop: Platform.OS === "android" ? "" : 6.5,
+    // paddingBottom: 1,
+    // justifyContent: "flex-start",
+    // marginBottom: 40,
   },
   kitchen: {
     marginVertical: 2,
@@ -140,24 +136,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     right: "2%",
     color: "#95a5a6",
+    paddingLeft: 10,
     marginLeft: "2%",
   },
-  time: {
-    paddingBottom: "2%",
-    bottom: "25%",
+  actions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingBottom: 20,
+    alignItems: "center",
+    height: "25%",
+    paddingHorizontal: 20,
+    // paddingVertical: 20,
   },
+  // time: {
+  //   paddingBottom: "2%",
+  //   bottom: "25%",
+  // },
   like: {
     position: "absolute",
-    right: "35%",
-    bottom: "20%",
-
+    right: "18%",
+    bottom: "22%",
     borderRadius: 10,
   },
   dislike: {
     position: "absolute",
-    right: "20%",
-    bottom: "20%",
-
+    right: "7%",
+    bottom: "22%",
     borderRadius: 10,
   },
 });

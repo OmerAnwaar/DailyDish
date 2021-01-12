@@ -1,23 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 
-const CategorizedProductsScreen = (props) => {
+const VoucherScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <Text style={styles.hello}>
-        {" "}
-        Hello All Categorised products from Omer!!!{" "}
-      </Text>
-      <Text style={styles.saad}> Have fun working here, SAAD. Good Luck!</Text>
+      <Text>hello</Text>
     </View>
   );
 };
 
-CategorizedProductsScreen.navigationOptions = (navData) => {
+VoucherScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Your Orders",
+    headerTitle: "Categories",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -34,17 +31,9 @@ CategorizedProductsScreen.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-  },
-  hello: {
     justifyContent: "center",
-    textAlign: "center",
-    paddingTop: 30,
-  },
-  saad: {
-    textAlign: "center",
-    paddingTop: 300,
+    alignContent: "center",
   },
 });
 
-export default CategorizedProductsScreen;
+export default VoucherScreen;

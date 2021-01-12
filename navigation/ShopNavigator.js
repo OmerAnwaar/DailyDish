@@ -25,6 +25,7 @@ import {
   Image,
   Text,
   Alert,
+  ScrollView,
 } from "react-native";
 
 import { Entypo, Ionicons } from "@expo/vector-icons";
@@ -45,7 +46,7 @@ import AllProductsScreen from "../screens/shop/AllProductsScreen";
 import RiderProfileScreen from "../screens/shop/RiderProfileScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
-import CategorizedProductsScreen from "../screens/shop/CategorizedProductsScreen";
+// import CategorizedProductsScreen from "../screens/shop/CategorizedProductsScreen";
 
 import ChefAuthScreen from "../screens/chef/ChefAuthScreen";
 import EditProductScreen from "../screens/chef/EditProductScreen";
@@ -65,6 +66,7 @@ import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
+import VoucherScreen from "../screens/shop/VoucherScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -75,6 +77,7 @@ const defaultNavOptions = {
   },
   headerBackTitleStyle: {
     fontFamily: "open-sans",
+    // fontSize: "17",
   },
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
@@ -156,6 +159,23 @@ const ReceivedOrdersNavigator = createStackNavigator(
       drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-list" : "ios-list"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+const VoucherNavigator = createStackNavigator(
+  {
+    Vouchers: VoucherScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name={Platform.OS === "android" ? "md-gift" : "ios-gift"}
           size={23}
           color={drawerConfig.tintColor}
         />
@@ -403,6 +423,7 @@ const ShopNavigator = createDrawerNavigator(
     Address: LocationNavigator,
     Categories: CategoriesNavigator,
     InProgress: SentOrdersNavigator,
+    Vouchers: VoucherNavigator,
   },
   {
     contentOptions: {
@@ -426,17 +447,25 @@ const ShopNavigator = createDrawerNavigator(
       getUserName();
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
-          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            <View style={styles.UserNameHolder}>
-              <Ionicons
-                name={Platform.OS == "android" ? "md-person" : "ios-person"}
-                size={25}
-                color={Colors.primary}
-              />
-              <Text style={styles.usertxt}>Welcome {userName}</Text>
-              <UserName />
-            </View>
-            <DrawerNavigatorItems {...props} />
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+              <View style={styles.UserNameHolder}>
+                <Ionicons
+                  name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                  size={25}
+                  color={Colors.primary}
+                />
+                <Text style={styles.usertxt}>Welcome {userName}</Text>
+                <UserName />
+              </View>
+              <DrawerNavigatorItems {...props} />
+            </SafeAreaView>
 
             <View style={styles.buttonUser}>
               <View style={styles.logout}>
@@ -450,7 +479,7 @@ const ShopNavigator = createDrawerNavigator(
                 />
               </View>
             </View>
-          </SafeAreaView>
+          </ScrollView>
         </View>
       );
     },
@@ -517,32 +546,38 @@ const ChefShopNavigator = createDrawerNavigator(
       ignoreWarnings("Possible Unhandled Promise");
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
-          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            <View style={styles.UserNameHolder}>
-              <Ionicons
-                name={Platform.OS == "android" ? "md-person" : "ios-person"}
-                size={25}
-                color={Colors.primary}
-              />
-              <Text style={styles.usertxt}>Welcome {userName}</Text>
-              <UserName />
-            </View>
-            <DrawerNavigatorItems {...props} />
-
-            <View style={styles.buttonChef}>
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+              <View style={styles.UserNameHolder}>
+                <Ionicons
+                  name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                  size={25}
+                  color={Colors.primary}
+                />
+                <Text style={styles.usertxt}>Welcome {userName}</Text>
+                <UserName />
+              </View>
+              <DrawerNavigatorItems {...props} />
+            </SafeAreaView>
+            <View style={styles.buttonUser}>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color="white"
+                  color={Platform.OS === "android" ? Colors.primary : "white"}
                   onPress={() => {
                     dispatch(authActions.logout());
-                    props.navigation.navigate("Auth");
-                    console.log("i amhere");
+                    // props.navigation.navigate("Auth");
                   }}
                 />
               </View>
             </View>
-          </SafeAreaView>
+          </ScrollView>
         </View>
       );
     },
@@ -571,32 +606,38 @@ const RiderNavigator = createDrawerNavigator(
       getUserName();
       return (
         <View style={{ flex: 1, paddingTop: 20 }}>
-          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-            <View style={styles.UserNameHolder}>
-              <Ionicons
-                name={Platform.OS == "android" ? "md-person" : "ios-person"}
-                size={25}
-                color={Colors.primary}
-              />
-              <Text style={styles.usertxt}>Welcome {userName}</Text>
-              <UserName />
-            </View>
-            <DrawerNavigatorItems {...props} />
-
-            <View style={styles.buttonRider}>
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+              <View style={styles.UserNameHolder}>
+                <Ionicons
+                  name={Platform.OS == "android" ? "md-person" : "ios-person"}
+                  size={25}
+                  color={Colors.primary}
+                />
+                <Text style={styles.usertxt}>Welcome {userName}</Text>
+                <UserName />
+              </View>
+              <DrawerNavigatorItems {...props} />
+            </SafeAreaView>
+            <View style={styles.buttonUser}>
               <View style={styles.logout}>
                 <Button
                   title="Logout"
-                  color={Platform.OS === "android" ? "white" : "white"}
+                  color={Platform.OS === "android" ? Colors.primary : "white"}
                   onPress={() => {
-                    console.log("i amhere");
                     dispatch(authActions.logout());
-                    props.navigation.navigate("Auth");
+                    // props.navigation.navigate("Auth");
                   }}
                 />
               </View>
             </View>
-          </SafeAreaView>
+          </ScrollView>
         </View>
       );
     },
@@ -646,7 +687,10 @@ const MainNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   buttonUser: {
-    paddingTop: 300,
+    // position: "absolute",
+    // justifyContent: "center",
+    // alignItems: "flex-end",
+    // bottom: 0,
   },
   buttonChef: {
     paddingTop: 350,
