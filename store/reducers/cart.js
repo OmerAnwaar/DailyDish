@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
+import { ADD_TO_CART, REMOVE_FROM_CART, ADD_QUANT } from "../actions/cart";
 import { ADD_ORDER } from "../actions/orders";
 import CartItem from "../../models/cart-item";
 import { DELETE_PRODUCT } from "../actions/products";
@@ -22,7 +22,8 @@ export default (state = initialState, action) => {
       console.log("added product", addedProduct);
       console.log("Added product ownerid", addedProduct.ownerId);
       console.log("onwer dekhna", state.ownerId);
-      console.log("i am the state",state);
+      console.log("price", prodPrice);
+      console.log("i am the state", state);
 
       let updatedOrNewCartItem;
       if (state.ownerId != "" && state.ownerId != addedProduct.ownerId) {
@@ -108,6 +109,37 @@ export default (state = initialState, action) => {
         items: updatedItems,
         totalAmount: state.totalAmount - itemTotal,
       };
+    case ADD_QUANT:
+      const addedquant = action.product;
+      const quantPrice = addedquant.productPrice;
+      const quantTitle = addedquant.productTitle;
+      const kName = addedquant.kitchenName;
+      const oId = addedquant.ownerId;
+      const uid = addedquant.id;
+      console.log("i am added quantatiy", addedquant);
+      console.log("Added product ownerid", addedquant.ownerId);
+      console.log("onwer dekhna", state.ownerId);
+      console.log("price", quantPrice);
+      console.log("i am the state", state);
+      let updatedCartItem;
+      if (state.items[addedquant.productId]) {
+        // already have the item in the cart
+        updatedCartItem = new CartItem(
+          uid,
+          state.items[addedquant.productId].quantity + 1,
+          quantPrice,
+          quantTitle,
+          state.items[addedquant.productId].sum + quantPrice,
+          oId,
+          kName
+        );
+        return {
+          ...state,
+          items: { ...state.items, [addedquant.productId]: updatedCartItem },
+          totalAmount: state.totalAmount + quantPrice,
+          ownerId: addedquant.ownerId,
+        };
+      }
   }
 
   return state;
