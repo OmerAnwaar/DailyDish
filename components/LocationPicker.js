@@ -3,6 +3,7 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import Geocoder from "react-native-geocoding";
 import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
@@ -74,6 +75,8 @@ const LocationPicker = (props) => {
   const ReduxLatitude = useSelector((state) => state.cord.latitude);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [SavedAddress, setSavedAddress] = useState([]);
+  const [marker, setmarker] = useState(false);
+  const [markerCords, setmarkerCords] = useState({});
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -216,6 +219,10 @@ const LocationPicker = (props) => {
         pickedLocation.longitude.toFixed(4)
       )
     );
+    setmarkerCords({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
     console.log(pickedLocation);
 
     return true;
@@ -263,6 +270,7 @@ const LocationPicker = (props) => {
     setloading(true);
     const getCord = await _getlocation();
     const getadd = getAdd();
+    setmarker(true);
     // dispatch(
     //   actions.addCords(
     //     pickedLocation.latitude.toFixed(4),
@@ -316,7 +324,14 @@ const LocationPicker = (props) => {
           region={pickedLocation}
           showsUserLocation={true}
           maxZoomLevel={65}
-        ></MapView>
+        >
+          {marker == true ? (
+            <Marker coordinate={markerCords} title={"Your Location"}></Marker>
+          ) : (
+            <></>
+          )}
+        </MapView>
+
         <View style={styles.btnView}>
           <Button
             title="Locate Me on Map"

@@ -197,6 +197,7 @@ const ReceievedOrdersScreen = (props) => {
                           onPress={() => {
                             db.collection("orders").doc(item.id).update({
                               orderStatus: "declined",
+                              deliverystatus: "declined"
                             });
                             let tokenRef = db
                               .collection("app-users")

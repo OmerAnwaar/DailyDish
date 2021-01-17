@@ -66,6 +66,7 @@ import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
+import * as riderauth from '../store/actions/authRider'
 import VoucherScreen from "../screens/shop/VoucherScreen";
 
 const defaultNavOptions = {
@@ -514,8 +515,7 @@ const ChefShopNavigator = createDrawerNavigator(
         let chefStat = statusGetter.data().chefStatus;
         console.log("Ye status mila hai", chefStat);
         if (chefStat === false) {
-          Alert.alert("Sign Up as a Chef!");
-          dispatch(chefauth.logout());
+          Alert.alert("Sign Up as a Chef!")
           props.navigation.navigate("Auth");
         }
       };
@@ -571,8 +571,8 @@ const ChefShopNavigator = createDrawerNavigator(
                   title="Logout"
                   color={Platform.OS === "android" ? Colors.primary : "white"}
                   onPress={() => {
-                    dispatch(authActions.logout());
-                    // props.navigation.navigate("Auth");
+                    dispatch(chefauth.logout());
+                    props.navigation.navigate("Auth");
                   }}
                 />
               </View>
@@ -631,8 +631,8 @@ const RiderNavigator = createDrawerNavigator(
                   title="Logout"
                   color={Platform.OS === "android" ? Colors.primary : "white"}
                   onPress={() => {
-                    dispatch(authActions.logout());
-                    // props.navigation.navigate("Auth");
+                    dispatch(riderauth.logout());
+                    props.navigation.navigate("Auth");
                   }}
                 />
               </View>
