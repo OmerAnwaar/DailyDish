@@ -66,7 +66,7 @@ import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
-import * as riderauth from '../store/actions/authRider'
+import * as riderauth from "../store/actions/authRider";
 import VoucherScreen from "../screens/shop/VoucherScreen";
 
 const defaultNavOptions = {
@@ -515,7 +515,7 @@ const ChefShopNavigator = createDrawerNavigator(
         let chefStat = statusGetter.data().chefStatus;
         console.log("Ye status mila hai", chefStat);
         if (chefStat === false) {
-          Alert.alert("Sign Up as a Chef!")
+          Alert.alert("Sign Up as a Chef!");
           props.navigation.navigate("Auth");
         }
       };
@@ -703,7 +703,7 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
-    bottom: "220%"
+    // bottom: "220%"
   },
   UserNameHolder: {
     paddingTop: 20,
