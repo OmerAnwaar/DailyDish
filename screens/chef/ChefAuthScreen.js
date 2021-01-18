@@ -176,7 +176,7 @@ const ChefAuthScreen = (props) => {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      keyboardVerticalOffset={50}
+      keyboardVerticalOffset={100}
       style={styles.screen}
     >
       <LinearGradient colors={["#FF6347", "#fe6347"]} style={styles.gradient}>
@@ -186,7 +186,7 @@ const ChefAuthScreen = (props) => {
             duraton="1500"
             source={require("../../assets/logo.png")}
             style={styles.logo}
-            resizeMode="cover"
+            resizeMode="contain"
           />
         </View>
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
@@ -335,32 +335,41 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    height: "35%",
     alignItems: "center",
-    paddingTop: 92,
   },
   gradient: {
     justifyContent: "center",
+    padding: "1.5%",
   },
   logo: {
-    width: 160,
-    height: 150,
-    padding: 20,
+    width: "50%",
+    height: "40%",
   },
   authContainer: {
+    // width: "100%",
+    // height: 850,
+    // maxWidth: 400,
+    // padding: 30,
+    // marginHorizontal: 7.5,
+    // borderTopLeftRadius: 20,
+    // borderTopRightRadius: 20,
     width: "100%",
-    height: 850,
-    maxWidth: 400,
+    height: "110%",
+    // maxWidth: 400,
     padding: 30,
-    marginHorizontal: 7.5,
+    alignContent: "center",
+    justifyContent: "center",
     borderTopLeftRadius: 20,
+    // marginHorizontal: 7.5,
     borderTopRightRadius: 20,
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: 5,
   },
   button: {
-    paddingTop: "10%",
+    paddingTop: "3%",
   },
 });
 
