@@ -341,7 +341,7 @@ const LocationPicker = (props) => {
           ></Button>
         </View>
 
-        {loading === true ? (
+        {/* {loading === true ? (
           <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" color={Colors.primary} />
           </View>
@@ -372,7 +372,7 @@ const LocationPicker = (props) => {
               </View>
             )}
           </View>
-        )}
+        )} */}
         <View style={styles.btnView}>
           <Button
             title="Generate Address!"
@@ -509,7 +509,7 @@ const LocationPicker = (props) => {
                   <Button
                     style={styles.button}
                     color={Colors.primary}
-                    title="Not Your Address? 😢 "
+                    title="Not Your Address? "
                     onPress={() => {
                       setModalView(true);
                     }}
