@@ -17,6 +17,18 @@ const CartItem = (props) => {
       </View>
       <View style={styles.itemData}>
         <Text style={styles.mainText}>Rs {Number.parseInt(props.amount).toFixed(2)}</Text>
+        {props.addable && (
+          <TouchableOpacity
+            onPress={props.onAdd}
+            style={styles.deleteButton}
+          >
+            <Ionicons
+              name={Platform.OS === "android" ? "md-add" : "ios-add"}
+              size={30}
+              color="red"
+            />
+          </TouchableOpacity>
+        )}
         {props.deletable && (
           <TouchableOpacity
             onPress={props.onRemove}
@@ -40,7 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
   itemData: {
     flexDirection: "row",
@@ -56,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   deleteButton: {
-    marginLeft: 20,
+    marginLeft: 25,
   },
 });
 

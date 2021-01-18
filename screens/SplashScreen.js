@@ -47,7 +47,7 @@ const SplashScreen = (props) => {
             },
           ]}
         >
-          Find best food in your locality!
+         Find Home Cooked Hygenic Food!
         </Text>
         <Text style={styles.text}>Sign in with account</Text>
         <View style={styles.button}>

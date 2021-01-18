@@ -6,6 +6,9 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
 import ItemHolder from "../../components/categories/ItemHolder";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 import * as firebase from "firebase";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import "firebase/firestore";
@@ -20,6 +23,9 @@ const ReceievedOrdersScreen = (props) => {
   const [Cname, setCname] = useState("");
   const [Aname, setAname] = useState("");
   const [Pname, setPname] = useState("");
+  const [long, setlong] = useState("");
+  const [lat, setlat] = useState("");
+  const [ExpoToken, setExpoToken] = useState("");
 
   const kitchenInfoGetter = async () => {
     const kitchenDataRef = db.collection("chefs").doc(ReduxCurrentUser);
@@ -28,6 +34,8 @@ const ReceievedOrdersScreen = (props) => {
     setCname(kitchenData.data().ChefName);
     setAname(kitchenData.data().CurrentAddress);
     setPname(kitchenData.data().phnumber);
+    setlat(kitchenData.data().location.U);
+    setlong(kitchenData.data().location.k);
   };
   const recievedOrders = async () => {
     const recievedOrderRef = db
@@ -37,6 +45,7 @@ const ReceievedOrdersScreen = (props) => {
       setorderRecieved(
         res.docs.map((doc) => ({
           id: doc.id,
+          CustomerId: doc.data().CustomerId,
           CustomerName: doc.data().CustomerName,
           phnumber: doc.data().phnumber,
           CurrentAddr: doc.data().CurrentAddress,
@@ -63,7 +72,7 @@ const ReceievedOrdersScreen = (props) => {
     //     timestamp: doc.data().timestamp.toDate().toString().slice(0, 21),
     //   }))
     // );
-    console.log("hoja pae set ", orderRecieved);
+    // console.log("hoja pae set ", orderRecieved);
     // recievedOrder.docs.map((doc) => {
     //   console.log("checking again again", doc.data());
     // });
@@ -104,7 +113,8 @@ const ReceievedOrdersScreen = (props) => {
         name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
         size={25}
       >
-        {" "}Refresh
+        {" "}
+        Refresh
       </Ionicons>
       <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
@@ -114,6 +124,7 @@ const ReceievedOrdersScreen = (props) => {
           <>
             {item.ownerId === ReduxCurrentUser ? (
               <View style={styles.container}>
+                {console.log(orderRecieved)}
                 <View style={styles.contain}>
                   <Text style={{ fontWeight: "bold" }}>Customer Name: </Text>
                   <Text>{item.CustomerName}</Text>
@@ -150,6 +161,31 @@ const ReceievedOrdersScreen = (props) => {
                             db.collection("orders").doc(item.id).update({
                               orderStatus: "accepted",
                             });
+                            let tokenRef = db
+                              .collection("app-users")
+                              .doc(item.CustomerId);
+                            tokenRef.get().then((res) => {
+                              setExpoToken(res.data().expoToken);
+                            });
+                            console.log("ithae======>", ExpoToken);
+                            let response = fetch(
+                              "https://exp.host/--/api/v2/push/send",
+                              {
+                                method: "POST",
+                                headers: {
+                                  Accept: "application/json",
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  to: ExpoToken,
+                                  sound: "default",
+                                  title: "Order Confirmed",
+                                  body: "Your Order is being prepared!",
+                                }),
+                              }
+                            );
+
+                            recievedOrders();
                           }}
                         ></Button>
                         {/* </View> */}
@@ -161,7 +197,33 @@ const ReceievedOrdersScreen = (props) => {
                           onPress={() => {
                             db.collection("orders").doc(item.id).update({
                               orderStatus: "declined",
+                              deliverystatus: "declined"
                             });
+                            let tokenRef = db
+                              .collection("app-users")
+                              .doc(item.CustomerId);
+                            tokenRef.get().then((res) => {
+                              setExpoToken(res.data().expoToken);
+                            });
+
+                            let response = fetch(
+                              "https://exp.host/--/api/v2/push/send",
+                              {
+                                method: "POST",
+                                headers: {
+                                  Accept: "application/json",
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  to: ExpoToken,
+                                  sound: "default",
+                                  title: "Oh No!",
+                                  body:
+                                    "Due to some reason chef can't accept your order but you can explore more options",
+                                }),
+                              }
+                            );
+                            recievedOrders();
                           }}
                         ></Button>
                         {/* </View> */}
@@ -181,10 +243,14 @@ const ReceievedOrdersScreen = (props) => {
                               });
                               db.collection("live-orders").add({
                                 orderId: item.id,
+                                kitchenId: ReduxCurrentUser,
+                                CustomerId: item.CustomerId,
                                 KitchenName: Kname,
                                 KitchenAddress: Aname,
                                 KitchenChef: Cname,
                                 Kitchenph: Pname,
+                                KitchenLat: lat,
+                                KitchenLong: long,
                                 CustomerName: item.CustomerName,
                                 Customerph: item.phnumber,
                                 CustomerAddress: item.CurrentAddr,
@@ -192,6 +258,7 @@ const ReceievedOrdersScreen = (props) => {
                                 deliverystatus: "inprogress",
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                               });
+                              recievedOrders();
                             }}
                           ></Button>
                         </>

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Button, FlatList } from "react-native";
+import * as Location from "expo-location";
 import { db } from "../../firebase/Firebase";
 import ItemHolder from "../../components/categories/ItemHolder";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
+import Geocoder from "react-native-geocoding";
 import { useSelector, useDispatch } from "react-redux";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import LocationGetter from "./LocationGetter";
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
@@ -16,13 +19,50 @@ Notifications.setNotificationHandler({
     };
   },
 });
+const initialLocation = {
+  latitude: 0.0,
+  longitude: 0.0,
+  latitudeDelta: 0.0025,
+  longitudeDelta: 0.0015,
+};
 
 const RiderHomeScreen = (props) => {
+  const [latChef, setlatChef] = useState("");
+  const [longChef, setlongChef] = useState("");
   const ReduxCurrentUser = useSelector((state) => state.authRider.userId);
   console.log("current user rider", ReduxCurrentUser);
+  const [pickedLocation, setPickedLocation] = useState(initialLocation);
   const [orderRecieved, setorderRecieved] = useState([]);
+  //const [latChef, setlatChef] = useState("")
   const [liveOrder, setliveOrder] = useState([]);
   const [id, setid] = useState("");
+  Geocoder.init("AIzaSyBCSNe6FSjhJtL8iENJ8bk25HjCd0ApAWc");
+  const _getlocation = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      console.log("PERMSSION NOT GRANTED");
+      seterror({ error: "Location Permission not Granted" });
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: error }]
+      );
+      return false;
+    }
+    
+    const location = await Location.getCurrentPositionAsync();
+
+    setPickedLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.00019,
+      longitudeDelta: 0.0019,
+    });
+
+    console.log(pickedLocation);
+
+    return true;
+  };
   // const testNotification = async () => {
   //   Notifications.scheduleNotificationAsync({
   //     content: {
@@ -73,6 +113,10 @@ const RiderHomeScreen = (props) => {
 
     return token;
   };
+  const unsubscribe = props.navigation.addListener("didFocus", () => {
+    _getlocation();
+    console.log("focussed");
+  });
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
@@ -104,6 +148,8 @@ const RiderHomeScreen = (props) => {
     await orederLive.get().then((res) => {
       setliveOrder(
         res.docs.map((doc) => ({
+          id: doc.id,
+          kitchenId: doc.data().kitchenId,
           orderId: doc.data().orderId,
           CustomerName: doc.data().CustomerName,
           Customerphnumber: doc.data().Customerph,
@@ -114,6 +160,8 @@ const RiderHomeScreen = (props) => {
           KitchenName: doc.data().KitchenName,
           KitchenAddress: doc.data().KitchenAddress,
           Kitchenph: doc.data().Kitchenph,
+          KitchenLong: doc.data().KitchenLong,
+          KitchenLat: doc.data().KitchenLat
         }))
       );
     });
@@ -169,6 +217,7 @@ const RiderHomeScreen = (props) => {
 
   useEffect(() => {
     liveOrderGetter();
+    _getlocation();
     //recievedOrders();
     return () => {
       liveOrderGetter();
@@ -203,7 +252,9 @@ const RiderHomeScreen = (props) => {
         style={styles.Refresh}
         size={24}
         name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-        onPress={liveOrderGetter}
+        onPress={() => {
+          liveOrderGetter();
+        }}
       ></Ionicons>
 
       <FlatList
@@ -212,16 +263,32 @@ const RiderHomeScreen = (props) => {
         renderItem={({ item }) => (
           <View>
             {item.deliverystatus === "inprogress" ? (
-              <View style={styles.container}>
-                <Text>Kitchen Name: {item.KitchenName}</Text>
+              <>
+                <LocationGetter
+                  kitchenId={item.kitchenId}
+                  riderLat={pickedLocation.latitude}
+                  riderLong={pickedLocation.longitude}
+                  KitchenName={item.KitchenName}
+                  Kitchenph={item.Kitchenph}
+                  KitchenAddress={item.KitchenAddress}
+                  CustomerName={item.CustomerName}
+                  CustomerAddress={item.CustomerAddress}
+                  Total={item.Total}
+                  KitchenLat={item.KitchenLat}
+                  KitchenLong={item.KitchenLong}
+                  timestamp={item.timestamp}
+                />
+                
+              
+                {/* <Text>Kitchen Name: {item.KitchenName}</Text>
                 <Text>Kitchen Phone Number: {item.Kitchenph}</Text>
                 <Text>Pick Up Address: {item.KitchenAddress}</Text>
                 <Text>Customer Name: {item.CustomerName}</Text>
                 <Text>Customer Address: {item.CustomerAddress}</Text>
                 <Text>Delivery Address: {item.CustomerAddress}</Text>
                 <Text>Total: {item.Total}</Text>
-                <Text> Avaialibe From: {item.timestamp}</Text>
-              </View>
+                <Text> Avaialibe From: {item.timestamp}</Text> */}
+              </>
             ) : (
               <></>
             )}

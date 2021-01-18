@@ -87,7 +87,7 @@ const ProductItem = (props) => {
 
 const styles = StyleSheet.create({
   product: {
-    height: 260,
+    height: 300,
     width: "90%",
     // margin: 10,
     marginHorizontal: 20,

@@ -6,6 +6,7 @@ import {
   Button,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import * as firebase from "firebase";
@@ -21,6 +22,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
 const CartScreen = (props) => {
+  let newTotal
   const db = firebase.firestore();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,14 +82,14 @@ const CartScreen = (props) => {
   // cartItems ={[ProductId]: transformedCartItems}
   const sendOrderHandler = async () => {
     setIsLoading(true);
-    dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+    dispatch(ordersActions.addOrder(cartItems, newTotal));
     setTimeout(function () {
-      props.navigation.navigate("SentOrders");
+    Alert.alert("Please check inProgress screen to see Progress of your Order!")
     }, 4000);
     setTimeout(() => {
       sendPushNotification();
     }, 2000);
-   
+
     setIsLoading(false);
   };
 
@@ -95,10 +97,22 @@ const CartScreen = (props) => {
     <View style={styles.screen}>
       <Card style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total:{" "}
+          Order Total:{" "}
           <Text style={styles.amount}>
-            Rs {Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
+            Rs {Math.round((cartTotalAmount.toFixed(2) * 100) / 100)}
           </Text>
+          
+        </Text>
+        <Text style={styles.sumText}>Delivery Charges: Rs 30</Text>
+        <Text style={styles.summaryText}>
+         Total:{" "}
+          <Text style={styles.amount}>
+            Rs {newTotal= cartTotalAmount+30}
+            {console.log(newTotal)}
+            
+            
+          </Text>
+          
         </Text>
         {isLoading ? (
           <ActivityIndicator size="small" color={Colors.primary} />
@@ -110,7 +124,9 @@ const CartScreen = (props) => {
             onPress={sendOrderHandler}
           />
         )}
+      
       </Card>
+
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.productId}
@@ -120,6 +136,10 @@ const CartScreen = (props) => {
             title={itemData.item.productTitle}
             amount={itemData.item.sum}
             deletable
+            addable
+            onAdd={() => {
+              dispatch(cartActions.addQuant(itemData.item));
+            }}
             onRemove={() => {
               dispatch(cartActions.removeFromCart(itemData.item.productId));
             }}
@@ -139,12 +159,14 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   summary: {
-    flexDirection: "row",
-    alignItems: "center",
+    //flexDirection: "row",
+    // alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
     padding: 10,
     borderRadius: 15,
+    height: "40%",
+    maxWidth: "120%"
   },
   summaryText: {
     fontFamily: "open-sans-bold",
@@ -152,6 +174,16 @@ const styles = StyleSheet.create({
   },
   amount: {
     color: Colors.primary,
+  },
+  divCharge: {
+    fontWeight: "normal",
+    fontSize: 13,
+  },
+  sumText: {
+    fontFamily: "open-sans-bold",
+    fontSize: 16,
+ 
+  
   },
 });
 
