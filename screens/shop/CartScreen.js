@@ -86,7 +86,7 @@ const CartScreen = (props) => {
     setTimeout(function () {
       sendPushNotification();
       Alert.alert(
-        "Please check inProgress screen to see Progress of your Order!"
+        "Please check Current Order screen to see Progress of your Order!"
       );
     }, 4000);
     // setTimeout(() => {

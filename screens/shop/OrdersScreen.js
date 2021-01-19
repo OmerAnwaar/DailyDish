@@ -109,9 +109,9 @@ const OrdersScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>Completed Orders. </Text>
+      {/* <Text style={styles.Title}>Completed Orders. </Text> */}
       <Text style={styles.info}>
-        Tell us how was your experience with these Kitchen?{" "}
+        Please rate the kitchen on the basis of your expirience{" "}
       </Text>
 
       <FlatList
@@ -142,7 +142,7 @@ const OrdersScreen = (props) => {
 
 OrdersScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Your Orders",
+    headerTitle: "Order History",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
   },
   info: {
     textAlign: "center",
+    paddingTop: 20,
   },
 });
 

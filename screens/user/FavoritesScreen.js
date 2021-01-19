@@ -12,7 +12,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { db } from "../../firebase/Firebase";
 import ProductItem from "../../components/shop/ProductItem";
-import FavouriteProductItem from '../../components/shop/FavouriteProductItem'
+import FavouriteProductItem from "../../components/shop/FavouriteProductItem";
 import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 
@@ -28,7 +28,8 @@ const FavoritesScreen = (props) => {
     let favref = db
       .collection("app-users")
       .doc(ReduxCurrentUser)
-      .collection("favourite").orderBy("timestamp","desc")
+      .collection("favourite")
+      .orderBy("timestamp", "desc");
     await favref.get().then((res) => {
       setfavFood(
         res.docs.map((doc) => ({
@@ -39,14 +40,12 @@ const FavoritesScreen = (props) => {
           imageUrl: doc.data().imageUrl,
           price: doc.data().price,
           title: doc.data().title,
-        
         }))
       );
     });
 
     favFood.map((doc) => {
       console.log("i am mapped", doc.title);
-      
     });
 
     //  favref.onSnapshot((res) => {
@@ -82,20 +81,20 @@ const FavoritesScreen = (props) => {
   }, []);
   const handleRefresh = () => {
     setrefresh(true);
-    fetchFvourites()
+    fetchFvourites();
     setrefresh(false);
   };
   return (
     <View>
       {favFood.length == null ? (
         <View style={styles.content}>
-          <Text>No favorite meals found. Start adding some!  </Text>
+          <Text>No favorite meals found. Start adding some! </Text>
         </View>
       ) : (
         <View style={styles.container}>
-          <View >
+          {/* <View>
             <Text style={styles.title}>Your Favourite Food!</Text>
-          </View>
+          </View> */}
           <FlatList
             data={favFood}
             refreshing={refresh}
@@ -118,7 +117,7 @@ const FavoritesScreen = (props) => {
                   );
                 }}
               >
-                <Button
+                {/* <Button
                   color={Colors.primary}
                   title="View Details"
                   onPress={() => {
@@ -128,7 +127,8 @@ const FavoritesScreen = (props) => {
                       itemData.item.ownerId
                     );
                   }}
-                />
+                /> */}
+
                 <Button
                   color={Colors.primary}
                   title="To Cart"
@@ -163,19 +163,19 @@ FavoritesScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  container:{
-marginBottom: "19%"
+  container: {
+    // marginBottom: "19%",
   },
   content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  title:{
-   fontSize: 20,
-   textAlign: "center",
-   padding: "2%"
-  }
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    padding: "2%",
+  },
 });
 
 export default FavoritesScreen;

@@ -73,9 +73,9 @@ const FavouriteProductItem = (props) => {
               </Ionicons>
               <Ionicons
                 style={styles.remove}
-                color="red"
-                size={40}
-                name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+                color={Colors.primary}
+                size={35}
+                name={Platform.OS === "android" ? "md-star" : "ios-star"}
                 onPress={() => {
                   Alert.alert(
                     "Remove Favourite",
@@ -94,8 +94,6 @@ const FavouriteProductItem = (props) => {
                             .collection("favourite")
                             .doc(props.productID)
                             .delete();
-                       
-                       
                         },
                       },
                     ],
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     // paddingBottom: 19,
     paddingLeft: 10,
-    paddingTop: Platform.OS === "android" ? "" : 6.5,
+    paddingTop: Platform.OS === "android" ? "" : 13,
     // paddingBottom: 1,
     // justifyContent: "flex-start",
     // marginBottom: 40,
@@ -188,19 +186,25 @@ const styles = StyleSheet.create({
   like: {
     position: "absolute",
     right: "18%",
-    bottom: "22%",
+    bottom: "24%",
     borderRadius: 10,
   },
   dislike: {
     position: "absolute",
-    right: "7%",
-    bottom: "22%",
+    right: "3%",
+    bottom: "11%",
     borderRadius: 10,
   },
   remove: {
-    position: "absolute",
-    right: "2%",
-    bottom: "350%",
+    borderColor: "white",
+    borderWidth: 1,
+    overflow: "hidden",
+    height: 40,
+    width: 40,
+    borderRadius: 40 / 2,
+    paddingLeft: 4,
+    backgroundColor: "white",
+    bottom: "180%",
   },
 });
 
