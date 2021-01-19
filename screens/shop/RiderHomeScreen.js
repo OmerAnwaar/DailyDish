@@ -345,7 +345,7 @@ const RiderHomeScreen = (props) => {
                         onPress={() => {
                           let cfToken;
                           db.collection("chefs")
-                            .doc(item.kitchenId)
+                            .doc(item.kitchenId) 
                             .get()
                             .then((res) => {
                               cfToken = res.data().expoToken;

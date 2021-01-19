@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert
 } from "react-native";
+import ignoreWarnings from "react-native-ignore-warnings";
 import * as userAction from '../../store/actions/auth'
 // import { Notifications } from 'expo-notifications';
 import { useSelector, useDispatch } from "react-redux";
@@ -44,6 +45,7 @@ const ProductsOverviewScreen = (props) => {
   const filtered = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
+  ignoreWarnings("Require cycle: store");
   // const testNotification = async () => {
   //   Notifications.scheduleNotificationAsync({
   //     content: {

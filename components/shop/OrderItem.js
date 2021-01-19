@@ -26,7 +26,7 @@ const OrderItem = (props) => {
     setrated(true);
   };
   const ratedDislike = async () => {
-    let rateRef = db.collection("products-view").doc(props.ownerId);
+    let rateRef = db.collection("chefs").doc(props.ownerId);
     await rateRef.update({
       dislike: firebase.firestore.FieldValue.increment(1),
     });

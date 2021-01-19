@@ -674,7 +674,7 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
-    bottom: "220%",
+    // bottom: "220%",
   },
   UserNameHolder: {
     paddingTop: 20,
