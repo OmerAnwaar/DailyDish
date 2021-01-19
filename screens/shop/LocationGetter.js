@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Button,
+} from "react-native";
 import getDistance from "geolib/es/getPreciseDistance";
 import { db } from "../../firebase/Firebase";
 import { Accuracy } from "expo-location";
@@ -54,30 +60,40 @@ const LocationGetter = (props) => {
     locationget();
     setloading(false);
   }, []);
+const riderassigned =()=>{
+  db.collection("live-orders").doc(props.currentuser).update({
+    deliverystatus: "accepted"
+  })
 
+}
   return (
     <View>
       {loading == true ? (
         <ActivityIndicator size="small" color="#0000ff" />
       ) : (
         <>
-          {distance <= 5 ? (
+          {distance >= 0 ? (
             <View style={styles.container}>
-              {/* <Text>Lat: {props.KitchenLat}</Text>
+              <Text>Lat: {props.KitchenLat}</Text>
               <Text>Long: {props.KitchenLong}</Text>
               <Text>Rider Lat: {props.riderLat}</Text>
-              <Text>Rider Long : {props.riderLong}</Text> */}
+              <Text>Rider Long : {props.riderLong}</Text>
               <Text>Distance from Kitchen: {distance} Km</Text>
               <Text>Kitchen Name: {props.KitchenName}</Text>
               <Text>Kitchen Phone Number: {props.Kitchenph}</Text>
               <Text>Pick Up Address: {props.KitchenAddress}</Text>
               <Text>Customer Name: {props.CustomerName}</Text>
               <Text>Delivery Address: {props.CustomerAddress}</Text>
-              <Text>Total: {props.Total}</Text>
+              <Text>Total to be paid: {props.Total - 30}</Text>
+              <Text>Delivery Fee: Rs 30</Text>
               <Text> Avaialibe From: {props.timestamp}</Text>
               <View>
-                  <Button label="Accept" title="Accept"></Button>
-                </View>
+                {props.deliverystatus === "inprogress" ? (
+                  <Button label="Accept" title="Accept" onPress={riderassigned}></Button>
+                ) : (
+                  <></>
+                )}
+              </View>
             </View>
           ) : (
             <></>

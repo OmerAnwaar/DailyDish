@@ -1,14 +1,62 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { View, Text, StyleSheet } from "react-native";
+import {Pedometer} from "expo-sensors"
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 
+
 const VoucherScreen = (props) => {
+  const [Currsteps, setCurrsteps] = useState(0)
+ const [pastSteps, setpastSteps] = useState(0)
+ const [availaible, setavailaible] = useState("checking")
+ let subscription
+  const _subscribe = () => {
+  subscription = Pedometer.watchStepCount(result => {
+     setCurrsteps(result.steps)
+    });
+
+    Pedometer.isAvailableAsync().then(
+      result => {
+       setavailaible(String(result))
+      },
+      error => {
+        this.setState({
+          isPedometerAvailable: 'Could not get isPedometerAvailable: ' + error,
+        });
+      }
+    );
+
+    const end = new Date();
+    const start = new Date();
+    start.setDate(end.getDate() - 1);
+    Pedometer.getStepCountAsync(start, end).then(
+      result => {
+        setpastSteps(result.steps)
+      },
+      error => {
+       console.log(error)
+      }
+    );
+  };
+
+  useEffect(() => {
+    _subscribe()
+    return () => {
+      _unsubscribe()
+    }
+  }, [])
+
+ const  _unsubscribe = () => {
+    subscription && subscription.remove();
+    subscription = null;
+  };
   return (
-    <View style={styles.screen}>
-      <Text>hello</Text>
-    </View>
+    <View style={styles.container}>
+        <Text>Pedometer.isAvailableAsync(): {availaible}</Text>
+        <Text>Steps taken in the last 24 hours: {pastSteps}</Text>
+        <Text>Walk! And watch this go up: {Currsteps}</Text>
+      </View>
   );
 };
 

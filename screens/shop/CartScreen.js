@@ -22,7 +22,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
 const CartScreen = (props) => {
-  let newTotal
+  let newTotal;
   const db = firebase.firestore();
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,11 +84,14 @@ const CartScreen = (props) => {
     setIsLoading(true);
     dispatch(ordersActions.addOrder(cartItems, newTotal));
     setTimeout(function () {
-    Alert.alert("Please check inProgress screen to see Progress of your Order!")
-    }, 4000);
-    setTimeout(() => {
       sendPushNotification();
-    }, 2000);
+      Alert.alert(
+        "Please check inProgress screen to see Progress of your Order!"
+      );
+    }, 4000);
+    // setTimeout(() => {
+
+    // }, 2000);
 
     setIsLoading(false);
   };
@@ -101,18 +104,14 @@ const CartScreen = (props) => {
           <Text style={styles.amount}>
             Rs {Math.round((cartTotalAmount.toFixed(2) * 100) / 100)}
           </Text>
-          
         </Text>
         <Text style={styles.sumText}>Delivery Charges: Rs 30</Text>
         <Text style={styles.summaryText}>
-         Total:{" "}
+          Total:{" "}
           <Text style={styles.amount}>
-            Rs {newTotal= cartTotalAmount+30}
+            Rs {(newTotal = cartTotalAmount + 30)}
             {console.log(newTotal)}
-            
-            
           </Text>
-          
         </Text>
         {isLoading ? (
           <ActivityIndicator size="small" color={Colors.primary} />
@@ -124,7 +123,6 @@ const CartScreen = (props) => {
             onPress={sendOrderHandler}
           />
         )}
-      
       </Card>
 
       <FlatList
@@ -166,7 +164,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     height: "40%",
-    maxWidth: "120%"
+    maxWidth: "120%",
   },
   summaryText: {
     fontFamily: "open-sans-bold",
@@ -182,8 +180,6 @@ const styles = StyleSheet.create({
   sumText: {
     fontFamily: "open-sans-bold",
     fontSize: 16,
- 
-  
   },
 });
 

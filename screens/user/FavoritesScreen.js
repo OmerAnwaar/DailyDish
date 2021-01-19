@@ -12,16 +12,19 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { db } from "../../firebase/Firebase";
 import ProductItem from "../../components/shop/ProductItem";
+import FavouriteProductItem from '../../components/shop/FavouriteProductItem'
 import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 
 import HeaderButton from "../../components/UI/HeaderButton";
 
 const FavoritesScreen = (props) => {
+  const [refresh, setrefresh] = useState(false);
   const dispatch = useDispatch();
   const [favFood, setfavFood] = useState([]);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const fetchFvourites = async () => {
+    setrefresh(true);
     let favref = db
       .collection("app-users")
       .doc(ReduxCurrentUser)
@@ -43,6 +46,7 @@ const FavoritesScreen = (props) => {
 
     favFood.map((doc) => {
       console.log("i am mapped", doc.title);
+      
     });
 
     //  favref.onSnapshot((res) => {
@@ -50,6 +54,7 @@ const FavoritesScreen = (props) => {
     //       console.log("data", doc.data());
     //     });
     //   });
+    setrefresh(false);
   };
   // useEffect(() => {
   //   fetchFvourites();
@@ -75,6 +80,11 @@ const FavoritesScreen = (props) => {
       unsubscribe.remove();
     };
   }, []);
+  const handleRefresh = () => {
+    setrefresh(true);
+    fetchFvourites()
+    setrefresh(false);
+  };
   return (
     <View>
       {favFood.length == null ? (
@@ -88,15 +98,18 @@ const FavoritesScreen = (props) => {
           </View>
           <FlatList
             data={favFood}
+            refreshing={refresh}
+            onRefresh={handleRefresh}
             keyExtractor={(item) => item.id}
             renderItem={(itemData) => (
-              <ProductItem
+              <FavouriteProductItem
                 image={itemData.item.imageUrl}
                 title={itemData.item.title}
                 price={itemData.item.price}
                 kitchenName={itemData.item.KitchenName}
                 ownerId={itemData.item.ownerId}
                 productID={itemData.item.id}
+                currentuser={ReduxCurrentUser}
                 onSelect={() => {
                   selectItemHandler(
                     itemData.item.id,
@@ -123,7 +136,7 @@ const FavoritesScreen = (props) => {
                     dispatch(cartActions.addToCart(itemData.item));
                   }}
                 />
-              </ProductItem>
+              </FavouriteProductItem>
             )}
           />
         </View>

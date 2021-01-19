@@ -7,8 +7,9 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Alert
 } from "react-native";
-
+import * as userAction from '../../store/actions/auth'
 // import { Notifications } from 'expo-notifications';
 import { useSelector, useDispatch } from "react-redux";
 // import { SearchBar } from "react-native-elements";
@@ -54,6 +55,18 @@ const ProductsOverviewScreen = (props) => {
   //     },
   //   });
   // };
+  const CheckStatus = async () => {
+    let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
+    let statusGetter = await checkChefRef.get();
+    //setChefStatus( statusGetter.data().chefStatus)
+    let chefStat = statusGetter.data().Disable;
+    console.log("Ye Disable status mila hai", chefStat);
+    if (chefStat === true) {
+      Alert.alert("You have been disabled by the Admin!");
+      props.navigation.navigate("Auth");
+      userAction.logout()
+    }
+  };
   const registerForPushNotificationsAsync = async () => {
     let token;
     if (Constants.isDevice) {
@@ -123,6 +136,7 @@ const ProductsOverviewScreen = (props) => {
     setIsLoading(true);
     loadProducts().then(() => {
       setIsLoading(false);
+      CheckStatus()
     });
   }, [dispatch, loadProducts]);
 
@@ -169,9 +183,7 @@ const ProductsOverviewScreen = (props) => {
 
   return (
     <>
-      <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
-      {/* <Text style={styles.title}>Latest Additions</Text> */}
-      {/* <Button title="Testing"  onPress={testNotification} /> */}
+
 
       <FlatList
         onRefresh={loadProducts}

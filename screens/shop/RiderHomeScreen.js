@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button, FlatList } from "react-native";
+import { StyleSheet, View, Text, Button, FlatList, Alert } from "react-native";
 import * as Location from "expo-location";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import { db } from "../../firebase/Firebase";
 import ItemHolder from "../../components/categories/ItemHolder";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -10,8 +12,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
+import * as RiderAction from "../../store/actions/authRider";
+import getDistance from "geolib/es/getPreciseDistance";
 import Constants from "expo-constants";
 import LocationGetter from "./LocationGetter";
+import { setNotificationHandler } from "expo-notifications";
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
@@ -27,12 +32,16 @@ const initialLocation = {
 };
 
 const RiderHomeScreen = (props) => {
+  const [refresh, setrefresh] = useState(false);
   const [latChef, setlatChef] = useState("");
   const [longChef, setlongChef] = useState("");
   const ReduxCurrentUser = useSelector((state) => state.authRider.userId);
-  console.log("current user rider", ReduxCurrentUser);
   const [pickedLocation, setPickedLocation] = useState(initialLocation);
   const [orderRecieved, setorderRecieved] = useState([]);
+  const [distance, setdistance] = useState(0);
+  const [cheftoken, setcheftoken] = useState("");
+  const [usertoken, setusertoken] = useState("");
+  const [loading, setloading] = useState(false);
   //const [latChef, setlatChef] = useState("")
   const [liveOrder, setliveOrder] = useState([]);
   const [id, setid] = useState("");
@@ -49,7 +58,7 @@ const RiderHomeScreen = (props) => {
       );
       return false;
     }
-    
+
     const location = await Location.getCurrentPositionAsync();
 
     setPickedLocation({
@@ -63,6 +72,7 @@ const RiderHomeScreen = (props) => {
 
     return true;
   };
+
   // const testNotification = async () => {
   //   Notifications.scheduleNotificationAsync({
   //     content: {
@@ -74,6 +84,18 @@ const RiderHomeScreen = (props) => {
   //     },
   //   });
   // };
+  const CheckStatus = async () => {
+    let checkChefRef = db.collection("riders").doc(ReduxCurrentUser);
+    let statusGetter = await checkChefRef.get();
+    //setChefStatus( statusGetter.data().chefStatus)
+    let chefStat = statusGetter.data().Disable;
+    console.log("Ye Disable status mila hai", chefStat);
+    if (chefStat === true) {
+      Alert.alert("You have been disabled by the Admin!");
+      props.navigation.navigate("Auth");
+      RiderAction.logout();
+    }
+  };
 
   const registerForPushNotificationsAsync = async () => {
     let token;
@@ -113,15 +135,23 @@ const RiderHomeScreen = (props) => {
 
     return token;
   };
-  const unsubscribe = props.navigation.addListener("didFocus", () => {
-    _getlocation();
-    console.log("focussed");
-  });
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener("didFocus", () => {
+      _getlocation();
+      liveOrderGetter();
+      console.log("focussed");
+    });
+    return () => {
+      unsubscribe;
+    };
+  }, []);
+
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
 
   const liveOrderGetter = async () => {
+    setrefresh(true);
     // const orderInfoRef = db.collection("live-orders");
     // await orderInfoRef.get().then((res) => {
     //   setliveOrder(
@@ -149,8 +179,10 @@ const RiderHomeScreen = (props) => {
       setliveOrder(
         res.docs.map((doc) => ({
           id: doc.id,
+
           kitchenId: doc.data().kitchenId,
           orderId: doc.data().orderId,
+          CustomerId: doc.data().CustomerId,
           CustomerName: doc.data().CustomerName,
           Customerphnumber: doc.data().Customerph,
           CustomerAddress: doc.data().CustomerAddress,
@@ -161,14 +193,36 @@ const RiderHomeScreen = (props) => {
           KitchenAddress: doc.data().KitchenAddress,
           Kitchenph: doc.data().Kitchenph,
           KitchenLong: doc.data().KitchenLong,
-          KitchenLat: doc.data().KitchenLat
+          KitchenLat: doc.data().KitchenLat,
         }))
       );
     });
 
     console.log("CHALLLLL JAAA BHAE", liveOrder);
+    setrefresh(false);
   };
+  let dst;
+  const locationget = (KitchenLat, KitchenLong) => {
+    setloading(true);
+    // let locRef  = db.collection("chefs").doc(props.kitchenId)
+    // let loc = await locRef.get()
+    // setlatChef(loc.data().location.U)
+    // setlongChef(loc.data().location.k)
+    //   .then((res) => {
+    //     setlatChef(res.data().location.U);
+    //     setlongChef(res.data().location.k);
+    //   });
 
+    var dist = getDistance(
+      { latitude: KitchenLat, longitude: KitchenLong },
+      { latitude: pickedLocation.latitude, longitude: pickedLocation.longitude }
+    );
+    // setdistance(Math.round(dist / 1000));
+    dst = Math.round(dist / 1000);
+    setloading(false);
+    return dst;
+    // setdistance(dist / 1000);
+  };
   // const recievedOrders = async () => {
   //   const recievedOrderRef = db
   //     .collection("orders")
@@ -216,15 +270,21 @@ const RiderHomeScreen = (props) => {
   // });
 
   useEffect(() => {
+    CheckStatus();
     liveOrderGetter();
     _getlocation();
+
     //recievedOrders();
     return () => {
       liveOrderGetter();
       //recievedOrders();
     };
   }, []);
-
+  const handleRefresh = () => {
+    setrefresh(true);
+    liveOrderGetter();
+    setrefresh(false);
+  };
   if (liveOrder.length == 0) {
     return (
       <View>
@@ -248,23 +308,101 @@ const RiderHomeScreen = (props) => {
         ></Ionicons>{" "}
         Welcome Rider{" "}
       </Text>
-      <Ionicons
-        style={styles.Refresh}
-        size={24}
-        name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-        onPress={() => {
-          liveOrderGetter();
-        }}
-      ></Ionicons>
 
       <FlatList
         data={liveOrder}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
-            {item.deliverystatus === "inprogress" ? (
+            {item.deliverystatus === "inprogress" &&
+            locationget(item.KitchenLat, item.KitchenLong) <= 5 ? (
               <>
-                <LocationGetter
+                <View style={styles.container}>
+                  {/* <Text>Lat: {props.KitchenLat}</Text>
+                  <Text>Long: {props.KitchenLong}</Text>
+                  <Text>Rider Lat: {props.riderLat}</Text>
+                  <Text>Rider Long : {props.riderLong}</Text> */}
+                  <Text>
+                    Distance from Kitchen:{" "}
+                    {locationget(item.KitchenLat, item.KitchenLong)} Km
+                  </Text>
+                  <Text>Kitchen Name: {item.KitchenName}</Text>
+                  <Text>Kitchen Phone Number: {item.Kitchenph}</Text>
+                  <Text>Pick Up Address: {item.KitchenAddress}</Text>
+                  <Text>Customer Name: {item.CustomerName}</Text>
+                  <Text>Delivery Address: {item.CustomerAddress}</Text>
+                  <Text>Total to be paid: {item.Total - 30}</Text>
+                  <Text>Delivery Fee: Rs 30</Text>
+                  <Text>Total to be collected: {item.Total}</Text>
+                  <Text> Avaialibe From: {item.timestamp}</Text>
+                  <View>
+                    {item.deliverystatus === "inprogress" ? (
+                      <Button
+                        label="Accept"
+                        title="Accept"
+                        onPress={() => {
+                          let cfToken;
+                          db.collection("chefs")
+                            .doc(item.kitchenId)
+                            .get()
+                            .then((res) => {
+                              cfToken = res.data().expoToken;
+                              fetch("https://exp.host/--/api/v2/push/send", {
+                                method: "POST",
+                                headers: {
+                                  Accept: "application/json",
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  to: cfToken,
+                                  sound: "default",
+                                  title: "Rider Assigned!",
+                                  body: "Rider will pick up the order soon",
+                                }),
+                              });
+                            });
+                          db.collection("live-orders").doc(item.id).update({
+                            deliverystatus: "accepted",
+                          });
+                          db.collection("orders").doc(item.orderId).update({
+                            deliverystatus: "accepted",
+                          });
+                          db.collection("riders")
+                            .doc(ReduxCurrentUser)
+                            .collection("rides")
+                            .doc()
+                            .set({
+                              kitchenId: item.kitchenId,
+                              orderId: item.orderId,
+                              CustomerName: item.CustomerName,
+                              Customerphnumber: item.Customerphnumber,
+                              CustomerAddress: item.CustomerAddress,
+                              Total: item.Total,
+                              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                              deliverystatus: "accepted",
+                              KitchenName: item.KitchenName,
+                              KitchenAddress: item.KitchenAddress,
+                              Kitchenph: item.Kitchenph,
+                              KitchenLong: item.KitchenLong,
+                              KitchenLat: item.KitchenLat,
+                              CustomerId: item.CustomerId,
+                            });
+
+                          liveOrderGetter();
+                          setTimeout(() => {
+                            props.navigation.navigate("RiderOrder");
+                          }, 2000);
+                        }}
+                      ></Button>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
+                </View>
+
+                {/* <LocationGetter
                   kitchenId={item.kitchenId}
                   riderLat={pickedLocation.latitude}
                   riderLong={pickedLocation.longitude}
@@ -277,9 +415,17 @@ const RiderHomeScreen = (props) => {
                   KitchenLat={item.KitchenLat}
                   KitchenLong={item.KitchenLong}
                   timestamp={item.timestamp}
-                />
-                
-              
+                  deliverystatus={item.deliverystatus}
+                  currentuser={ReduxCurrentUser}
+                /> */}
+
+                {/* <Text>{locationget(item.KitchenLat, item.KitchenLong)}</Text>
+                <Text>picked loc: {pickedLocation.latitude}</Text>
+                <Text>picked loc: {pickedLocation.longitude}</Text>
+                <Text>kitchen loc: {item.KitchenLat}</Text>
+                <Text>kitchen loc: {item.KitchenLong}</Text>
+                <Text>distance : {distance}</Text> */}
+
                 {/* <Text>Kitchen Name: {item.KitchenName}</Text>
                 <Text>Kitchen Phone Number: {item.Kitchenph}</Text>
                 <Text>Pick Up Address: {item.KitchenAddress}</Text>

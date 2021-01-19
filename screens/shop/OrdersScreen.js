@@ -20,10 +20,12 @@ import { db } from "../../firebase/Firebase";
 
 const OrdersScreen = (props) => {
   ignoreWarnings("Each child in");
+  const [refresh, setrefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [OrderHistory, setOrderHistory] = useState([]);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const orderGetter = async () => {
+    setrefresh(true);
     let orderRef = db.collection("orders");
     await orderRef.get().then((res) => {
       setOrderHistory(
@@ -44,6 +46,7 @@ const OrdersScreen = (props) => {
       //   console.log(doc.data());
       // });
     });
+    setrefresh(false);
     // console.log("chal paya", OrderHistory);
   };
 
@@ -73,9 +76,14 @@ const OrdersScreen = (props) => {
   const orders = useSelector((state) => state.orders.orders);
   const dispatch = useDispatch();
 
+  const handleRefresh = () => {
+    setrefresh(true);
+    orderGetter();
+    setrefresh(false);
+  };
+
   useEffect(() => {
     orderGetter();
-  
   }, []);
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     orderGetter();
@@ -101,18 +109,14 @@ const OrdersScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>
-        Completed Orders.{" "}
-        <Ionicons
-          onPress={orderGetter}
-          name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-          size={20}
-        ></Ionicons>
+      <Text style={styles.Title}>Completed Orders. </Text>
+      <Text style={styles.info}>
+        Tell us how was your experience with these Kitchen?{" "}
       </Text>
-      <Text style={styles.info}>Tell us how was your experience with these Kitchen? </Text>
-      
 
       <FlatList
+        refreshing={refresh}
+        onRefresh={handleRefresh}
         data={OrderHistory}
         keyExtractor={(item) => item.item.id}
         renderItem={(itemData) => (
@@ -124,7 +128,7 @@ const OrdersScreen = (props) => {
                 items={itemData.item.item}
                 id={itemData.item.id}
                 key={itemData.item.id}
-                ownerId= {itemData.item.ownerId}
+                ownerId={itemData.item.ownerId}
               />
             ) : (
               <></>
@@ -165,9 +169,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  info:{
-    textAlign: "center"
-  }
+  info: {
+    textAlign: "center",
+  },
 });
 
 export default OrdersScreen;

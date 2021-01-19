@@ -66,7 +66,7 @@ import { db } from "../firebase/Firebase";
 import UserName from "../screens/user/UserName";
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
-import * as riderauth from '../store/actions/authRider'
+import * as riderauth from "../store/actions/authRider";
 import VoucherScreen from "../screens/shop/VoucherScreen";
 
 const defaultNavOptions = {
@@ -507,35 +507,6 @@ const ChefShopNavigator = createDrawerNavigator(
       const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
       const [chefCnic, setchefCnic] = useState("");
       ignoreWarnings("Possible Unhandled Promise");
-
-      const CheckChef = async () => {
-        let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
-        let statusGetter = await checkChefRef.get();
-        //setChefStatus( statusGetter.data().chefStatus)
-        let chefStat = statusGetter.data().chefStatus;
-        console.log("Ye status mila hai", chefStat);
-        if (chefStat === false) {
-          Alert.alert("Sign Up as a Chef!")
-          props.navigation.navigate("Auth");
-        }
-      };
-      setTimeout(function () {
-        CheckChef();
-      }, 5000);
-      // const currAddrChecker = async () => {
-      //   let refAdd = db.collection("chefs").doc(ReduxCurrentUser);
-      //   let Add = await refAdd.get();
-      //   console.log("Oh hellllo payen", Add.data());
-      //   let currAddSetter = Add.data().CurrentAddress
-      //   console.log("Ye curraddress mila hai", currAddSetter);
-      //   if (currAddSetter === "notset") {
-      //     Alert.alert("Set Your Address", "Please Set a current Address!");
-      //     props.navigation.navigate("Address")
-      //   }
-      // };
-      // setTimeout(function () {
-      //   currAddrChecker();
-      // }, 6000);
       const getUserName = async () => {
         let userNameRef = db.collection("chefs").doc(ReduxCurrentUser);
         let userNameGetter = await userNameRef.get();
@@ -703,7 +674,7 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
-    bottom: "220%"
+    bottom: "220%",
   },
   UserNameHolder: {
     paddingTop: 20,

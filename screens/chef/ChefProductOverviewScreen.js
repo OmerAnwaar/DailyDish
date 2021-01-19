@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
+import * as chefActions from "../../store/actions/authChef";
 import Constants from "expo-constants";
 import { useSelector, useDispatch } from "react-redux";
 // import { SearchBar } from "react-native-elements";
@@ -56,6 +57,30 @@ const ChefProductsOverviewScreen = (props) => {
   //     },
   //   });
   // };
+  const CheckStatus = async () => {
+    let checkChefRef = db.collection("chefs").doc(ReduxCurrentUser);
+    let statusGetter = await checkChefRef.get();
+    //setChefStatus( statusGetter.data().chefStatus)
+    let chefStat = statusGetter.data().Disable;
+    console.log("Ye Disable status mila hai", chefStat);
+    if (chefStat === true) {
+      Alert.alert("You have been disabled by the Admin!");
+      props.navigation.navigate("Auth");
+      chefActions.logout();
+    }
+  };
+  const CheckChef = async () => {
+    let checkChefRef = db.collection("app-users").doc(ReduxCurrentUser);
+    let statusGetter = await checkChefRef.get();
+    //setChefStatus( statusGetter.data().chefStatus)
+    let chefStat = statusGetter.data().chefStatus;
+    console.log("Ye status mila hai", chefStat);
+    if (chefStat === false) {
+      Alert.alert("Sign Up as a Chef!");
+      props.navigation.navigate("Auth");
+      chefActions.logout();
+    }
+  };
   const registerForPushNotificationsAsync = async () => {
     let token;
     if (Constants.isDevice) {
@@ -125,6 +150,8 @@ const ChefProductsOverviewScreen = (props) => {
     setIsLoading(true);
     loadProducts().then(() => {
       setIsLoading(false);
+      CheckStatus();
+      CheckChef();
     });
   }, [dispatch, loadProducts]);
 
@@ -186,9 +213,7 @@ const ChefProductsOverviewScreen = (props) => {
   // }
   return (
     <>
-      <SearchBar onChangeText={(e) => setSearch(e.target.value)} />
-      {/* <Text style={styles.title}>Latest Additions</Text> */}
-      {/* <Button title="Testing"  onPress={testNotification} /> */}
+
 
       <FlatList
         onRefresh={loadProducts}

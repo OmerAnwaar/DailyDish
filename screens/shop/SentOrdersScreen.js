@@ -20,11 +20,13 @@ import { db } from "../../firebase/Firebase";
 
 const SentOrderScreen = (props) => {
   ignoreWarnings("Each child in");
+  const [refresh, setrefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [OrderHistory, setOrderHistory] = useState([]);
   const ReduxCurrentUser = useSelector((state) => state.auth.userId);
   const orderGetter = async () => {
-    let orderRef = db.collection("orders").orderBy("timestamp", "desc")
+    setrefresh(true);
+    let orderRef = db.collection("orders").orderBy("timestamp", "desc");
     await orderRef.get().then((res) => {
       setOrderHistory(
         res.docs.map((doc) => ({
@@ -44,7 +46,8 @@ const SentOrderScreen = (props) => {
       //   console.log(doc.data());
       // });
     });
-    console.log("pressed")
+    setrefresh(false);
+    console.log("pressed");
     // console.log("chal paya", OrderHistory);
   };
 
@@ -74,9 +77,14 @@ const SentOrderScreen = (props) => {
   const orders = useSelector((state) => state.orders.orders);
   const dispatch = useDispatch();
 
+  const handleRefresh = () => {
+    setrefresh(true);
+    orderGetter();
+    setrefresh(false);
+  };
+
   useEffect(() => {
     orderGetter();
-  
   }, []);
 
   const unsubscribe = props.navigation.addListener("didFocus", () => {
@@ -103,29 +111,28 @@ const SentOrderScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>
-         Orders In Progress.{" "}
-        <Ionicons
-          onPress={orderGetter}
-          name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-          size={25}
-        ></Ionicons>
-      </Text>
-      
+      <Text style={styles.Title}>Orders In Progress. </Text>
 
       <FlatList
         data={OrderHistory}
         keyExtractor={(item) => item.item.id}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
         renderItem={(itemData) => (
           <>
-            {itemData.item.deliverystatus === "requested" || itemData.item.deliverystatus === "live" || itemData.item.deliverystatus === "accepted"  && itemData.item.orderStatus=== "accepted" || itemData.item.orderStatus=== "completed" ? (
+            {itemData.item.deliverystatus === "requested" ||
+            itemData.item.deliverystatus === "live" ||
+            itemData.item.deliverystatus === "accepted" ||
+            (itemData.item.deliverystatus === "onway" &&
+              itemData.item.orderStatus === "accepted") ||
+            itemData.item.orderStatus === "completed" ? (
               <SentOrderItem
                 amount={itemData.item.amount}
                 date={itemData.item.date}
                 items={itemData.item.item}
                 id={itemData.item.id}
                 key={itemData.item.id}
-                ownerId= {itemData.item.ownerId}
+                ownerId={itemData.item.ownerId}
                 deliverystatus={itemData.item.deliverystatus}
                 orderStatus={itemData.item.orderStatus}
               />
@@ -168,9 +175,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  info:{
-    textAlign: "center"
-  }
+  info: {
+    textAlign: "center",
+  },
 });
 
 export default SentOrderScreen;

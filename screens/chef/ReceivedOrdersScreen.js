@@ -4,6 +4,7 @@ import { db } from "../../firebase/Firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
+import ignoreWarnings from "react-native-ignore-warnings";
 import OrderItem from "../../components/shop/OrderItem";
 import ItemHolder from "../../components/categories/ItemHolder";
 import * as Permissions from "expo-permissions";
@@ -14,6 +15,7 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import "firebase/firestore";
 import Colors from "../../constants/Colors";
 const ReceievedOrdersScreen = (props) => {
+  let totalofProduct;
   const ReduxCurrentUser = useSelector((state) => state.authChef.userId);
   const [recieved, setrecieved] = useState([]);
   const [loading, setloading] = useState(false);
@@ -25,7 +27,10 @@ const ReceievedOrdersScreen = (props) => {
   const [Pname, setPname] = useState("");
   const [long, setlong] = useState("");
   const [lat, setlat] = useState("");
+  ignoreWarnings("Each child in a");
   const [ExpoToken, setExpoToken] = useState("");
+  const [refresh, setrefresh] = useState(false);
+  const [tokenArr, settokenArr] = useState([]);
 
   const kitchenInfoGetter = async () => {
     const kitchenDataRef = db.collection("chefs").doc(ReduxCurrentUser);
@@ -37,7 +42,10 @@ const ReceievedOrdersScreen = (props) => {
     setlat(kitchenData.data().location.U);
     setlong(kitchenData.data().location.k);
   };
+  const expoArr = async () => {};
+
   const recievedOrders = async () => {
+    setrefresh(true);
     const recievedOrderRef = db
       .collection("orders")
       .orderBy("timestamp", "desc");
@@ -76,19 +84,30 @@ const ReceievedOrdersScreen = (props) => {
     // recievedOrder.docs.map((doc) => {
     //   console.log("checking again again", doc.data());
     // });
+    setrefresh(false);
+  };
+
+  const handleRefresh = () => {
+    setrefresh(true);
+    recievedOrders();
+    expoArr();
+    setrefresh(false);
   };
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     recievedOrders();
     kitchenInfoGetter();
+    expoArr();
     console.log("focussed");
   });
 
   useEffect(() => {
     kitchenInfoGetter();
     recievedOrders();
+    expoArr();
     return () => {
       recievedOrders();
       kitchenInfoGetter();
+      expoArr();
     };
   }, []);
 
@@ -107,24 +126,18 @@ const ReceievedOrdersScreen = (props) => {
   return (
     <View>
       {/* <Button label="refresh" title="refresh" onPress={recievedOrders}></Button> */}
-      <Ionicons
-        onPress={recievedOrders}
-        style={styles.Reload}
-        name={Platform.OS === "android" ? "md-refresh" : "ios-refresh"}
-        size={25}
-      >
-        {" "}
-        Refresh
-      </Ionicons>
+
       <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
         data={orderRecieved}
         keyExtractor={(item) => item.id}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
         renderItem={({ item }) => (
           <>
             {item.ownerId === ReduxCurrentUser ? (
               <View style={styles.container}>
-                {console.log(orderRecieved)}
+                {/* {console.log(orderRecieved)} */}
                 <View style={styles.contain}>
                   <Text style={{ fontWeight: "bold" }}>Customer Name: </Text>
                   <Text>{item.CustomerName}</Text>
@@ -145,8 +158,10 @@ const ReceievedOrdersScreen = (props) => {
                 </View>
                 <ItemHolder data={item.item} />
                 <View style={styles.contain}>
-                  <Text style={{ fontWeight: "bold" }}>Total: </Text>
-                  <Text>{item.totalAmount}</Text>
+                  <Text style={{ fontWeight: "bold" }}>
+                    Total to be recieved:{" "}
+                  </Text>
+                  <Text>{item.totalAmount - 30}</Text>
                 </View>
                 <View>
                   {item.orderStatus === "requested" ? (
@@ -161,29 +176,47 @@ const ReceievedOrdersScreen = (props) => {
                             db.collection("orders").doc(item.id).update({
                               orderStatus: "accepted",
                             });
+                            let TokenExpo;
                             let tokenRef = db
                               .collection("app-users")
                               .doc(item.CustomerId);
                             tokenRef.get().then((res) => {
-                              setExpoToken(res.data().expoToken);
-                            });
-                            console.log("ithae======>", ExpoToken);
-                            let response = fetch(
-                              "https://exp.host/--/api/v2/push/send",
-                              {
+                              // setExpoToken(res.data().expoToken);
+                              TokenExpo = res.data().expoToken;
+                              fetch("https://exp.host/--/api/v2/push/send", {
                                 method: "POST",
                                 headers: {
                                   Accept: "application/json",
                                   "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                  to: ExpoToken,
+                                  to: TokenExpo,
                                   sound: "default",
-                                  title: "Order Confirmed",
-                                  body: "Your Order is being prepared!",
+                                  title: "Order Accepted!",
+                                  body:
+                                    "Your order is being prepared by the chef",
                                 }),
-                              }
-                            );
+                              });
+                            });
+
+                            // console.log("ithae======>", ExpoToken);
+                            // let response = fetch(
+                            //   "https://exp.host/--/api/v2/push/send",
+                            //   {
+                            //     method: "POST",
+                            //     headers: {
+                            //       Accept: "application/json",
+                            //       "Content-Type": "application/json",
+                            //     },
+                            //     body: JSON.stringify({
+                            //       to: ExpoToken,
+                            //       sound: "default",
+                            //       title: "Order Accepted!",
+                            //       body:
+                            //         "Your order is being prepared by the chef",
+                            //     }),
+                            //   }
+                            // );
 
                             recievedOrders();
                           }}
@@ -197,32 +230,31 @@ const ReceievedOrdersScreen = (props) => {
                           onPress={() => {
                             db.collection("orders").doc(item.id).update({
                               orderStatus: "declined",
-                              deliverystatus: "declined"
+                              deliverystatus: "declined",
                             });
+                            let TokenReq;
                             let tokenRef = db
                               .collection("app-users")
                               .doc(item.CustomerId);
                             tokenRef.get().then((res) => {
-                              setExpoToken(res.data().expoToken);
-                            });
-
-                            let response = fetch(
-                              "https://exp.host/--/api/v2/push/send",
-                              {
+                              // setExpoToken(res.data().expoToken);
+                              TokenReq = res.data().expoToken;
+                              fetch("https://exp.host/--/api/v2/push/send", {
                                 method: "POST",
                                 headers: {
                                   Accept: "application/json",
                                   "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                  to: ExpoToken,
+                                  to: TokenReq,
                                   sound: "default",
                                   title: "Oh No!",
                                   body:
                                     "Due to some reason chef can't accept your order but you can explore more options",
                                 }),
-                              }
-                            );
+                              });
+                            });
+
                             recievedOrders();
                           }}
                         ></Button>
@@ -258,6 +290,40 @@ const ReceievedOrdersScreen = (props) => {
                                 deliverystatus: "inprogress",
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                               });
+                              let exTok = [];
+                              db.collection("riders")
+                                .get()
+                                .then((res) => {
+                                  exTok.push(
+                                    res.docs.map((doc) => ({
+                                      token: doc.data().expoToken,
+                                    }))
+                                  );
+                                  console.log("arr", exTok);
+                                  exTok.map((doc) => {
+                                    doc.map((res) => {
+                                      console.log("yara", res.token);
+                                      fetch(
+                                        "https://exp.host/--/api/v2/push/send",
+                                        {
+                                          method: "POST",
+                                          headers: {
+                                            Accept: "application/json",
+                                            "Content-Type": "application/json",
+                                          },
+                                          body: JSON.stringify({
+                                            to: res.token,
+                                            sound: "default",
+                                            title: "Delivery in your Area!",
+                                            body:
+                                              "Check App for delivery in your area",
+                                          }),
+                                        }
+                                      );
+                                    });
+                                  });
+                                });
+
                               recievedOrders();
                             }}
                           ></Button>
@@ -271,9 +337,26 @@ const ReceievedOrdersScreen = (props) => {
                                   Rider is Assigned and will be there soon
                                 </Text>
                               ) : (
-                                <Text style={styles.rider}>
-                                  Rider will accept delivery request soon
-                                </Text>
+                                <>
+                                  {item.deliverystatus === "onway" ? (
+                                    <Text style={styles.sucess}>
+                                      Order is on way to Customer!
+                                    </Text>
+                                  ) : (
+                                    <>
+                                      {item.deliverystatus === "delivered" ? (
+                                        <Text style={styles.sucess}>
+                                          Order Delivered!
+                                        </Text>
+                                      ) : (
+                                        <Text style={styles.rider}>
+                                          Rider will accept delivery request
+                                          soon
+                                        </Text>
+                                      )}
+                                    </>
+                                  )}
+                                </>
                               )}
                             </>
                           ) : (
@@ -366,6 +449,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 3,
     color: Colors.primary,
+  },
+  sucess: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginVertical: 3,
+    color: "green",
   },
   turnedDown: {
     fontWeight: "bold",
