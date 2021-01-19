@@ -111,7 +111,7 @@ const SentOrderScreen = (props) => {
 
   return (
     <View>
-      <Text style={styles.Title}>Orders In Progress. </Text>
+      {/* <Text style={styles.Title}>Orders In Progress. </Text> */}
 
       <FlatList
         data={OrderHistory}
@@ -148,7 +148,7 @@ const SentOrderScreen = (props) => {
 
 SentOrderScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Your Orders",
+    headerTitle: "Order in Progress",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item

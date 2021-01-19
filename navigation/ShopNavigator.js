@@ -67,7 +67,6 @@ import UserName from "../screens/user/UserName";
 import * as authActions from "../store/actions/auth";
 import * as chefauth from "../store/actions/authChef";
 import * as riderauth from "../store/actions/authRider";
-import VoucherScreen from "../screens/shop/VoucherScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -160,23 +159,6 @@ const ReceivedOrdersNavigator = createStackNavigator(
       drawerIcon: (drawerConfig) => (
         <Ionicons
           name={Platform.OS === "android" ? "md-list" : "ios-list"}
-          size={23}
-          color={drawerConfig.tintColor}
-        />
-      ),
-    },
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
-const VoucherNavigator = createStackNavigator(
-  {
-    Vouchers: VoucherScreen,
-  },
-  {
-    navigationOptions: {
-      drawerIcon: (drawerConfig) => (
-        <Ionicons
-          name={Platform.OS === "android" ? "md-gift" : "ios-gift"}
           size={23}
           color={drawerConfig.tintColor}
         />
@@ -420,11 +402,10 @@ const ShopNavigator = createDrawerNavigator(
     Products: MealsFavTabNavigator,
     // Products: ProductsNavigator,
     Profile: UserProfileNavigator,
-    Orders: OrdersNavigator,
+    "Orders History": OrdersNavigator,
     Address: LocationNavigator,
     Categories: CategoriesNavigator,
-    InProgress: SentOrdersNavigator,
-    Vouchers: VoucherNavigator,
+    "Current Orders": SentOrdersNavigator,
   },
   {
     contentOptions: {
@@ -674,7 +655,7 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: Colors.primary,
     margin: 10,
-    bottom: "220%",
+    // bottom: "220%",
   },
   UserNameHolder: {
     paddingTop: 20,

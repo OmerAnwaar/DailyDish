@@ -156,17 +156,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   like: {
+    borderEndWidth: 1,
+    borderColor: "green",
+    borderEndWidth: 1,
+    borderColor: "black",
     position: "absolute",
-    right: "35%",
+    right: "25%",
     bottom: "90%",
-
     borderRadius: 10,
   },
   dislike: {
+    borderEndWidth: 1,
+    borderColor: "red",
     position: "absolute",
-    right: "20%",
+    right: "10%",
     bottom: "90%",
-
     borderRadius: 10,
   },
   feed: {
