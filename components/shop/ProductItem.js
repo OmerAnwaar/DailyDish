@@ -87,7 +87,7 @@ const ProductItem = (props) => {
 
 const styles = StyleSheet.create({
   product: {
-    height: 300,
+    height: 280,
     width: "90%",
     // margin: 10,
     marginHorizontal: 20,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   details: {
     height: "16.5%",
-    padding: 10,
+    padding: 7,
   },
   title: {
     fontFamily: "open-sans-bold",
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     // paddingBottom: 19,
     paddingLeft: 10,
-    paddingTop: Platform.OS === "android" ? "" : 6.5,
+    paddingTop: Platform.OS === "android" ? "" : 11,
     // paddingBottom: 1,
     // justifyContent: "flex-start",
     // marginBottom: 40,
@@ -142,10 +142,11 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    paddingBottom: 20,
+    paddingBottom: 25,
     alignItems: "center",
     height: "25%",
     paddingHorizontal: 20,
+    fontFamily: "open-sans-bold",
     // paddingVertical: 20,
   },
   // time: {
@@ -155,13 +156,13 @@ const styles = StyleSheet.create({
   like: {
     position: "absolute",
     right: "18%",
-    bottom: "22%",
+    bottom: "23%",
     borderRadius: 10,
   },
   dislike: {
     position: "absolute",
     right: "7%",
-    bottom: "22%",
+    bottom: "23%",
     borderRadius: 10,
   },
 });

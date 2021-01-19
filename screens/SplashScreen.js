@@ -107,10 +107,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 30,
+    // justifyContent: "center",
   },
   logo: {
-    width: "80%",
-    height: "60%",
+    width: "75%",
+    height: "55%",
   },
   title: {
     color: "#05375a",
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "flex-end",
-    marginTop: 50,
+    paddingTop: "10%",
   },
   signIn: {
     width: 150,

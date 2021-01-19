@@ -83,7 +83,7 @@ const RiderAuthScreen = (props) => {
     if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
-        formState.inputValues.password,   
+        formState.inputValues.password,
         formState.inputValues.ridername,
         formState.inputValues.phnumber
       );
@@ -119,7 +119,7 @@ const RiderAuthScreen = (props) => {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      keyboardVerticalOffset={50}
+      keyboardVerticalOffset={15}
       style={styles.screen}
     >
       <LinearGradient colors={["#FF6347", "#fe6347"]} style={styles.gradient}>
@@ -129,7 +129,7 @@ const RiderAuthScreen = (props) => {
             duraton="1500"
             source={require("../../assets/logo.png")}
             style={styles.logo}
-            resizeMode="cover"
+            resizeMode="contain"
           />
         </View>
         <Animatable.View style={styles.Container} animation="fadeInUpBig">
@@ -160,7 +160,6 @@ const RiderAuthScreen = (props) => {
               />
               {isSignup == true ? (
                 <View>
-            
                   <Input
                     id="ridername"
                     label="Rider Name:"
@@ -252,25 +251,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    height: "35%",
     alignItems: "center",
-    paddingTop: 30,
   },
   gradient: {
     justifyContent: "center",
+
+    padding: "2%",
   },
   logo: {
-    width: 160,
-    height: 150,
-    padding: 20,
+    width: "50%",
+    height: "40%",
   },
   authContainer: {
     width: "100%",
-    height: 600,
-    maxWidth: 400,
+    height: "110%",
     padding: 30,
+    alignContent: "center",
+    justifyContent: "center",
     borderTopLeftRadius: 20,
-    marginHorizontal: 7.5,
     borderTopRightRadius: 20,
   },
   buttonContainer: {

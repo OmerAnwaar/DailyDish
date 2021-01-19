@@ -62,7 +62,7 @@ const VoucherScreen = (props) => {
 
 VoucherScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Categories",
+    headerTitle: "Vouchers",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
